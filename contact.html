@@ -51,19 +51,64 @@
         <label for="cf-email">Email address</label>
         <input type="email" id="cf-email" placeholder="you@example.com" required>
       </div>
+
+      <!-- Custom animated dropdown -->
       <div class="form-group">
-        <label for="cf-subject">Subject</label>
-        <select id="cf-subject">
-          <option value="order">Order enquiry</option>
-          <option value="return">Return / refund</option>
-          <option value="product">Product question</option>
-          <option value="shipping">Shipping &amp; delivery</option>
-          <option value="other">Other</option>
-        </select>
+        <label>Subject</label>
+        <div class="custom-select" id="subject-select">
+          <button type="button" class="custom-select-trigger" aria-haspopup="listbox" aria-expanded="false">
+            <span class="custom-select-trigger-inner">
+              <span class="custom-select-trigger-icon">
+                <i class="fa-solid fa-box"></i>
+              </span>
+              <span class="custom-select-trigger-text">Order enquiry</span>
+            </span>
+            <i class="fa-solid fa-chevron-down custom-select-arrow"></i>
+          </button>
+          <div class="custom-select-panel" role="listbox">
+            <div class="custom-select-option selected" data-value="order" role="option">
+              <div class="custom-select-option-icon"><i class="fa-solid fa-box"></i></div>
+              <div>
+                <p class="custom-select-option-title">Order enquiry</p>
+                <p class="custom-select-option-sub">Track or ask about an existing order</p>
+              </div>
+            </div>
+            <div class="custom-select-option" data-value="return" role="option">
+              <div class="custom-select-option-icon"><i class="fa-solid fa-rotate-left"></i></div>
+              <div>
+                <p class="custom-select-option-title">Return / Refund</p>
+                <p class="custom-select-option-sub">Start a return or claim a refund</p>
+              </div>
+            </div>
+            <div class="custom-select-option" data-value="product" role="option">
+              <div class="custom-select-option-icon"><i class="fa-solid fa-circle-question"></i></div>
+              <div>
+                <p class="custom-select-option-title">Product question</p>
+                <p class="custom-select-option-sub">Compatibility, fitment or specs</p>
+              </div>
+            </div>
+            <div class="custom-select-option" data-value="shipping" role="option">
+              <div class="custom-select-option-icon"><i class="fa-solid fa-truck"></i></div>
+              <div>
+                <p class="custom-select-option-title">Shipping &amp; delivery</p>
+                <p class="custom-select-option-sub">Delivery times and costs</p>
+              </div>
+            </div>
+            <div class="custom-select-option" data-value="other" role="option">
+              <div class="custom-select-option-icon"><i class="fa-solid fa-ellipsis"></i></div>
+              <div>
+                <p class="custom-select-option-title">Other</p>
+                <p class="custom-select-option-sub">Anything else we can help with</p>
+              </div>
+            </div>
+          </div>
+          <input type="hidden" id="cf-subject" value="order">
+        </div>
       </div>
+
       <div class="form-group">
         <label for="cf-message">Message</label>
-        <textarea id="cf-message" placeholder="Tell us what's going on…" required></textarea>
+        <textarea id="cf-message" placeholder="Tell us what's going on..." required></textarea>
       </div>
       <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;">Send message</button>
     </form>
@@ -123,9 +168,10 @@
       const name    = document.getElementById('cf-name').value;
       const email   = document.getElementById('cf-email').value;
       const subject = document.getElementById('cf-subject').value;
+      const subjectText = document.querySelector('#subject-select .custom-select-trigger-text')?.textContent || subject;
       const message = document.getElementById('cf-message').value;
-      const body = `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\n\n${message}`;
-      window.location.href = 'mailto:hello@forged.co.uk?subject=Forged Support: ' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+      const body = `Name: ${name}\nEmail: ${email}\nSubject: ${subjectText}\n\n${message}`;
+      window.location.href = 'mailto:hello@forged.co.uk?subject=Forged Support: ' + encodeURIComponent(subjectText) + '&body=' + encodeURIComponent(body);
       document.getElementById('contact-form').style.display = 'none';
       document.getElementById('contact-success').style.display = 'block';
     }

@@ -54,55 +54,29 @@
     <a href="contact.html">Support</a>
   </div>
 
-  <!-- Hero -->
+  <!-- Hero — full-width two-column -->
   <section class="hero">
     <div class="hero-image-wrap">
-      <!-- Replace src with your hero product image -->
-      <div class="hero-image-placeholder">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm7 3a5 5 0 1 0 0 10A5 5 0 0 0 12 6zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></svg>
-      </div>
+      <div class="hero-image-placeholder"></div>
     </div>
-
     <div class="hero-content">
-      <div>
-        <p class="hero-eyebrow">Forged</p>
+      <div class="hero-text">
         <h1 class="hero-title">Forge Your<br><span class="muted">Drive.</span></h1>
-        <p class="hero-sub">Premium upgrades. Every car.</p>
+        <p class="hero-sub">Premium upgrades for every car.</p>
       </div>
       <div class="hero-cta">
         <p class="hero-price">From <strong>£9.99</strong></p>
         <a href="shop.html" class="btn btn-primary btn-lg">Shop Now</a>
       </div>
     </div>
-
-    <div class="hero-scroll">
-      <div class="hero-scroll-line"></div>
-      scroll
-    </div>
   </section>
-
-  <!-- Marquee -->
-  <div class="marquee-section">
-    <div class="marquee-track">
-      <div class="marquee-item"><span class="marquee-dot"></span> CarPlay Upgrades</div>
-      <div class="marquee-item"><span class="marquee-dot"></span> Audi · BMW · Mercedes</div>
-      <div class="marquee-item"><span class="marquee-dot"></span> Free UK Delivery Over £50</div>
-      <div class="marquee-item"><span class="marquee-dot"></span> Badge & Emblem Upgrades</div>
-      <div class="marquee-item"><span class="marquee-dot"></span> Interior Styling</div>
-      <div class="marquee-item"><span class="marquee-dot"></span> Exterior Mods</div>
-      <div class="marquee-item"><span class="marquee-dot"></span> Find Products For Your Car</div>
-      <div class="marquee-item"><span class="marquee-dot"></span> 30-Day Returns</div>
-      <div class="marquee-item"><span class="marquee-dot"></span> UK Based</div>
-      <div class="marquee-item"><span class="marquee-dot"></span> Premium Quality</div>
-    </div>
-  </div>
 
   <!-- Reg Lookup -->
   <section class="reg-section">
     <div class="reg-section-inner">
       <p class="section-label">Smart search</p>
       <h2 class="section-title">Find products for your car</h2>
-      <p class="section-sub">Enter your reg plate — we'll show you everything that fits your exact vehicle.</p>
+      <p class="section-sub">Enter your reg plate. We'll show you everything that fits your exact vehicle.</p>
 
       <form class="reg-form" id="reg-form">
         <div class="reg-form-plate">
@@ -121,7 +95,7 @@
       </form>
 
       <div id="reg-result" class="reg-result-box"></div>
-      <p class="reg-disclaimer">Powered by DVLA & DVSA. We never store your registration.</p>
+      <p class="reg-disclaimer">Powered by DVLA &amp; DVSA. We never store your registration.</p>
     </div>
   </section>
 
@@ -135,55 +109,55 @@
       <a href="shop.html" class="btn btn-outline btn-sm">View all</a>
     </div>
 
-    <div class="products-grid">
+    <div class="products-grid" style="grid-template-columns: repeat(3, 1fr);">
 
       <div class="product-card reveal" onclick="location.href='shop.html'">
         <div class="product-img">
           <div class="product-img-placeholder">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
           </div>
           <span class="product-badge">Best Seller</span>
         </div>
         <div class="product-info">
           <p class="product-category">Tech &amp; Connectivity</p>
           <p class="product-name">Wireless CarPlay Adapter</p>
-          <p class="product-price">£89.99</p>
         </div>
-        <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); addToCart('wireless-carplay','Wireless CarPlay Adapter',89.99,'Tech & Connectivity')">
-          Add to cart
-        </button>
+        <div class="product-footer">
+          <p class="product-price">£89.99</p>
+          <button class="product-add-btn" onclick="event.stopPropagation(); addToCart('wireless-carplay','Wireless CarPlay Adapter',89.99,'Tech & Connectivity')">Add to cart</button>
+        </div>
       </div>
 
       <div class="product-card reveal reveal-delay-1" onclick="location.href='shop.html'">
         <div class="product-img">
           <div class="product-img-placeholder">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
           </div>
         </div>
         <div class="product-info">
           <p class="product-category">Badges &amp; Emblems</p>
-          <p class="product-name">Audi S Badge Set — Gloss Black</p>
-          <p class="product-price">£19.99</p>
+          <p class="product-name">Audi S Badge Set, Gloss Black</p>
         </div>
-        <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); addToCart('audi-s-badge','Audi S Badge Set — Gloss Black',19.99,'Badges & Emblems')">
-          Add to cart
-        </button>
+        <div class="product-footer">
+          <p class="product-price">£19.99</p>
+          <button class="product-add-btn" onclick="event.stopPropagation(); addToCart('audi-s-badge','Audi S Badge Set, Gloss Black',19.99,'Badges & Emblems')">Add to cart</button>
+        </div>
       </div>
 
       <div class="product-card reveal reveal-delay-2" onclick="location.href='shop.html'">
         <div class="product-img">
           <div class="product-img-placeholder">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
           </div>
         </div>
         <div class="product-info">
           <p class="product-category">Exterior Styling</p>
           <p class="product-name">Carbon Fibre Mirror Caps</p>
-          <p class="product-price">£34.99 <span class="was">£49.99</span></p>
         </div>
-        <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); addToCart('carbon-mirror-caps','Carbon Fibre Mirror Caps',34.99,'Exterior Styling')">
-          Add to cart
-        </button>
+        <div class="product-footer">
+          <p class="product-price">£34.99 <span class="was">£49.99</span></p>
+          <button class="product-add-btn" onclick="event.stopPropagation(); addToCart('carbon-mirror-caps','Carbon Fibre Mirror Caps',34.99,'Exterior Styling')">Add to cart</button>
+        </div>
       </div>
 
     </div>
@@ -194,7 +168,7 @@
     <div class="brand-statement-inner">
       <h2 class="brand-statement-title reveal">Precision in Every Detail.</h2>
       <p class="brand-statement-body reveal">
-        At <strong>Forged</strong>, we source only the upgrades worth having. Every product is chosen for fit, finish, and the difference it makes — inside and out. No filler. No cheap alternatives. Just the parts that make your car feel exactly how it should.
+        At <strong>Forged</strong>, we source only the upgrades worth having. Every product is chosen for fit, finish, and the difference it makes. Inside and out. No filler. No cheap alternatives. Just the parts that make your car feel exactly how it should.
       </p>
       <a href="shop.html" class="btn btn-primary btn-lg reveal">Browse the full range</a>
 
@@ -259,7 +233,7 @@
           <p class="footer-col-title">Company</p>
           <div class="footer-links">
             <a href="about.html">About Forged</a>
-            <a href="garage.html">Garage (reg lookup)</a>
+            <a href="garage.html">Garage</a>
             <a href="#">Privacy policy</a>
             <a href="#">Terms of service</a>
           </div>
