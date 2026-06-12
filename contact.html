@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support — Forged</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-mark"><svg width="12" height="12" viewBox="0 0 14 14"><path d="M7 0L9.5 5H14L10.5 8.5L12 14L7 11L2 14L3.5 8.5L0 5H4.5L7 0Z"/></svg></div>
+        Forged
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li><li><a href="shop.html">Shop</a></li>
+        <li><a href="garage.html">Garage</a></li><li><a href="about.html">About</a></li>
+        <li><a href="contact.html" class="active">Support</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="nav-icon-btn" onclick="openCart()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" x2="21" y1="6" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="cart-badge" style="display:none">0</span>
+        </button>
+        <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </nav>
+  <div class="nav-mobile" id="mobile-nav">
+    <a href="index.html">Home</a><a href="shop.html">Shop</a>
+    <a href="garage.html">Garage</a><a href="about.html">About</a><a href="contact.html">Support</a>
+  </div>
+
+  <section class="contact-section">
+    <p class="section-label">Support</p>
+    <h1>How can we help?</h1>
+    <p class="section-sub">Got a question about your order, a product, or anything else? We'll get back to you within 24 hours.</p>
+
+    <form id="contact-form" onsubmit="handleContact(event)">
+      <div class="form-group">
+        <label for="cf-name">Your name</label>
+        <input type="text" id="cf-name" placeholder="Eden Covell" required>
+      </div>
+      <div class="form-group">
+        <label for="cf-email">Email address</label>
+        <input type="email" id="cf-email" placeholder="you@example.com" required>
+      </div>
+      <div class="form-group">
+        <label for="cf-subject">Subject</label>
+        <select id="cf-subject">
+          <option value="order">Order enquiry</option>
+          <option value="return">Return / refund</option>
+          <option value="product">Product question</option>
+          <option value="shipping">Shipping &amp; delivery</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="cf-message">Message</label>
+        <textarea id="cf-message" placeholder="Tell us what's going on…" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;">Send message</button>
+    </form>
+
+    <div id="contact-success" style="display:none; margin-top:24px; padding:20px; background:var(--grey-100); border-radius:var(--radius); text-align:center;">
+      <i class="fa-solid fa-check" style="color:var(--black); font-size:1.5rem; margin-bottom:8px; display:block;"></i>
+      <p style="font-weight:700;">Message sent!</p>
+      <p style="color:var(--grey-500); font-size:0.875rem; margin-top:4px;">We'll get back to you within 24 hours.</p>
+    </div>
+
+    <!-- Quick links -->
+    <div style="margin-top: 48px; padding-top: 40px; border-top: 1px solid var(--grey-200); display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <a href="mailto:hello@forged.co.uk" style="padding:20px;border:1.5px solid var(--grey-200);border-radius:var(--radius);display:flex;align-items:center;gap:14px;transition:var(--transition);" onmouseover="this.style.borderColor='#000'" onmouseout="this.style.borderColor='var(--grey-200)'">
+        <i class="fa-solid fa-envelope" style="font-size:1.2rem;"></i>
+        <div><p style="font-weight:700;font-size:0.875rem;">Email us</p><p style="font-size:0.775rem;color:var(--grey-500);">hello@forged.co.uk</p></div>
+      </a>
+      <a href="https://wa.me/447700000000" target="_blank" style="padding:20px;border:1.5px solid var(--grey-200);border-radius:var(--radius);display:flex;align-items:center;gap:14px;transition:var(--transition);" onmouseover="this.style.borderColor='#000'" onmouseout="this.style.borderColor='var(--grey-200)'">
+        <i class="fa-brands fa-whatsapp" style="font-size:1.2rem;"></i>
+        <div><p style="font-weight:700;font-size:0.875rem;">WhatsApp</p><p style="font-size:0.775rem;color:var(--grey-500);">Quick questions</p></div>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div>
+          <div class="footer-brand-logo"><div class="footer-brand-mark"><svg width="11" height="11" viewBox="0 0 14 14"><path d="M7 0L9.5 5H14L10.5 8.5L12 14L7 11L2 14L3.5 8.5L0 5H4.5L7 0Z"/></svg></div>Forged</div>
+          <p class="footer-tagline">Premium car accessories, sourced for the detail-obsessed.</p>
+        </div>
+        <div><p class="footer-col-title">Shop</p><div class="footer-links"><a href="shop.html">All products</a><a href="garage.html">Garage</a></div></div>
+        <div><p class="footer-col-title">Help</p><div class="footer-links"><a href="contact.html">Support</a><a href="contact.html">Returns</a></div></div>
+        <div><p class="footer-col-title">Company</p><div class="footer-links"><a href="about.html">About</a><a href="#">Privacy</a></div></div>
+      </div>
+      <div class="footer-bottom"><p class="footer-copy">&copy; 2026 Forged. All rights reserved.</p></div>
+    </div>
+  </footer>
+
+  <div class="cart-overlay" id="cart-overlay"></div>
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-drawer-header">
+      <div><p class="cart-drawer-title">Your cart</p><p class="cart-drawer-count" id="cart-drawer-count">0 items</p></div>
+      <button class="cart-close" onclick="closeCart()">&times;</button>
+    </div>
+    <div class="cart-items-list" id="cart-items-list"></div>
+    <div class="cart-drawer-footer" id="cart-drawer-footer" style="display:none;">
+      <div class="cart-total-row"><span class="cart-total-label">Total</span><span class="cart-total-amount" id="cart-total">£0.00</span></div>
+      <button class="btn btn-primary btn-lg cart-checkout-btn" onclick="cartCheckoutEmail()">Checkout</button>
+    </div>
+  </div>
+
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    function handleContact(e) {
+      e.preventDefault();
+      const name    = document.getElementById('cf-name').value;
+      const email   = document.getElementById('cf-email').value;
+      const subject = document.getElementById('cf-subject').value;
+      const message = document.getElementById('cf-message').value;
+      const body = `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\n\n${message}`;
+      window.location.href = 'mailto:hello@forged.co.uk?subject=Forged Support: ' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+      document.getElementById('contact-form').style.display = 'none';
+      document.getElementById('contact-success').style.display = 'block';
+    }
+  </script>
+</body>
+</html>

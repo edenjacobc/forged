@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Forged Garage — Enter your reg plate and find every product that fits your exact vehicle.">
+  <title>Garage — Forged</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-mark"><svg width="12" height="12" viewBox="0 0 14 14"><path d="M7 0L9.5 5H14L10.5 8.5L12 14L7 11L2 14L3.5 8.5L0 5H4.5L7 0Z"/></svg></div>
+        Forged
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="garage.html" class="active">Garage</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Support</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="nav-icon-btn" onclick="openCart()" aria-label="Cart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" x2="21" y1="6" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+          <span class="cart-badge" style="display:none">0</span>
+        </button>
+        <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </nav>
+  <div class="nav-mobile" id="mobile-nav">
+    <a href="index.html">Home</a><a href="shop.html">Shop</a>
+    <a href="garage.html">Garage</a><a href="about.html">About</a><a href="contact.html">Support</a>
+  </div>
+
+  <!-- Garage Hero -->
+  <section class="garage-hero">
+    <p class="section-label">The Garage</p>
+    <h1 class="section-title">What fits your car?</h1>
+    <p class="section-sub">Enter your registration plate below. We'll identify your vehicle and show you every product that fits.</p>
+
+    <form class="reg-form" id="reg-form" style="max-width:480px;">
+      <div class="reg-form-plate">
+        <div class="reg-gb">
+          <span class="reg-gb-flag">🇬🇧</span>
+          <span class="reg-gb-text">GB</span>
+        </div>
+        <input
+          type="text" id="reg-input" class="reg-input"
+          placeholder="AB12 CDE" maxlength="8"
+          autocomplete="off" autocapitalize="characters"
+          aria-label="Vehicle registration"
+        >
+      </div>
+      <button type="submit" class="reg-submit" id="reg-submit">Find My Car</button>
+    </form>
+
+    <div id="reg-result" class="reg-result-box"></div>
+    <p class="reg-disclaimer">Powered by DVLA &amp; DVSA. We never store your registration.</p>
+  </section>
+
+  <!-- Vehicle result + products -->
+  <div class="garage-results" id="garage-products" style="display:none;">
+    <div class="garage-vehicle-card" id="garage-vehicle-card"></div>
+    <div>
+      <p class="section-label" style="margin-bottom:12px;">Products for your vehicle</p>
+      <div class="products-grid" id="garage-products-grid"></div>
+    </div>
+  </div>
+
+  <!-- Default: show all products -->
+  <section class="products-section" id="default-products">
+    <div class="section-header">
+      <div class="section-header-left">
+        <p class="section-label">All products</p>
+        <h2 class="section-title">Browse everything.</h2>
+      </div>
+      <a href="shop.html" class="btn btn-outline btn-sm">Full shop</a>
+    </div>
+    <div class="products-grid">
+      <div class="product-card reveal">
+        <div class="product-img"><div class="product-img-placeholder"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><span class="product-badge">Best Seller</span></div>
+        <div class="product-info"><p class="product-category">Tech &amp; Connectivity</p><p class="product-name">Wireless CarPlay Adapter</p><p class="product-price">£89.99</p></div>
+        <button class="btn btn-outline btn-sm" onclick="addToCart('wireless-carplay','Wireless CarPlay Adapter',89.99,'Tech & Connectivity')">Add to cart</button>
+      </div>
+      <div class="product-card reveal reveal-delay-1">
+        <div class="product-img"><div class="product-img-placeholder"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg></div></div>
+        <div class="product-info"><p class="product-category">Badges &amp; Emblems</p><p class="product-name">Audi S Badge Set — Gloss Black</p><p class="product-price">£19.99</p></div>
+        <button class="btn btn-outline btn-sm" onclick="addToCart('audi-s-badge','Audi S Badge Set — Gloss Black',19.99,'Badges & Emblems')">Add to cart</button>
+      </div>
+      <div class="product-card reveal reveal-delay-2">
+        <div class="product-img"><div class="product-img-placeholder"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div></div>
+        <div class="product-info"><p class="product-category">Exterior Styling</p><p class="product-name">Carbon Fibre Mirror Caps</p><p class="product-price">£34.99 <span class="was">£49.99</span></p></div>
+        <button class="btn btn-outline btn-sm" onclick="addToCart('carbon-mirror-caps','Carbon Fibre Mirror Caps',34.99,'Exterior Styling')">Add to cart</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div>
+          <div class="footer-brand-logo"><div class="footer-brand-mark"><svg width="11" height="11" viewBox="0 0 14 14"><path d="M7 0L9.5 5H14L10.5 8.5L12 14L7 11L2 14L3.5 8.5L0 5H4.5L7 0Z"/></svg></div>Forged</div>
+          <p class="footer-tagline">Premium car accessories, sourced for the detail-obsessed.</p>
+          <div class="footer-socials"><a href="#" class="footer-social"><i class="fa-brands fa-instagram"></i></a><a href="#" class="footer-social"><i class="fa-brands fa-tiktok"></i></a></div>
+        </div>
+        <div><p class="footer-col-title">Shop</p><div class="footer-links"><a href="shop.html">All products</a><a href="garage.html">Garage</a></div></div>
+        <div><p class="footer-col-title">Help</p><div class="footer-links"><a href="contact.html">Support</a><a href="contact.html">Returns</a></div></div>
+        <div><p class="footer-col-title">Company</p><div class="footer-links"><a href="about.html">About</a><a href="#">Privacy</a></div></div>
+      </div>
+      <div class="footer-bottom"><p class="footer-copy">&copy; 2026 Forged. All rights reserved.</p></div>
+    </div>
+  </footer>
+
+  <div class="cart-overlay" id="cart-overlay"></div>
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-drawer-header">
+      <div><p class="cart-drawer-title">Your cart</p><p class="cart-drawer-count" id="cart-drawer-count">0 items</p></div>
+      <button class="cart-close" onclick="closeCart()">&times;</button>
+    </div>
+    <div class="cart-items-list" id="cart-items-list"></div>
+    <div class="cart-drawer-footer" id="cart-drawer-footer" style="display:none;">
+      <div class="cart-total-row"><span class="cart-total-label">Total</span><span class="cart-total-amount" id="cart-total">£0.00</span></div>
+      <button class="btn btn-primary btn-lg cart-checkout-btn" onclick="cartCheckoutEmail()">Checkout <i class="fa-solid fa-arrow-right"></i></button>
+      <p class="cart-note">Free UK delivery on orders over £50</p>
+    </div>
+  </div>
+
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    /* Show vehicle card + filtered products after reg lookup */
+    const origShowResult = window.__regResultHandler;
+    document.getElementById('reg-form').addEventListener('submit', async function() {
+      await new Promise(r => setTimeout(r, 100));
+      const resultBox = document.getElementById('reg-result');
+      const result = resultBox.querySelector('.reg-result');
+      if (!result) return;
+
+      const make  = result.querySelector('.reg-make')?.textContent  || '';
+      const model = result.querySelector('.reg-model')?.textContent || '';
+      const year  = result.querySelector('.reg-year')?.textContent  || '';
+
+      if (make && make !== '—') {
+        document.getElementById('default-products').style.display = 'none';
+        document.getElementById('garage-products').style.display  = 'block';
+
+        document.getElementById('garage-vehicle-card').innerHTML = `
+          <div class="garage-vehicle-info">
+            <div class="garage-vehicle-make">${make}</div>
+            <div class="garage-vehicle-model">${model}</div>
+            <div class="garage-vehicle-detail">
+              ${year ? `<span>${year}</span>` : ''}
+            </div>
+          </div>
+          <div class="garage-reg-plate">${document.getElementById('reg-input').value.toUpperCase()}</div>
+        `;
+
+        document.getElementById('garage-products-grid').innerHTML = `
+          <p style="padding:40px;grid-column:1/-1;color:var(--grey-500);font-size:0.925rem;">
+            Vehicle-specific product matching coming soon. Browse the <a href="shop.html" style="color:var(--black);text-decoration:underline;">full shop</a> in the meantime.
+          </p>`;
+      }
+    }, true);
+  </script>
+</body>
+</html>

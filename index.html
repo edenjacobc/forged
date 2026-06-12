@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Forged — Premium car accessories for every drive. CarPlay upgrades, badges, interior styling and more. Free UK delivery over £50.">
+  <title>Forged | Premium Car Accessories</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-mark">
+          <svg width="12" height="12" viewBox="0 0 14 14"><path d="M7 0L9.5 5H14L10.5 8.5L12 14L7 11L2 14L3.5 8.5L0 5H4.5L7 0Z"/></svg>
+        </div>
+        Forged
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="garage.html">Garage</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Support</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="nav-icon-btn" onclick="openCart()" aria-label="Cart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" x2="21" y1="6" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+          <span class="cart-badge" style="display:none">0</span>
+        </button>
+        <div class="nav-hamburger" id="hamburger">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Nav -->
+  <div class="nav-mobile" id="mobile-nav">
+    <a href="index.html">Home</a>
+    <a href="shop.html">Shop</a>
+    <a href="garage.html">Garage</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Support</a>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-image-wrap">
+      <!-- Replace src with your hero product image -->
+      <div class="hero-image-placeholder">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm7 3a5 5 0 1 0 0 10A5 5 0 0 0 12 6zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></svg>
+      </div>
+    </div>
+
+    <div class="hero-content">
+      <div>
+        <p class="hero-eyebrow">Forged</p>
+        <h1 class="hero-title">Forge Your<br><span class="muted">Drive.</span></h1>
+        <p class="hero-sub">Premium upgrades. Every car.</p>
+      </div>
+      <div class="hero-cta">
+        <p class="hero-price">From <strong>£9.99</strong></p>
+        <a href="shop.html" class="btn btn-primary btn-lg">Shop Now</a>
+      </div>
+    </div>
+
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      scroll
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee-section">
+    <div class="marquee-track">
+      <div class="marquee-item"><span class="marquee-dot"></span> CarPlay Upgrades</div>
+      <div class="marquee-item"><span class="marquee-dot"></span> Audi · BMW · Mercedes</div>
+      <div class="marquee-item"><span class="marquee-dot"></span> Free UK Delivery Over £50</div>
+      <div class="marquee-item"><span class="marquee-dot"></span> Badge & Emblem Upgrades</div>
+      <div class="marquee-item"><span class="marquee-dot"></span> Interior Styling</div>
+      <div class="marquee-item"><span class="marquee-dot"></span> Exterior Mods</div>
+      <div class="marquee-item"><span class="marquee-dot"></span> Find Products For Your Car</div>
+      <div class="marquee-item"><span class="marquee-dot"></span> 30-Day Returns</div>
+      <div class="marquee-item"><span class="marquee-dot"></span> UK Based</div>
+      <div class="marquee-item"><span class="marquee-dot"></span> Premium Quality</div>
+    </div>
+  </div>
+
+  <!-- Reg Lookup -->
+  <section class="reg-section">
+    <div class="reg-section-inner">
+      <p class="section-label">Smart search</p>
+      <h2 class="section-title">Find products for your car</h2>
+      <p class="section-sub">Enter your reg plate — we'll show you everything that fits your exact vehicle.</p>
+
+      <form class="reg-form" id="reg-form">
+        <div class="reg-form-plate">
+          <div class="reg-gb">
+            <span class="reg-gb-flag">🇬🇧</span>
+            <span class="reg-gb-text">GB</span>
+          </div>
+          <input
+            type="text" id="reg-input" class="reg-input"
+            placeholder="AB12 CDE" maxlength="8"
+            autocomplete="off" autocapitalize="characters"
+            aria-label="Enter vehicle registration"
+          >
+        </div>
+        <button type="submit" class="reg-submit" id="reg-submit">Find My Car</button>
+      </form>
+
+      <div id="reg-result" class="reg-result-box"></div>
+      <p class="reg-disclaimer">Powered by DVLA & DVSA. We never store your registration.</p>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="products-section">
+    <div class="section-header">
+      <div class="section-header-left">
+        <p class="section-label">Our products</p>
+        <h2 class="section-title">Hand-picked upgrades.</h2>
+      </div>
+      <a href="shop.html" class="btn btn-outline btn-sm">View all</a>
+    </div>
+
+    <div class="products-grid">
+
+      <div class="product-card reveal" onclick="location.href='shop.html'">
+        <div class="product-img">
+          <div class="product-img-placeholder">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          </div>
+          <span class="product-badge">Best Seller</span>
+        </div>
+        <div class="product-info">
+          <p class="product-category">Tech &amp; Connectivity</p>
+          <p class="product-name">Wireless CarPlay Adapter</p>
+          <p class="product-price">£89.99</p>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); addToCart('wireless-carplay','Wireless CarPlay Adapter',89.99,'Tech & Connectivity')">
+          Add to cart
+        </button>
+      </div>
+
+      <div class="product-card reveal reveal-delay-1" onclick="location.href='shop.html'">
+        <div class="product-img">
+          <div class="product-img-placeholder">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          </div>
+        </div>
+        <div class="product-info">
+          <p class="product-category">Badges &amp; Emblems</p>
+          <p class="product-name">Audi S Badge Set — Gloss Black</p>
+          <p class="product-price">£19.99</p>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); addToCart('audi-s-badge','Audi S Badge Set — Gloss Black',19.99,'Badges & Emblems')">
+          Add to cart
+        </button>
+      </div>
+
+      <div class="product-card reveal reveal-delay-2" onclick="location.href='shop.html'">
+        <div class="product-img">
+          <div class="product-img-placeholder">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+        </div>
+        <div class="product-info">
+          <p class="product-category">Exterior Styling</p>
+          <p class="product-name">Carbon Fibre Mirror Caps</p>
+          <p class="product-price">£34.99 <span class="was">£49.99</span></p>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); addToCart('carbon-mirror-caps','Carbon Fibre Mirror Caps',34.99,'Exterior Styling')">
+          Add to cart
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Brand Statement -->
+  <section class="brand-statement">
+    <div class="brand-statement-inner">
+      <h2 class="brand-statement-title reveal">Precision in Every Detail.</h2>
+      <p class="brand-statement-body reveal">
+        At <strong>Forged</strong>, we source only the upgrades worth having. Every product is chosen for fit, finish, and the difference it makes — inside and out. No filler. No cheap alternatives. Just the parts that make your car feel exactly how it should.
+      </p>
+      <a href="shop.html" class="btn btn-primary btn-lg reveal">Browse the full range</a>
+
+      <div class="stats-row">
+        <div class="stat-item reveal">
+          <span class="stat-num">15+</span>
+          <span class="stat-label">Products</span>
+        </div>
+        <div class="stat-item reveal reveal-delay-1">
+          <span class="stat-num">48hr</span>
+          <span class="stat-label">UK Dispatch</span>
+        </div>
+        <div class="stat-item reveal reveal-delay-2">
+          <span class="stat-num">100%</span>
+          <span class="stat-label">Satisfaction guaranteed</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div>
+          <div class="footer-brand-logo">
+            <div class="footer-brand-mark">
+              <svg width="11" height="11" viewBox="0 0 14 14"><path d="M7 0L9.5 5H14L10.5 8.5L12 14L7 11L2 14L3.5 8.5L0 5H4.5L7 0Z"/></svg>
+            </div>
+            Forged
+          </div>
+          <p class="footer-tagline">Premium car accessories, sourced for the detail-obsessed. Built for UK roads.</p>
+          <div class="footer-socials">
+            <a href="#" class="footer-social" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="footer-social" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="#" class="footer-social" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          </div>
+        </div>
+
+        <div>
+          <p class="footer-col-title">Shop</p>
+          <div class="footer-links">
+            <a href="shop.html">All products</a>
+            <a href="shop.html?cat=tech">Tech &amp; CarPlay</a>
+            <a href="shop.html?cat=exterior">Exterior</a>
+            <a href="shop.html?cat=interior">Interior</a>
+            <a href="shop.html?cat=badges">Badges &amp; Emblems</a>
+          </div>
+        </div>
+
+        <div>
+          <p class="footer-col-title">Help</p>
+          <div class="footer-links">
+            <a href="contact.html">Support</a>
+            <a href="contact.html">Shipping info</a>
+            <a href="contact.html">Returns</a>
+            <a href="contact.html">Track your order</a>
+          </div>
+        </div>
+
+        <div>
+          <p class="footer-col-title">Company</p>
+          <div class="footer-links">
+            <a href="about.html">About Forged</a>
+            <a href="garage.html">Garage (reg lookup)</a>
+            <a href="#">Privacy policy</a>
+            <a href="#">Terms of service</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-copy">&copy; 2026 Forged. All rights reserved.</p>
+        <div class="footer-payments">
+          <span class="pay-tag">VISA</span>
+          <span class="pay-tag">MC</span>
+          <span class="pay-tag">AMEX</span>
+          <span class="pay-tag">PAYPAL</span>
+          <span class="pay-tag">APPLE PAY</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Cart Drawer -->
+  <div class="cart-overlay" id="cart-overlay"></div>
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-drawer-header">
+      <div>
+        <p class="cart-drawer-title">Your cart</p>
+        <p class="cart-drawer-count" id="cart-drawer-count">0 items</p>
+      </div>
+      <button class="cart-close" onclick="closeCart()">&times;</button>
+    </div>
+    <div class="cart-items-list" id="cart-items-list"></div>
+    <div class="cart-drawer-footer" id="cart-drawer-footer" style="display:none;">
+      <div class="cart-total-row">
+        <span class="cart-total-label">Total</span>
+        <span class="cart-total-amount" id="cart-total">£0.00</span>
+      </div>
+      <button class="btn btn-primary btn-lg cart-checkout-btn" onclick="cartCheckoutEmail()">
+        Checkout <i class="fa-solid fa-arrow-right"></i>
+      </button>
+      <p class="cart-note">Free UK delivery on orders over £50</p>
+    </div>
+  </div>
+
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
