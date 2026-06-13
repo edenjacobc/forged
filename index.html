@@ -13,6 +13,22 @@
 </head>
 <body>
 
+  <!-- Pause hero animations before loader exits -->
+  <script>document.body.classList.add('loader-active');</script>
+
+  <!-- Page Loader -->
+  <div class="page-loader" id="page-loader">
+    <div class="loader-content">
+      <p class="loader-label">Carbon Series &middot; UK</p>
+      <div class="loader-wordmark">FORGED</div>
+      <div class="loader-bar-wrap">
+        <div class="loader-bar-track">
+          <div class="loader-bar-fill" id="loader-bar"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Navbar -->
   <nav class="navbar" id="navbar">
     <div class="nav-inner">
@@ -411,5 +427,52 @@
   <script src="js/cart.js"></script>
   <script src="js/shopify.js"></script>
   <script src="js/main.js"></script>
+
+  <script>
+    (function () {
+      const loader = document.getElementById('page-loader');
+      const bar    = document.getElementById('loader-bar');
+      if (!loader || !bar) return;
+
+      const MIN_TIME = 1800;
+      const start    = Date.now();
+      let pct        = 0;
+
+      // Ease the bar to ~90% while loading
+      const tick = setInterval(function () {
+        pct += (90 - pct) * 0.07 + Math.random() * 3;
+        if (pct >= 90) { pct = 90; clearInterval(tick); }
+        bar.style.width = pct + '%';
+      }, 80);
+
+      function finish() {
+        clearInterval(tick);
+        bar.style.transition = 'width 0.35s ease';
+        bar.style.width = '100%';
+
+        // After bar fills, slide the curtain up
+        setTimeout(function () {
+          loader.classList.add('loader-exit');
+          loader.addEventListener('transitionend', function () {
+            loader.style.display = 'none';
+            // Now remove loader-active so hero animations play
+            document.body.classList.remove('loader-active');
+          }, { once: true });
+        }, 400);
+      }
+
+      var elapsed = Date.now() - start;
+      var wait    = Math.max(0, MIN_TIME - elapsed);
+
+      if (document.readyState === 'complete') {
+        setTimeout(finish, wait);
+      } else {
+        window.addEventListener('load', function () {
+          var e2 = Date.now() - start;
+          setTimeout(finish, Math.max(0, MIN_TIME - e2));
+        });
+      }
+    })();
+  </script>
 </body>
 </html>

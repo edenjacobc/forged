@@ -991,6 +991,83 @@ footer { border-top: 1px solid var(--grey-200); background: var(--white); }
 }
 
 /* ============================================================
+   PAGE LOADER
+   ============================================================ */
+.page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: #0b0b0b;
+  background-image:
+    repeating-linear-gradient(45deg, transparent 0, transparent 5px, rgba(255,255,255,0.028) 5px, rgba(255,255,255,0.028) 6px, transparent 6px, transparent 12px, rgba(255,255,255,0.014) 12px, rgba(255,255,255,0.014) 13px),
+    repeating-linear-gradient(-45deg, transparent 0, transparent 5px, rgba(255,255,255,0.028) 5px, rgba(255,255,255,0.028) 6px, transparent 6px, transparent 12px, rgba(255,255,255,0.014) 12px, rgba(255,255,255,0.014) 13px);
+  background-size: 13px 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: transform 0.85s cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: transform;
+}
+.page-loader.loader-exit {
+  transform: translateY(-100%);
+}
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  text-align: center;
+}
+.loader-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.28);
+  margin-bottom: 20px;
+  animation: fadeIn 0.5s 0.15s both;
+}
+.loader-wordmark {
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 40px;
+  animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.05s both;
+}
+.loader-bar-wrap {
+  width: clamp(160px, 28vw, 280px);
+  animation: fadeIn 0.5s 0.3s both;
+}
+.loader-bar-track {
+  height: 2px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 1px;
+  overflow: hidden;
+}
+.loader-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: #fff;
+  border-radius: 1px;
+  transition: width 0.12s linear;
+}
+
+/* Pause hero animations while loader is active so they play after curtain lifts */
+body.loader-active .hero-eyebrow,
+body.loader-active .hw,
+body.loader-active .hw-carbon,
+body.loader-active .hero-sub,
+body.loader-active .hero-actions,
+body.loader-active .hero-stats,
+body.loader-active .hero-scroll,
+body.loader-active .hero-bg-word {
+  animation-play-state: paused;
+}
+
+/* ============================================================
    REVIEWS
    ============================================================ */
 .reviews-section {
