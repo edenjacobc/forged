@@ -155,31 +155,21 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
 .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 .nav-mobile {
-  display: flex;
-  flex-direction: column; gap: 4px;
+  display: none;
   position: fixed; top: var(--nav-h); left: 0; right: 0;
   background: var(--white); border-bottom: 1px solid var(--grey-200);
   padding: 16px 24px;
+  flex-direction: column; gap: 4px;
   z-index: 99;
   box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-  transform: translateY(-12px);
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition:
-    transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity 0.25s ease,
-    visibility 0s linear 0.28s;
 }
 .nav-mobile.open {
-  transform: none;
-  opacity: 1;
-  visibility: visible;
-  pointer-events: all;
-  transition:
-    transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity 0.25s ease,
-    visibility 0s linear 0s;
+  display: flex;
+  animation: navSlideDown 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes navSlideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: none; }
 }
 .nav-mobile a {
   padding: 12px 0; font-size: 1rem; font-weight: 600;
@@ -310,13 +300,12 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
   display: inline-block;
   animation: hwReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0s) both;
 }
-/* "Drive." — light wave sweeps left to right like CF catching light */
+/* "Drive." — colour glow + wave sweep, zero filter stutter */
 .hw-carbon {
   position: relative;
   display: inline-block;
   overflow: hidden;
-  color: rgba(255,255,255,0.55);
-  will-change: filter;
+  color: rgba(255,255,255,0.38);
   animation:
     hwReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both,
     driveGlow 5s ease-in-out 1.4s infinite;
@@ -325,14 +314,13 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
   content: '';
   position: absolute;
   top: -5%; left: 0;
-  width: 65px;
-  height: 110%;
+  width: 60px; height: 110%;
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255,255,255,0.12) 20%,
-    rgba(255,255,255,0.88) 50%,
-    rgba(255,255,255,0.12) 80%,
+    rgba(255,255,255,0.08) 20%,
+    rgba(255,255,255,0.75) 50%,
+    rgba(255,255,255,0.08) 80%,
     transparent 100%
   );
   will-change: transform, opacity;
@@ -340,11 +328,11 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
   pointer-events: none;
 }
 @keyframes driveGlow {
-  0%   { filter: brightness(0.72); }
-  20%  { filter: brightness(1.5) drop-shadow(0 0 20px rgba(255,255,255,0.55)) drop-shadow(0 0 50px rgba(255,255,255,0.2)); }
-  62%  { filter: brightness(1.5) drop-shadow(0 0 20px rgba(255,255,255,0.55)) drop-shadow(0 0 50px rgba(255,255,255,0.2)); }
-  84%  { filter: brightness(0.72); }
-  100% { filter: brightness(0.72); }
+  0%   { color: rgba(255,255,255,0.38); text-shadow: none; }
+  20%  { color: #fff; text-shadow: 0 0 30px rgba(255,255,255,0.7), 0 0 70px rgba(255,255,255,0.3); }
+  62%  { color: #fff; text-shadow: 0 0 30px rgba(255,255,255,0.7), 0 0 70px rgba(255,255,255,0.3); }
+  84%  { color: rgba(255,255,255,0.38); text-shadow: none; }
+  100% { color: rgba(255,255,255,0.38); text-shadow: none; }
 }
 @keyframes driveWave {
   0%   { transform: skewX(-18deg) translateX(-115%); opacity: 0; }
