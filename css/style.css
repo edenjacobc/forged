@@ -195,11 +195,7 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
   0%, 100% { opacity: 0.09; }
   50%       { opacity: 0.19; }
 }
-@keyframes driveSheen {
-  0%   { background-position: 120% 0; }
-  50%  { background-position: -80% 0; }
-  100% { background-position: 120% 0; }
-}
+
 @keyframes scrollPulse {
   0%, 100% { transform: scaleY(0); transform-origin: top; opacity: 1; }
   60%       { transform: scaleY(1); transform-origin: top; opacity: 1; }
@@ -297,24 +293,17 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
   display: inline-block;
   animation: hwReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0s) both;
 }
-/* "Drive." — metallic carbon sheen, slow shimmer across the text */
+/* "Drive." — glow pulse, GPU-friendly, no clip lag */
 .hw-carbon {
   display: inline-block;
-  background: linear-gradient(
-    110deg,
-    rgba(255,255,255,0.06) 0%,
-    rgba(255,255,255,0.42) 35%,
-    rgba(255,255,255,0.10) 50%,
-    rgba(255,255,255,0.32) 65%,
-    rgba(255,255,255,0.04) 100%
-  );
-  background-size: 300% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: rgba(255,255,255,0.68);
   animation:
     hwReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both,
-    driveSheen 6s ease-in-out 1.6s infinite;
+    driveGlow 5s ease-in-out 1.4s infinite;
+}
+@keyframes driveGlow {
+  0%, 100% { color: rgba(255,255,255,0.68); text-shadow: none; }
+  50%      { color: rgba(255,255,255,0.92); text-shadow: 0 0 80px rgba(255,255,255,0.18); }
 }
 .hero-sub {
   font-size: 1rem; color: rgba(255,255,255,0.42);
