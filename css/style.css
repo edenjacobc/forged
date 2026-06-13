@@ -970,6 +970,23 @@ footer { border-top: 1px solid var(--grey-200); background: var(--white); }
   .garage-results { padding: 32px 20px; }
   .garage-vehicle-card { flex-direction: column; align-items: flex-start; gap: 16px; }
   .wrap, .wrap--wide { padding: 0 20px; }
+
+  /* About page */
+  .about-hero-sec { padding: 48px 20px !important; }
+  .about-hero-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+  .about-values-sec { padding: 48px 20px !important; }
+  .about-values-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+    background: transparent !important;
+    border: none !important;
+  }
+  .about-values-grid > div { border: 1px solid var(--grey-200) !important; padding: 28px !important; }
+  .about-values-grid > div + div { border-top: none !important; }
+
+  /* Product card footer: stack price + button on narrow screens */
+  .product-footer { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .product-add-btn { width: 100%; text-align: center; }
 }
 @media (max-width: 480px) {
   .products-grid { grid-template-columns: repeat(2, 1fr); }
