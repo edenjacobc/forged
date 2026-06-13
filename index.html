@@ -55,7 +55,11 @@
   <!-- Hero — full-width two-column -->
   <section class="hero">
     <div class="hero-image-wrap">
-      <div class="hero-image-placeholder"></div>
+      <div class="hero-carbon">
+        <div class="hero-carbon-shimmer"></div>
+        <div class="hero-carbon-fmark"><img src="2.svg" alt=""></div>
+        <div class="hero-carbon-vignette"></div>
+      </div>
     </div>
     <div class="hero-content">
       <div class="hero-text">
@@ -79,7 +83,13 @@
       <form class="reg-form" id="reg-form">
         <div class="reg-form-plate">
           <div class="reg-gb">
-            <span class="reg-gb-flag">🇬🇧</span>
+            <svg viewBox="0 0 20 12" class="reg-gb-flag-svg" aria-hidden="true">
+              <rect width="20" height="12" fill="#012169"/>
+              <path d="M0,0 L20,12 M20,0 L0,12" stroke="white" stroke-width="3.5"/>
+              <path d="M0,0 L20,12 M20,0 L0,12" stroke="#C8102E" stroke-width="2"/>
+              <path d="M10,0 V12 M0,6 H20" stroke="white" stroke-width="4"/>
+              <path d="M10,0 V12 M0,6 H20" stroke="#C8102E" stroke-width="2.5"/>
+            </svg>
             <span class="reg-gb-text">GB</span>
           </div>
           <input
@@ -89,7 +99,7 @@
             aria-label="Enter vehicle registration"
           >
         </div>
-        <button type="submit" class="reg-submit" id="reg-submit">Find My Car</button>
+        <button type="submit" class="reg-submit" id="reg-submit"><i class="fa-solid fa-magnifying-glass"></i> Find My Car</button>
       </form>
 
       <div id="reg-result" class="reg-result-box"></div>

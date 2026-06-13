@@ -192,6 +192,75 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
   width: 100%; height: 100%;
   background: #0a0a0a;
 }
+
+/* ============================================================
+   HERO CARBON ANIMATION
+   ============================================================ */
+@keyframes carbonShimmer {
+  0%   { transform: translateX(-130%); opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { transform: translateX(130%); opacity: 0; }
+}
+@keyframes carbonGlow {
+  0%, 100% { opacity: 0.09; }
+  50%       { opacity: 0.19; }
+}
+
+.hero-carbon {
+  width: 100%; height: 100%;
+  position: relative; overflow: hidden;
+  background-color: #111;
+  background-image:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255,255,255,0) 0px, rgba(255,255,255,0) 2px,
+      rgba(255,255,255,0.048) 2px, rgba(255,255,255,0.048) 3px,
+      rgba(255,255,255,0) 3px, rgba(255,255,255,0) 5px,
+      rgba(255,255,255,0.022) 5px, rgba(255,255,255,0.022) 6px,
+      rgba(255,255,255,0) 6px, rgba(255,255,255,0) 8px
+    ),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0) 0px, rgba(255,255,255,0) 2px,
+      rgba(255,255,255,0.048) 2px, rgba(255,255,255,0.048) 3px,
+      rgba(255,255,255,0) 3px, rgba(255,255,255,0) 5px,
+      rgba(255,255,255,0.022) 5px, rgba(255,255,255,0.022) 6px,
+      rgba(255,255,255,0) 6px, rgba(255,255,255,0) 8px
+    );
+  background-size: 8px 8px, 8px 8px;
+}
+.hero-carbon-shimmer {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    103deg,
+    transparent 0%, transparent 35%,
+    rgba(255,255,255,0.025) 41%,
+    rgba(255,255,255,0.09) 50%,
+    rgba(255,255,255,0.025) 59%,
+    transparent 65%, transparent 100%
+  );
+  animation: carbonShimmer 7s cubic-bezier(0.4,0,0.6,1) infinite;
+  animation-delay: 2s;
+  pointer-events: none;
+  will-change: transform;
+}
+.hero-carbon-fmark {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+}
+.hero-carbon-fmark img {
+  width: min(70%, 460px);
+  mix-blend-mode: screen;
+  animation: carbonGlow 8s ease-in-out infinite;
+  user-select: none;
+}
+.hero-carbon-vignette {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 90% 90% at 40% 50%, transparent 28%, rgba(0,0,0,0.52) 100%);
+  pointer-events: none;
+}
 .hero-content {
   padding: 80px 56px;
   display: flex; flex-direction: column;
@@ -216,9 +285,31 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
    ============================================================ */
 .reg-section {
   padding: 80px 40px;
-  border-bottom: 1px solid var(--grey-200);
-  background: var(--grey-100);
+  border-bottom: 1px solid #222;
+  background-color: #0d0d0d;
+  background-image:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255,255,255,0) 0px, rgba(255,255,255,0) 2px,
+      rgba(255,255,255,0.036) 2px, rgba(255,255,255,0.036) 3px,
+      rgba(255,255,255,0) 3px, rgba(255,255,255,0) 5px,
+      rgba(255,255,255,0.015) 5px, rgba(255,255,255,0.015) 6px,
+      rgba(255,255,255,0) 6px, rgba(255,255,255,0) 8px
+    ),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0) 0px, rgba(255,255,255,0) 2px,
+      rgba(255,255,255,0.036) 2px, rgba(255,255,255,0.036) 3px,
+      rgba(255,255,255,0) 3px, rgba(255,255,255,0) 5px,
+      rgba(255,255,255,0.015) 5px, rgba(255,255,255,0.015) 6px,
+      rgba(255,255,255,0) 6px, rgba(255,255,255,0) 8px
+    );
+  background-size: 8px 8px, 8px 8px;
 }
+.reg-section .section-label  { color: rgba(255,255,255,0.4); }
+.reg-section .section-title  { color: var(--white); }
+.reg-section .section-sub    { color: rgba(255,255,255,0.5); }
+.reg-section .reg-disclaimer { color: rgba(255,255,255,0.3); }
 .reg-section-inner {
   max-width: 600px; margin: 0 auto; text-align: center;
 }
@@ -253,7 +344,7 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
   display: flex; flex-direction: column;
   align-items: center; justify-content: center; gap: 3px;
 }
-.reg-gb-flag { font-size: 15px; line-height: 1; }
+.reg-gb-flag-svg { width: 22px; height: 14px; border-radius: 2px; display: block; }
 .reg-gb-text { font-size: 8px; font-weight: 900; letter-spacing: 0.04em; }
 .reg-input {
   flex: 1; border: none;
@@ -270,16 +361,17 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
 .reg-input:focus { outline: none; }
 .reg-submit {
   height: 58px;
-  background: var(--black); color: var(--white);
+  background: #003399; color: var(--white);
   border: none; padding: 0 22px;
   border-radius: 8px;
   font-size: 0.875rem; font-weight: 700;
   cursor: pointer; white-space: nowrap;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em; text-transform: uppercase;
   transition: background var(--transition);
   flex-shrink: 0; font-family: var(--font);
+  display: flex; align-items: center; gap: 8px;
 }
-.reg-submit:hover { background: #222; }
+.reg-submit:hover { background: #004acc; }
 .reg-submit:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .reg-result-box { min-height: 48px; margin-top: 16px; }
