@@ -292,34 +292,47 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
   display: inline-block;
   animation: hwReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0s) both;
 }
-/* "Drive." — multi-layer text-shadow glow, zero GPU overhead */
+/* "Drive." — wave sweeps D→E via background-position on a pre-warmed clip layer */
 .hw-carbon {
   display: inline-block;
-  color: rgba(255,255,255,0.32);
+  /* Gradient is 400% wide; bright peak at 50% sweeps left→right as position goes 100%→0% */
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.30) 0%,
+    rgba(255,255,255,0.30) 24%,
+    rgba(255,255,255,0.68) 38%,
+    #fff                   50%,
+    rgba(255,255,255,0.68) 62%,
+    rgba(255,255,255,0.30) 76%,
+    rgba(255,255,255,0.30) 100%
+  );
+  background-size: 400% 100%;
+  background-position: 100% center; /* wave held off-screen left at start */
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   animation:
     hwReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both,
-    driveGlow 5s ease-in-out 1.4s infinite;
+    driveGlow 6s ease-in-out 1.4s infinite;
 }
 @keyframes driveGlow {
-  0%   { color: rgba(255,255,255,0.32); text-shadow: none; }
-  18%  {
-    color: #fff;
-    text-shadow:
-      0 0 10px rgba(255,255,255,1),
-      0 0 30px rgba(255,255,255,0.75),
-      0 0 65px rgba(255,255,255,0.4),
-      0 0 130px rgba(255,255,255,0.15);
+  /* dim, wave waiting off-screen left */
+  0%   { background-position: 100% center; text-shadow: none; }
+  12%  { background-position: 100% center; text-shadow: none; }
+  /* wave sweeps left→right, outer glow builds */
+  44%  {
+    background-position: 0% center;
+    text-shadow: 0 0 22px rgba(255,255,255,0.55), 0 0 58px rgba(255,255,255,0.22);
   }
-  62%  {
-    color: #fff;
-    text-shadow:
-      0 0 10px rgba(255,255,255,1),
-      0 0 30px rgba(255,255,255,0.75),
-      0 0 65px rgba(255,255,255,0.4),
-      0 0 130px rgba(255,255,255,0.15);
+  /* hold bright */
+  66%  {
+    background-position: 0% center;
+    text-shadow: 0 0 22px rgba(255,255,255,0.55), 0 0 58px rgba(255,255,255,0.22);
   }
-  84%  { color: rgba(255,255,255,0.32); text-shadow: none; }
-  100% { color: rgba(255,255,255,0.32); text-shadow: none; }
+  /* fade dim — both position:0% and position:100% show identical dim flat gradient sections */
+  84%  { background-position: 0% center; text-shadow: none; }
+  85%  { background-position: 100% center; text-shadow: none; } /* invisible reset */
+  100% { background-position: 100% center; text-shadow: none; }
 }
 .hero-sub {
   font-size: 1rem; color: rgba(255,255,255,0.42);
