@@ -442,23 +442,27 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
 }
 .reg-gb {
   background: #003399; color: var(--white);
-  width: 50px; flex-shrink: 0;
+  width: 56px; flex-shrink: 0;
   display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 3px;
+  align-items: center; justify-content: center; gap: 4px;
 }
-.reg-gb-flag-svg { width: 22px; height: 14px; border-radius: 2px; display: block; }
-.reg-gb-text { font-size: 8px; font-weight: 900; letter-spacing: 0.04em; }
+.reg-gb-flag-svg {
+  width: 30px; height: 19px;
+  border-radius: 3px; display: block;
+  box-shadow: 0 0 0 1.5px rgba(255,255,255,0.35);
+}
+.reg-gb-text { font-size: 8px; font-weight: 900; letter-spacing: 0.05em; }
 .reg-input {
   flex: 1; border: none;
   background: #FFDD00;
-  padding: 0 16px;
+  padding: 0 14px;
   font-size: 1.4rem; font-weight: 900;
   letter-spacing: 0.12em; text-transform: uppercase;
   color: var(--black); font-family: var(--font);
 }
 .reg-input::placeholder {
-  font-weight: 400;
-  color: rgba(0,0,0,0.28);
+  font-weight: 700;
+  color: rgba(0,0,0,0.32);
   letter-spacing: 0.08em;
 }
 .reg-input:focus { outline: none; }
@@ -990,9 +994,10 @@ footer { border-top: 1px solid var(--grey-200); background: var(--white); }
 }
 @media (max-width: 480px) {
   .products-grid { grid-template-columns: repeat(2, 1fr); }
-  .reg-form { flex-direction: column; }
-  .reg-form-plate { height: 52px; }
-  .reg-submit { height: 52px; width: 100%; border-radius: 8px; }
+  .reg-form { flex-direction: column; gap: 8px; width: 100%; max-width: 100%; }
+  .reg-form-plate { height: 56px; border-radius: 10px; overflow: hidden; }
+  .reg-input { font-size: 1.25rem; padding: 0 14px; }
+  .reg-submit { height: 52px; width: 100%; border-radius: 10px; justify-content: center; }
   .reviews-grid { grid-template-columns: 1fr; }
 }
 
