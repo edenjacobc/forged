@@ -450,9 +450,9 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
   color: var(--black); font-family: var(--font);
 }
 .reg-input::placeholder {
-  font-size: 0.875rem; font-weight: 500;
-  letter-spacing: 0.06em; text-transform: uppercase;
-  color: rgba(0,0,0,0.3);
+  font-weight: 400;
+  color: rgba(0,0,0,0.28);
+  letter-spacing: 0.08em;
 }
 .reg-input:focus { outline: none; }
 .reg-submit {
