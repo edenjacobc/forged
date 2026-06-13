@@ -434,11 +434,17 @@
       const bar    = document.getElementById('loader-bar');
       if (!loader || !bar) return;
 
+      // Skip loader on return visits within the same session
+      if (sessionStorage.getItem('forged_visited')) {
+        loader.style.display = 'none';
+        document.body.classList.remove('loader-active');
+        return;
+      }
+
       const MIN_TIME = 1800;
       const start    = Date.now();
       let pct        = 0;
 
-      // Ease the bar to ~90% while loading
       const tick = setInterval(function () {
         pct += (90 - pct) * 0.07 + Math.random() * 3;
         if (pct >= 90) { pct = 90; clearInterval(tick); }
@@ -449,27 +455,21 @@
         clearInterval(tick);
         bar.style.transition = 'width 0.35s ease';
         bar.style.width = '100%';
-
-        // After bar fills, slide the curtain up
         setTimeout(function () {
           loader.classList.add('loader-exit');
           loader.addEventListener('transitionend', function () {
             loader.style.display = 'none';
-            // Now remove loader-active so hero animations play
             document.body.classList.remove('loader-active');
+            sessionStorage.setItem('forged_visited', '1');
           }, { once: true });
         }, 400);
       }
 
-      var elapsed = Date.now() - start;
-      var wait    = Math.max(0, MIN_TIME - elapsed);
-
       if (document.readyState === 'complete') {
-        setTimeout(finish, wait);
+        setTimeout(finish, Math.max(0, MIN_TIME - (Date.now() - start)));
       } else {
         window.addEventListener('load', function () {
-          var e2 = Date.now() - start;
-          setTimeout(finish, Math.max(0, MIN_TIME - e2));
+          setTimeout(finish, Math.max(0, MIN_TIME - (Date.now() - start)));
         });
       }
     })();
