@@ -22,7 +22,6 @@
     else { cart.push({ id, name, price: Number(price), category: category || '', qty: 1 }); }
     saveCart(cart);
     openCart();
-    showToast(name + ' added to cart');
   };
 
   window.cartRemove = function (id) { saveCart(getCart().filter(i => i.id !== id)); };
