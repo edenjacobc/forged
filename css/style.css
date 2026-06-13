@@ -91,21 +91,13 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
   padding: 0 40px;
 }
 .nav-logo {
-  font-size: 1rem; font-weight: 900;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  display: flex; align-items: center; gap: 8px;
+  display: flex; align-items: center;
   color: var(--black);
 }
-.nav-logo-img-wrap {
-  width: 28px; height: 28px;
-  overflow: hidden;
-  position: relative;
-  flex-shrink: 0;
-}
-.nav-logo-img {
-  position: absolute;
-  width: 70px; height: 70px;
-  top: -15px; left: -21px;
+.nav-wordmark {
+  height: 26px;
+  width: auto;
+  display: block;
 }
 
 .nav-links { display: flex; align-items: center; gap: 36px; }
