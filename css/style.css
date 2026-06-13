@@ -471,7 +471,7 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
 }
 .reg-gb {
   background: #003399; color: var(--white);
-  width: 56px; flex-shrink: 0;
+  width: 54px; flex-shrink: 0;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center; gap: 4px;
 }
@@ -482,18 +482,21 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
 }
 .reg-gb-text { font-size: 8px; font-weight: 900; letter-spacing: 0.05em; }
 .reg-input {
-  flex: 1; border: none;
+  flex: 1;
+  min-width: 0;
+  border: none;
   background: #FFDD00;
-  padding: 0 14px 8px;
-  font-size: 1.4rem; font-weight: 900;
-  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 0 12px;
+  height: 100%;
+  font-size: 1.35rem; font-weight: 900;
+  letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--black); font-family: var(--font);
   text-align: center;
 }
 .reg-input::placeholder {
   font-weight: 700;
-  color: rgba(0,0,0,0.32);
-  letter-spacing: 0.08em;
+  color: rgba(0,0,0,0.35);
+  letter-spacing: 0.05em;
 }
 .reg-input:focus { outline: none; }
 .reg-submit {
@@ -1031,7 +1034,7 @@ footer { border-top: 1px solid var(--grey-200); background: var(--white); }
   .products-grid { grid-template-columns: repeat(2, 1fr); }
   .reg-form { flex-direction: column; gap: 8px; width: 100%; max-width: 100%; }
   .reg-form-plate { height: 56px; border-radius: 10px; overflow: hidden; }
-  .reg-input { font-size: 1.25rem; padding: 0 14px; }
+  .reg-input { font-size: 1.2rem; padding: 0 10px; }
   .reg-submit { height: 52px; width: 100%; border-radius: 10px; justify-content: center; }
   .reviews-grid { grid-template-columns: 1fr; }
 }
