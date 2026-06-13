@@ -195,6 +195,11 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
   0%, 100% { opacity: 0.09; }
   50%       { opacity: 0.19; }
 }
+@keyframes driveSheen {
+  0%   { background-position: 120% 0; }
+  50%  { background-position: -80% 0; }
+  100% { background-position: 120% 0; }
+}
 @keyframes scrollPulse {
   0%, 100% { transform: scaleY(0); transform-origin: top; opacity: 1; }
   60%       { transform: scaleY(1); transform-origin: top; opacity: 1; }
@@ -207,23 +212,23 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
   min-height: 100vh;
   display: flex; align-items: center;
   overflow: hidden;
-  background-color: #0c0c0c;
-  /* 2x2 plain-weave CF: horizontal + vertical bundles offset by half-tile */
+  background-color: #0b0b0b;
   background-image:
     repeating-linear-gradient(
-      90deg,
-      transparent 0, transparent 6px,
-      rgba(255,255,255,0.09) 6px, rgba(255,255,255,0.09) 9px,
-      transparent 9px, transparent 15px
+      45deg,
+      transparent 0, transparent 5px,
+      rgba(255,255,255,0.028) 5px, rgba(255,255,255,0.028) 6px,
+      transparent 6px, transparent 12px,
+      rgba(255,255,255,0.014) 12px, rgba(255,255,255,0.014) 13px
     ),
     repeating-linear-gradient(
-      0deg,
-      transparent 0, transparent 6px,
-      rgba(255,255,255,0.065) 6px, rgba(255,255,255,0.065) 9px,
-      transparent 9px, transparent 15px
+      -45deg,
+      transparent 0, transparent 5px,
+      rgba(255,255,255,0.028) 5px, rgba(255,255,255,0.028) 6px,
+      transparent 6px, transparent 12px,
+      rgba(255,255,255,0.014) 12px, rgba(255,255,255,0.014) 13px
     );
-  background-size: 15px 15px, 15px 15px;
-  background-position: 0 0, 7.5px 7.5px;
+  background-size: 13px 13px;
 }
 .hero-bg {
   position: absolute; inset: 0; pointer-events: none; overflow: hidden;
@@ -292,11 +297,24 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
   display: inline-block;
   animation: hwReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0s) both;
 }
-/* "Drive." — clean muted tone, contrast against full-white "Forge Your" */
+/* "Drive." — metallic carbon sheen, slow shimmer across the text */
 .hw-carbon {
   display: inline-block;
-  color: rgba(255,255,255,0.22);
-  animation: hwReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+  background: linear-gradient(
+    110deg,
+    rgba(255,255,255,0.06) 0%,
+    rgba(255,255,255,0.42) 35%,
+    rgba(255,255,255,0.10) 50%,
+    rgba(255,255,255,0.32) 65%,
+    rgba(255,255,255,0.04) 100%
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation:
+    hwReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both,
+    driveSheen 6s ease-in-out 1.6s infinite;
 }
 .hero-sub {
   font-size: 1rem; color: rgba(255,255,255,0.42);
@@ -969,4 +987,114 @@ footer { border-top: 1px solid var(--grey-200); background: var(--white); }
   .reg-form { flex-direction: column; }
   .reg-form-plate { height: 52px; }
   .reg-submit { height: 52px; width: 100%; border-radius: 8px; }
+  .reviews-grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   REVIEWS
+   ============================================================ */
+.reviews-section {
+  background: #0d0d0d;
+  padding: 96px 80px;
+  border-top: 1px solid #1e1e1e;
+}
+.reviews-header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+.reviews-title {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+  line-height: 1;
+}
+.reviews-sub {
+  color: rgba(255,255,255,0.38);
+  font-size: 0.9rem;
+}
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  max-width: var(--content-w);
+  margin: 0 auto;
+}
+.review-card {
+  background: #141414;
+  border: 1px solid #222;
+  border-radius: 12px;
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.25s;
+}
+.review-card:hover { border-color: #383838; }
+.review-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+.review-stars {
+  display: flex;
+  gap: 3px;
+}
+.review-stars span {
+  color: #fff;
+  font-size: 0.8rem;
+}
+.review-quote-icon {
+  color: rgba(255,255,255,0.12);
+  font-size: 1.5rem;
+  line-height: 1;
+  font-family: Georgia, serif;
+}
+.review-text {
+  color: rgba(255,255,255,0.62);
+  font-size: 0.855rem;
+  line-height: 1.72;
+  font-style: italic;
+  flex: 1;
+  margin-bottom: 22px;
+}
+.review-author {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding-top: 18px;
+  border-top: 1px solid #222;
+}
+.review-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #242424;
+  border: 1px solid #333;
+  color: rgba(255,255,255,0.55);
+  font-size: 0.65rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+.review-name {
+  font-size: 0.835rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 2px;
+}
+.review-car {
+  font-size: 0.735rem;
+  color: rgba(255,255,255,0.35);
+}
+@media (max-width: 1024px) {
+  .reviews-section { padding: 72px 40px; }
+  .reviews-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .reviews-section { padding: 56px 20px; }
 }
