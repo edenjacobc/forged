@@ -293,20 +293,48 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
   display: inline-block;
   animation: hwReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0s) both;
 }
-/* "Drive." — glow pulse, GPU-friendly, no clip lag */
+/* "Drive." — light wave sweeps left to right like CF catching light */
 .hw-carbon {
+  position: relative;
   display: inline-block;
-  color: rgba(255,255,255,0.42);
+  overflow: hidden;
+  color: rgba(255,255,255,0.55);
   animation:
     hwReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both,
-    driveGlow 6s ease-in-out 1.4s infinite;
+    driveGlow 5s ease-in-out 1.4s infinite;
+}
+.hw-carbon::before {
+  content: '';
+  position: absolute;
+  top: -5%; left: 0;
+  width: 65px;
+  height: 110%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255,255,255,0.12) 20%,
+    rgba(255,255,255,0.88) 50%,
+    rgba(255,255,255,0.12) 80%,
+    transparent 100%
+  );
+  transform: skewX(-18deg);
+  animation: driveWave 5s ease-in-out 1.4s infinite;
+  pointer-events: none;
 }
 @keyframes driveGlow {
-  0%   { color: rgba(255,255,255,0.42); text-shadow: none; }
-  22%  { color: rgba(255,255,255,0.96); text-shadow: 0 0 50px rgba(255,255,255,0.4), 0 0 100px rgba(255,255,255,0.15); }
-  62%  { color: rgba(255,255,255,0.96); text-shadow: 0 0 50px rgba(255,255,255,0.4), 0 0 100px rgba(255,255,255,0.15); }
-  84%  { color: rgba(255,255,255,0.42); text-shadow: none; }
-  100% { color: rgba(255,255,255,0.42); text-shadow: none; }
+  0%   { filter: brightness(0.72); }
+  20%  { filter: brightness(1.5) drop-shadow(0 0 20px rgba(255,255,255,0.55)) drop-shadow(0 0 50px rgba(255,255,255,0.2)); }
+  62%  { filter: brightness(1.5) drop-shadow(0 0 20px rgba(255,255,255,0.55)) drop-shadow(0 0 50px rgba(255,255,255,0.2)); }
+  84%  { filter: brightness(0.72); }
+  100% { filter: brightness(0.72); }
+}
+@keyframes driveWave {
+  0%   { left: -12%; opacity: 0; }
+  14%  { left: -12%; opacity: 0; }
+  16%  { opacity: 1; }
+  44%  { left: 112%; opacity: 1; }
+  45%  { left: 112%; opacity: 0; }
+  100% { left: 112%; opacity: 0; }
 }
 .hero-sub {
   font-size: 1rem; color: rgba(255,255,255,0.42);
@@ -894,35 +922,40 @@ footer { border-top: 1px solid var(--grey-200); background: var(--white); }
    REVEAL ANIMATIONS
    ============================================================ */
 .reveal {
-  opacity: 0; transform: translateY(28px);
-  transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1),
-              transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0;
+  transform: translateY(40px) scale(0.97);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .reveal-left {
-  opacity: 0; transform: translateX(-32px);
-  transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1),
-              transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0;
+  transform: translateX(-44px) scale(0.97);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .reveal-right {
-  opacity: 0; transform: translateX(32px);
-  transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1),
-              transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0;
+  transform: translateX(44px) scale(0.97);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .reveal-scale {
-  opacity: 0; transform: scale(0.94);
-  transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1),
-              transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .reveal.visible,
 .reveal-left.visible,
 .reveal-right.visible,
 .reveal-scale.visible {
-  opacity: 1; transform: none;
+  opacity: 1;
+  transform: none;
 }
-.reveal-delay-1 { transition-delay: 80ms; }
-.reveal-delay-2 { transition-delay: 160ms; }
-.reveal-delay-3 { transition-delay: 240ms; }
-.reveal-delay-4 { transition-delay: 320ms; }
+.reveal-delay-1 { transition-delay: 120ms; }
+.reveal-delay-2 { transition-delay: 240ms; }
+.reveal-delay-3 { transition-delay: 360ms; }
+.reveal-delay-4 { transition-delay: 480ms; }
 
 /* ============================================================
    TOAST
@@ -1138,6 +1171,7 @@ footer { border-top: 1px solid var(--grey-200); background: var(--white); }
 body.loader-active .hero-eyebrow,
 body.loader-active .hw,
 body.loader-active .hw-carbon,
+body.loader-active .hw-carbon::before,
 body.loader-active .hero-sub,
 body.loader-active .hero-actions,
 body.loader-active .hero-stats,
