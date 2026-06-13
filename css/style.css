@@ -195,10 +195,6 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
   0%, 100% { opacity: 0.09; }
   50%       { opacity: 0.19; }
 }
-@keyframes carbonTextShimmer {
-  from { background-position: 0px 0px, 0px 0px, 220% center; }
-  to   { background-position: 8px 8px, -8px 8px, -80% center; }
-}
 @keyframes scrollPulse {
   0%, 100% { transform: scaleY(0); transform-origin: top; opacity: 1; }
   60%       { transform: scaleY(1); transform-origin: top; opacity: 1; }
@@ -211,25 +207,23 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
   min-height: 100vh;
   display: flex; align-items: center;
   overflow: hidden;
-  background-color: #111;
+  background-color: #0c0c0c;
+  /* 2x2 plain-weave CF: horizontal + vertical bundles offset by half-tile */
   background-image:
     repeating-linear-gradient(
-      -45deg,
-      rgba(255,255,255,0) 0px, rgba(255,255,255,0) 2px,
-      rgba(255,255,255,0.048) 2px, rgba(255,255,255,0.048) 3px,
-      rgba(255,255,255,0) 3px, rgba(255,255,255,0) 5px,
-      rgba(255,255,255,0.022) 5px, rgba(255,255,255,0.022) 6px,
-      rgba(255,255,255,0) 6px, rgba(255,255,255,0) 8px
+      90deg,
+      transparent 0, transparent 6px,
+      rgba(255,255,255,0.09) 6px, rgba(255,255,255,0.09) 9px,
+      transparent 9px, transparent 15px
     ),
     repeating-linear-gradient(
-      45deg,
-      rgba(255,255,255,0) 0px, rgba(255,255,255,0) 2px,
-      rgba(255,255,255,0.048) 2px, rgba(255,255,255,0.048) 3px,
-      rgba(255,255,255,0) 3px, rgba(255,255,255,0) 5px,
-      rgba(255,255,255,0.022) 5px, rgba(255,255,255,0.022) 6px,
-      rgba(255,255,255,0) 6px, rgba(255,255,255,0) 8px
+      0deg,
+      transparent 0, transparent 6px,
+      rgba(255,255,255,0.065) 6px, rgba(255,255,255,0.065) 9px,
+      transparent 9px, transparent 15px
     );
-  background-size: 8px 8px, 8px 8px;
+  background-size: 15px 15px, 15px 15px;
+  background-position: 0 0, 7.5px 7.5px;
 }
 .hero-bg {
   position: absolute; inset: 0; pointer-events: none; overflow: hidden;
@@ -298,38 +292,11 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
   display: inline-block;
   animation: hwReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0s) both;
 }
-/* "Drive." has live carbon-fibre weave texture through the letterforms */
+/* "Drive." — clean muted tone, contrast against full-white "Forge Your" */
 .hw-carbon {
   display: inline-block;
-  background:
-    repeating-linear-gradient(
-      -45deg,
-      rgba(255,255,255,0.32) 0px, rgba(255,255,255,0.32) 1px,
-      rgba(255,255,255,0.14) 1px, rgba(255,255,255,0.14) 4px,
-      rgba(255,255,255,0.42) 4px, rgba(255,255,255,0.42) 5px,
-      rgba(255,255,255,0.14) 5px, rgba(255,255,255,0.14) 8px
-    ),
-    repeating-linear-gradient(
-      45deg,
-      rgba(255,255,255,0.22) 0px, rgba(255,255,255,0.22) 1px,
-      rgba(255,255,255,0.1) 1px, rgba(255,255,255,0.1) 4px,
-      rgba(255,255,255,0.3) 4px, rgba(255,255,255,0.3) 5px,
-      rgba(255,255,255,0.1) 5px, rgba(255,255,255,0.1) 8px
-    ),
-    linear-gradient(
-      90deg,
-      transparent 0%, transparent 30%,
-      rgba(255,255,255,0.3) 48%,
-      rgba(255,255,255,0.45) 50%,
-      rgba(255,255,255,0.3) 52%,
-      transparent 70%, transparent 100%
-    );
-  background-size: 8px 8px, 8px 8px, 300% 100%;
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation:
-    hwReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both,
-    carbonTextShimmer 5s 2s linear infinite;
+  color: rgba(255,255,255,0.22);
+  animation: hwReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
 }
 .hero-sub {
   font-size: 1rem; color: rgba(255,255,255,0.42);
@@ -483,8 +450,9 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
   color: var(--black); font-family: var(--font);
 }
 .reg-input::placeholder {
-  font-weight: 500; letter-spacing: 0.04em;
-  color: rgba(0,0,0,0.25); text-transform: none; font-size: 1rem;
+  font-size: 0.875rem; font-weight: 500;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: rgba(0,0,0,0.3);
 }
 .reg-input:focus { outline: none; }
 .reg-submit {
