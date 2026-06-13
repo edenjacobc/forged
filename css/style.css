@@ -296,14 +296,14 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
 /* "Drive." — glow pulse, GPU-friendly, no clip lag */
 .hw-carbon {
   display: inline-block;
-  color: rgba(255,255,255,0.68);
+  color: rgba(255,255,255,0.45);
   animation:
     hwReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both,
-    driveGlow 5s ease-in-out 1.4s infinite;
+    driveGlow 3.5s ease-in-out 1.4s infinite;
 }
 @keyframes driveGlow {
-  0%, 100% { color: rgba(255,255,255,0.68); text-shadow: none; }
-  50%      { color: rgba(255,255,255,0.92); text-shadow: 0 0 80px rgba(255,255,255,0.18); }
+  0%, 100% { color: rgba(255,255,255,0.45); text-shadow: none; }
+  50%      { color: #fff; text-shadow: 0 0 60px rgba(255,255,255,0.45), 0 0 120px rgba(255,255,255,0.2); }
 }
 .hero-sub {
   font-size: 1rem; color: rgba(255,255,255,0.42);
@@ -999,6 +999,71 @@ footer { border-top: 1px solid var(--grey-200); background: var(--white); }
   .reg-input { font-size: 1.25rem; padding: 0 14px; }
   .reg-submit { height: 52px; width: 100%; border-radius: 10px; justify-content: center; }
   .reviews-grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   PRIVACY PAGE
+   ============================================================ */
+.privacy-section {
+  padding: 80px 40px;
+  max-width: 760px;
+  margin: 0 auto;
+}
+.privacy-inner { width: 100%; }
+.privacy-header { margin-bottom: 48px; }
+.privacy-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  margin-bottom: 8px;
+}
+.privacy-meta {
+  font-size: 0.85rem;
+  color: var(--grey-400);
+}
+.privacy-notice {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: var(--grey-100);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin-bottom: 40px;
+  font-size: 0.875rem;
+  color: var(--grey-600);
+  line-height: 1.6;
+}
+.privacy-notice i { margin-top: 2px; flex-shrink: 0; }
+.privacy-body h2 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin: 36px 0 10px;
+  letter-spacing: -0.01em;
+}
+.privacy-body p {
+  font-size: 0.9rem;
+  color: var(--grey-600);
+  line-height: 1.75;
+  margin-bottom: 12px;
+}
+.privacy-body ul {
+  margin: 0 0 12px 0;
+  padding-left: 20px;
+}
+.privacy-body ul li {
+  font-size: 0.9rem;
+  color: var(--grey-600);
+  line-height: 1.75;
+  margin-bottom: 6px;
+}
+.privacy-body a {
+  color: var(--black);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.privacy-body a:hover { opacity: 0.65; }
+@media (max-width: 768px) {
+  .privacy-section { padding: 48px 20px; }
 }
 
 /* ============================================================
