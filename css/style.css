@@ -95,7 +95,7 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
   color: var(--black);
 }
 .nav-wordmark {
-  height: 26px;
+  height: 40px;
   width: auto;
   display: block;
 }
