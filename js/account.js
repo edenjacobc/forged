@@ -1,12 +1,11 @@
 (function () {
-  const SHOP_ID   = '100016423286';
-  const CLIENT_ID = '934f906e-c368-4a1a-9f9a-c5e938ed4e91';
-  const REDIRECT  = 'https://forgeduk.store/account.html';
-  const AUTH_URL  = `https://shopify.com/authentication/${SHOP_ID}/oauth/authorize`;
-  const TOKEN_URL = `https://shopify.com/authentication/${SHOP_ID}/oauth/token`;
-  const LOGOUT_URL= `https://shopify.com/authentication/${SHOP_ID}/logout`;
-  const API_URL   = `https://shopify.com/${SHOP_ID}/account/customer/api/2024-10/graphql`;
-  const SCOPES    = 'openid email';
+  const SHOP_ID    = '100016423286';
+  const CLIENT_ID  = '934f906e-c368-4a1a-9f9a-c5e938ed4e91';
+  const REDIRECT   = 'https://forgeduk.store/account.html';
+  const AUTH_URL   = `https://shopify.com/authentication/${SHOP_ID}/oauth/authorize`;
+  const TOKEN_URL  = `https://shopify.com/authentication/${SHOP_ID}/oauth/token`;
+  const LOGOUT_URL = `https://shopify.com/authentication/${SHOP_ID}/logout`;
+  const API_URL    = `https://shopify.com/${SHOP_ID}/account/customer/api/2024-10/graphql`;
 
   function b64url(buf) {
     return btoa(String.fromCharCode(...new Uint8Array(buf)))
@@ -30,7 +29,7 @@
         client_id:             CLIENT_ID,
         response_type:         'code',
         redirect_uri:          REDIRECT,
-        scope:                 SCOPES,
+        scope:                 'openid email',
         code_challenge:        challenge,
         code_challenge_method: 'S256',
         state,
@@ -61,28 +60,61 @@
         code_verifier: localStorage.getItem('pkce_v'),
       }),
     });
-    if (!res.ok) throw new Error('token_exchange');
+    if (!res.ok) throw new Error('code_exchange_failed');
     return res.json();
   }
 
-  async function fetchCustomer(token) {
-    const res = await fetch('/api/customer', {
+  async function exchangeForCustomerToken(idToken) {
+    const res = await fetch(TOKEN_URL, {
       method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ token }),
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body:    new URLSearchParams({
+        grant_type:         'urn:ietf:params:oauth:grant-type:token-exchange',
+        client_id:          CLIENT_ID,
+        audience:           '30243aa5-17c1-465a-8493-944bcc4e88aa',
+        subject_token:      idToken,
+        subject_token_type: 'urn:ietf:params:oauth:token-type:id_token',
+        scopes:             'https://api.customers.com/auth/customer.graphql',
+      }),
+    });
+    const data = await res.json();
+    if (!data.access_token) throw new Error(JSON.stringify(data));
+    return data.access_token;
+  }
+
+  async function fetchCustomer(token) {
+    const query = `{
+      customer {
+        firstName lastName
+        emailAddress { emailAddress }
+        orders(first: 10, sortKey: PROCESSED_AT, reverse: true) {
+          nodes {
+            id name processedAt financialStatus fulfillmentStatus
+            totalPrice { amount currencyCode }
+            lineItems(first: 5) { nodes { title quantity } }
+            fulfillments(first: 1) { trackingInfo(first: 1) { number url } }
+          }
+        }
+      }
+    }`;
+    const res = await fetch(API_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body:    JSON.stringify({ query }),
     });
     const json = await res.json();
-    if (!res.ok) throw new Error(json.error || ('HTTP ' + res.status));
-    return json;
+    if (json.errors) throw new Error(JSON.stringify(json.errors));
+    if (!json.data?.customer) throw new Error('Invalid token');
+    return json.data.customer;
   }
 
   function orderStep(o) {
     const f = o.fulfillmentStatus;
     const p = o.financialStatus;
-    if (f === 'FULFILLED')                                        return 5;
-    if (f === 'IN_PROGRESS' || f === 'PARTIALLY_FULFILLED')      return 4;
-    if (f === 'PENDING_FULFILLMENT' || f === 'OPEN')             return 3;
-    if (p === 'PAID' || p === 'AUTHORIZED')                      return 2;
+    if (f === 'FULFILLED')                                    return 5;
+    if (f === 'IN_PROGRESS' || f === 'PARTIALLY_FULFILLED')  return 4;
+    if (f === 'PENDING_FULFILLMENT' || f === 'OPEN')         return 3;
+    if (p === 'PAID' || p === 'AUTHORIZED')                  return 2;
     return 1;
   }
 
@@ -148,21 +180,28 @@
     if (code) {
       const savedState = localStorage.getItem('oauth_s');
       if (state !== savedState) {
-        showError(`State mismatch (got ${state?.slice(0,8)}, expected ${savedState?.slice(0,8)}). Try again.`);
+        showError(`State mismatch. Try logging in again.`);
         return;
       }
       try {
         show('loading');
         const tokens = await exchangeCode(code);
         if (!tokens.access_token) {
-          showError('Token exchange returned no access token. Response: ' + JSON.stringify(tokens));
+          showError('Login failed: no token received. Response: ' + JSON.stringify(tokens));
           return;
         }
-        localStorage.setItem('access_token', tokens.access_token);
-        if (tokens.id_token) localStorage.setItem('id_token', tokens.id_token);
+        const idToken = tokens.id_token;
+        if (!idToken) {
+          showError('Login failed: no id_token in response. Response: ' + JSON.stringify(tokens));
+          return;
+        }
+        localStorage.setItem('id_token', idToken);
+
+        const customerToken = await exchangeForCustomerToken(idToken);
+        localStorage.setItem('access_token', customerToken);
         window.history.replaceState({}, '', window.location.pathname);
       } catch (e) {
-        showError('Token exchange failed: ' + e.message);
+        showError('Login failed: ' + e.message);
         return;
       }
     }
