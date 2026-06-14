@@ -168,7 +168,7 @@ window.garageSaveCar = function (btn) {
             ${fuel   ? `<span class="reg-trim">${fuel}</span>`    : ''}
           </div>
           <div class="reg-result-actions">
-            <a href="shop.html?make=${encodeURIComponent(make)}&model=${encodeURIComponent(model)}"
+            <a href="/shop?make=${encodeURIComponent(make)}&model=${encodeURIComponent(model)}"
                class="btn btn-primary btn-sm">
               Shop for your ${make}${model ? ' ' + model : ''}
             </a>

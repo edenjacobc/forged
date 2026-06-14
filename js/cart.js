@@ -72,7 +72,7 @@
         <div class="cart-empty">
           <i class="fa-solid fa-bag-shopping"></i>
           <p>Your cart is empty</p>
-          <a href="shop.html" class="btn btn-outline btn-sm" onclick="closeCart()" style="margin-top:8px;">Browse products</a>
+          <a href="/shop" class="btn btn-outline btn-sm" onclick="closeCart()" style="margin-top:8px;">Browse products</a>
         </div>`;
       return;
     }

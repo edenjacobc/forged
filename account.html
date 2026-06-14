@@ -9,23 +9,25 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="2.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="1.png">
 </head>
 <body>
 
   <nav class="navbar" id="navbar">
     <div class="nav-inner">
-      <a href="index.html" class="nav-logo">
+      <a href="/" class="nav-logo">
         <img src="forged logo.png" alt="Forged" class="nav-wordmark">
       </a>
       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="shop.html">Shop</a></li>
-        <li><a href="garage.html">Garage</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="contact.html">Support</a></li>
+        <li><a href="/">Home</a></li>
+        <li><a href="/shop">Shop</a></li>
+        <li><a href="/garage">Garage</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Support</a></li>
       </ul>
       <div class="nav-actions">
-        <a href="account.html" class="nav-icon-btn" aria-label="Account">
+        <a href="/account" class="nav-icon-btn" aria-label="Account">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </a>
         <button class="nav-icon-btn" onclick="openCart()" aria-label="Cart">
@@ -37,8 +39,8 @@
     </div>
   </nav>
   <div class="nav-mobile" id="mobile-nav">
-    <a href="index.html">Home</a><a href="shop.html">Shop</a>
-    <a href="garage.html">Garage</a><a href="about.html">About</a><a href="contact.html">Support</a>
+    <a href="/">Home</a><a href="/shop">Shop</a>
+    <a href="/garage">Garage</a><a href="/about">About</a><a href="/contact">Support</a>
   </div>
 
   <section class="account-section">
@@ -117,9 +119,9 @@
               </div>
               <div class="acct-card">
                 <p class="acct-card-label">Quick links</p>
-                <a href="shop.html" class="acct-card-link">Browse the shop <i class="fa-solid fa-arrow-right"></i></a>
-                <a href="garage.html" class="acct-card-link">Open My Garage <i class="fa-solid fa-arrow-right"></i></a>
-                <a href="contact.html" class="acct-card-link">Contact support <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="/shop" class="acct-card-link">Browse the shop <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="/garage" class="acct-card-link">Open My Garage <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="/contact" class="acct-card-link">Contact support <i class="fa-solid fa-arrow-right"></i></a>
               </div>
             </div>
             <div class="acct-orders-nudge" onclick="acctTab('orders', document.querySelector('[data-tab=orders]'))">
@@ -190,9 +192,9 @@
           <p class="footer-tagline">Premium car accessories, sourced for the detail-obsessed.</p>
           <div class="footer-socials"><a href="#" class="footer-social"><i class="fa-brands fa-instagram"></i></a><a href="#" class="footer-social"><i class="fa-brands fa-tiktok"></i></a></div>
         </div>
-        <div><p class="footer-col-title">Shop</p><div class="footer-links"><a href="shop.html">All products</a><a href="garage.html">Garage</a></div></div>
-        <div><p class="footer-col-title">Help</p><div class="footer-links"><a href="contact.html">Support</a><a href="contact.html">Returns</a></div></div>
-        <div><p class="footer-col-title">Company</p><div class="footer-links"><a href="about.html">About</a><a href="privacy.html">Privacy</a></div></div>
+        <div><p class="footer-col-title">Shop</p><div class="footer-links"><a href="/shop">All products</a><a href="/garage">Garage</a></div></div>
+        <div><p class="footer-col-title">Help</p><div class="footer-links"><a href="/contact">Support</a><a href="/contact">Returns</a></div></div>
+        <div><p class="footer-col-title">Company</p><div class="footer-links"><a href="/about">About</a><a href="/privacy">Privacy</a></div></div>
       </div>
       <div class="footer-bottom"><p class="footer-copy">&copy; 2026 Forged. All rights reserved. &nbsp;|&nbsp; Built by Eden Covell</p></div>
     </div>

@@ -162,15 +162,15 @@
     document.getElementById('admin-error-msg').textContent = msg;
   }
 
-  window.adminLogout = function () { window.location.href = 'account.html'; };
+  window.adminLogout = function () { window.location.href = '/account'; };
 
   async function init() {
     const idToken     = localStorage.getItem('id_token');
     const accessToken = localStorage.getItem('access_token');
-    if (!idToken || !accessToken) { window.location.href = 'account.html'; return; }
+    if (!idToken || !accessToken) { window.location.href = '/account'; return; }
 
     const claims = decodeJWT(idToken);
-    if (!claims || claims.email !== STAFF_EMAIL) { window.location.href = 'account.html'; return; }
+    if (!claims || claims.email !== STAFF_EMAIL) { window.location.href = '/account'; return; }
 
     document.getElementById('admin-user-email').textContent = claims.email;
 

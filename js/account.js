@@ -232,7 +232,7 @@
     const el = document.getElementById('acct-orders');
     el.innerHTML = orders && orders.length
       ? orders.map(renderOrder).join('')
-      : `<p class="acct-empty">No orders yet. <a href="shop.html">Browse the shop</a></p>`;
+      : `<p class="acct-empty">No orders yet. <a href="/shop">Browse the shop</a></p>`;
   }
 
   async function init() {
