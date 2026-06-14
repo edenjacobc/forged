@@ -1,11 +1,11 @@
 (function () {
-  const SHOP_ID    = '100016423286';
-  const CLIENT_ID  = '934f906e-c368-4a1a-9f9a-c5e938ed4e91';
-  const REDIRECT   = 'https://forgeduk.store/account.html';
-  const AUTH_URL   = `https://shopify.com/authentication/${SHOP_ID}/oauth/authorize`;
-  const TOKEN_URL  = `https://shopify.com/authentication/${SHOP_ID}/oauth/token`;
-  const LOGOUT_URL = `https://shopify.com/authentication/${SHOP_ID}/logout`;
-  const API_URL    = `https://shopify.com/${SHOP_ID}/account/customer/api/2024-10/graphql`;
+  const SHOP_ID      = '100016423286';
+  const CLIENT_ID    = '934f906e-c368-4a1a-9f9a-c5e938ed4e91';
+  const REDIRECT     = 'https://forgeduk.store/account.html';
+  const AUTH_URL     = `https://shopify.com/authentication/${SHOP_ID}/oauth/authorize`;
+  const TOKEN_URL    = `https://shopify.com/authentication/${SHOP_ID}/oauth/token`;
+  const LOGOUT_URL   = `https://shopify.com/authentication/${SHOP_ID}/logout`;
+  const USERINFO_URL = `https://shopify.com/authentication/${SHOP_ID}/oauth/userinfo`;
 
   function b64url(buf) {
     return btoa(String.fromCharCode(...new Uint8Array(buf)))
@@ -64,48 +64,26 @@
     return res.json();
   }
 
-  async function exchangeForCustomerToken(idToken) {
-    const res = await fetch(TOKEN_URL, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body:    new URLSearchParams({
-        grant_type:         'urn:ietf:params:oauth:grant-type:token-exchange',
-        client_id:          CLIENT_ID,
-        audience:           '30243aa5-17c1-465a-8493-944bcc4e88aa',
-        subject_token:      idToken,
-        subject_token_type: 'urn:ietf:params:oauth:token-type:id_token',
-        scopes:             'https://api.customers.com/auth/customer.graphql',
-      }),
+  async function getUserInfo(token) {
+    const res = await fetch(USERINFO_URL, {
+      headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
     });
-    const data = await res.json();
-    if (!data.access_token) throw new Error(JSON.stringify(data));
-    return data.access_token;
+    if (!res.ok) throw new Error('userinfo_failed');
+    return res.json();
   }
 
-  async function fetchCustomer(token) {
-    const query = `{
-      customer {
-        firstName lastName
-        emailAddress { emailAddress }
-        orders(first: 10, sortKey: PROCESSED_AT, reverse: true) {
-          nodes {
-            id name processedAt financialStatus fulfillmentStatus
-            totalPrice { amount currencyCode }
-            lineItems(first: 5) { nodes { title quantity } }
-            fulfillments(first: 1) { trackingInfo(first: 1) { number url } }
-          }
-        }
-      }
-    }`;
-    const res = await fetch(API_URL, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body:    JSON.stringify({ query }),
-    });
-    const json = await res.json();
-    if (json.errors) throw new Error(JSON.stringify(json.errors));
-    if (!json.data?.customer) throw new Error('Invalid token');
-    return json.data.customer;
+  async function getOrders(token) {
+    try {
+      const res = await fetch('/api/customer', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ token }),
+      });
+      const json = await res.json();
+      return res.ok ? (json.orders || null) : null;
+    } catch {
+      return null;
+    }
   }
 
   function orderStep(o) {
@@ -163,13 +141,18 @@
     if (el) { el.textContent = msg; el.style.display = ''; }
   }
 
-  function renderDashboard(c) {
-    document.getElementById('acct-name').textContent  = `${c.firstName} ${c.lastName}`;
-    document.getElementById('acct-email').textContent = c.emailAddress?.emailAddress || '';
+  function renderDashboard(userInfo, orders) {
+    const first = userInfo.given_name || '';
+    const last  = userInfo.family_name || '';
+    const name  = (first + ' ' + last).trim() || userInfo.email || 'Customer';
+    document.getElementById('acct-name').textContent  = name;
+    document.getElementById('acct-email').textContent = userInfo.email || '';
     const el = document.getElementById('acct-orders');
-    el.innerHTML = c.orders.nodes.length
-      ? c.orders.nodes.map(renderOrder).join('')
-      : `<p class="acct-empty">No orders yet. <a href="shop.html">Browse the shop</a></p>`;
+    if (orders && orders.nodes && orders.nodes.length) {
+      el.innerHTML = orders.nodes.map(renderOrder).join('');
+    } else {
+      el.innerHTML = `<p class="acct-empty">No orders yet. <a href="shop.html">Browse the shop</a></p>`;
+    }
   }
 
   async function init() {
@@ -180,25 +163,18 @@
     if (code) {
       const savedState = localStorage.getItem('oauth_s');
       if (state !== savedState) {
-        showError(`State mismatch. Try logging in again.`);
+        showError('State mismatch. Try logging in again.');
         return;
       }
       try {
         show('loading');
         const tokens = await exchangeCode(code);
         if (!tokens.access_token) {
-          showError('Login failed: no token received. Response: ' + JSON.stringify(tokens));
+          showError('Login failed: no token received.');
           return;
         }
-        const idToken = tokens.id_token;
-        if (!idToken) {
-          showError('Login failed: no id_token in response. Response: ' + JSON.stringify(tokens));
-          return;
-        }
-        localStorage.setItem('id_token', idToken);
-
-        const customerToken = await exchangeForCustomerToken(idToken);
-        localStorage.setItem('access_token', customerToken);
+        localStorage.setItem('access_token', tokens.access_token);
+        if (tokens.id_token) localStorage.setItem('id_token', tokens.id_token);
         window.history.replaceState({}, '', window.location.pathname);
       } catch (e) {
         showError('Login failed: ' + e.message);
@@ -211,16 +187,14 @@
 
     try {
       show('loading');
-      const customer = await fetchCustomer(token);
-      renderDashboard(customer);
+      const userInfo = await getUserInfo(token);
+      const orders   = await getOrders(token);
+      renderDashboard(userInfo, orders);
       show('dashboard');
     } catch (e) {
       localStorage.removeItem('access_token');
-      if (e.message === 'Invalid token') {
-        show('login');
-      } else {
-        showError('Could not load account: ' + e.message);
-      }
+      show('login');
+      showError('Session expired. Please log in again.');
     }
   }
 
