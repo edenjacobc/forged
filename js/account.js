@@ -6,7 +6,7 @@
   const TOKEN_URL = `https://shopify.com/authentication/${SHOP_ID}/oauth/token`;
   const LOGOUT_URL= `https://shopify.com/authentication/${SHOP_ID}/logout`;
   const API_URL   = `https://shopify.com/${SHOP_ID}/account/customer/api/2024-10/graphql`;
-  const SCOPES    = 'openid%20email%20https%3A%2F%2Fapi.customers.com%2Fauth%2Fcustomer.graphql';
+  const SCOPES    = 'openid email';
 
   function b64url(buf) {
     return btoa(String.fromCharCode(...new Uint8Array(buf)))
@@ -30,11 +30,12 @@
         client_id:             CLIENT_ID,
         response_type:         'code',
         redirect_uri:          REDIRECT,
+        scope:                 SCOPES,
         code_challenge:        challenge,
         code_challenge_method: 'S256',
         state,
       });
-      window.location.href = `${AUTH_URL}?${p}&scope=${SCOPES}`;
+      window.location.href = `${AUTH_URL}?${p}`;
     } catch (e) {
       showError('Could not start login: ' + e.message);
     }
