@@ -66,28 +66,14 @@
   }
 
   async function fetchCustomer(token) {
-    const res = await fetch(API_URL, {
+    const res = await fetch('/api/customer', {
       method:  'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body:    JSON.stringify({ query: `{
-        customer {
-          firstName lastName
-          emailAddress { emailAddress }
-          orders(first: 10, sortKey: PROCESSED_AT, reverse: true) {
-            nodes {
-              id name processedAt financialStatus fulfillmentStatus
-              totalPrice { amount currencyCode }
-              lineItems(first: 5) { nodes { title quantity } }
-              fulfillments { trackingInfo { number url } }
-            }
-          }
-        }
-      }` }),
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ token }),
     });
     const json = await res.json();
-    if (json.errors) throw new Error(JSON.stringify(json.errors));
-    if (!json.data?.customer) throw new Error('No customer data. HTTP ' + res.status);
-    return json.data.customer;
+    if (!res.ok) throw new Error(json.error || ('HTTP ' + res.status));
+    return json;
   }
 
   function orderStep(o) {
