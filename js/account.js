@@ -127,7 +127,90 @@
     document.querySelectorAll('.acct-nav-item').forEach(el => el.classList.remove('active'));
     document.getElementById('acct-tab-' + tab).style.display = '';
     if (btn) btn.classList.add('active');
+    if (tab === 'garage') renderGarageTab();
   };
+
+  function renderGarageTab() {
+    const cars = window.forgedGarage?.get() || [];
+    const list = document.getElementById('acct-garage-list');
+    if (!list) return;
+    list.innerHTML = cars.length
+      ? cars.map(c => {
+          const name   = [c.make, c.model].filter(Boolean).join(' ');
+          const detail = [c.year, c.colour ? c.colour.charAt(0).toUpperCase() + c.colour.slice(1).toLowerCase() : ''].filter(Boolean).join(' · ');
+          return `
+            <div class="acct-garage-car">
+              <div class="acct-garage-plate">${c.reg}</div>
+              <div class="acct-garage-car-info">
+                ${name   ? `<p class="acct-garage-car-name">${name}</p>` : ''}
+                ${detail ? `<p class="acct-garage-car-detail">${detail}</p>` : ''}
+              </div>
+              <button class="acct-garage-car-remove" onclick="acctGarageRemove('${c.reg}')" title="Remove">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>`;
+        }).join('')
+      : '<p class="acct-empty">No cars saved yet. Add your first one below.</p>';
+  }
+
+  window.acctGarageShowAdd = function () {
+    document.getElementById('acct-garage-add-form').style.display = '';
+    document.getElementById('acct-add-car-btn').style.display = 'none';
+    document.getElementById('acct-add-reg')?.focus();
+  };
+
+  window.acctGarageHideAdd = function () {
+    document.getElementById('acct-garage-add-form').style.display = 'none';
+    document.getElementById('acct-add-car-btn').style.display = '';
+    const inp = document.getElementById('acct-add-reg');
+    const sta = document.getElementById('acct-add-car-status');
+    if (inp) inp.value = '';
+    if (sta) sta.textContent = '';
+  };
+
+  window.acctGarageRemove = function (reg) {
+    window.forgedGarage?.remove(reg);
+    renderGarageTab();
+  };
+
+  async function addCarFormSubmit(e) {
+    e.preventDefault();
+    const input  = document.getElementById('acct-add-reg');
+    const status = document.getElementById('acct-add-car-status');
+    const submit = document.getElementById('acct-add-car-submit');
+    const reg    = (input?.value || '').trim().toUpperCase().replace(/\s+/g, '');
+    if (!reg) return;
+    if (window.forgedGarage.get().find(c => c.reg === reg)) {
+      status.textContent = 'Already in your garage.';
+      return;
+    }
+    submit.textContent = 'Looking up...';
+    submit.disabled    = true;
+    status.textContent = '';
+    try {
+      const res  = await fetch('/api/vehicle-lookup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ registrationNumber: reg }),
+      });
+      const data = await res.json();
+      if (!res.ok) { status.textContent = data.error || 'Vehicle not found. Check the reg.'; return; }
+      window.forgedGarage.save({
+        reg,
+        make:   data.make   || '',
+        model:  data.model  || '',
+        year:   data.yearOfManufacture || data.manufactureYear || '',
+        colour: data.colour || '',
+      });
+      acctGarageHideAdd();
+      renderGarageTab();
+    } catch {
+      status.textContent = 'Lookup failed. Please try again.';
+    } finally {
+      submit.textContent = 'Add car';
+      submit.disabled    = false;
+    }
+  }
 
   function renderDashboard(claims, orders) {
     const first  = claims.given_name  || '';
@@ -187,5 +270,8 @@
     show('dashboard');
   }
 
-  document.addEventListener('DOMContentLoaded', init);
+  document.addEventListener('DOMContentLoaded', function () {
+    init();
+    document.getElementById('acct-add-car-form')?.addEventListener('submit', addCarFormSubmit);
+  });
 })();

@@ -90,6 +90,35 @@
   });
 })();
 
+/* ── Saved garage cars (shared across pages) ── */
+window.forgedGarage = (function () {
+  const KEY = 'forged_garage';
+  function get() { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch { return []; } }
+  function set(cars) { localStorage.setItem(KEY, JSON.stringify(cars)); }
+  return {
+    get,
+    save: function (car) {
+      const cars = get();
+      if (!cars.find(c => c.reg === car.reg)) { cars.push(car); set(cars); }
+    },
+    remove: function (reg) { set(get().filter(c => c.reg !== reg)); },
+  };
+})();
+
+window.garageSaveCar = function (btn) {
+  if (!btn) return;
+  window.forgedGarage.save({
+    reg:    btn.dataset.reg,
+    make:   btn.dataset.make,
+    model:  btn.dataset.model,
+    year:   btn.dataset.year,
+    colour: btn.dataset.colour,
+  });
+  btn.innerHTML = '<i class="fa-solid fa-check"></i> Saved to garage';
+  btn.disabled = true;
+  window.renderSavedCars?.();
+};
+
 /* ── Reg lookup ── */
 (function () {
   const form      = document.getElementById('reg-form');
@@ -126,6 +155,8 @@
       const year   = data.yearOfManufacture || data.manufactureYear || '';
       const fuel   = data.fuelType  ? data.fuelType.charAt(0) + data.fuelType.slice(1).toLowerCase()  : '';
       const colour = data.colour    ? data.colour.charAt(0) + data.colour.slice(1).toLowerCase()       : '';
+      const isSaved = window.forgedGarage.get().some(c => c.reg === reg);
+      function esc(s) { return String(s || '').replace(/"/g, '&quot;'); }
 
       resultBox.innerHTML = `
         <div class="reg-result">
@@ -136,10 +167,21 @@
             ${colour ? `<span class="reg-trim">${colour}</span>`  : ''}
             ${fuel   ? `<span class="reg-trim">${fuel}</span>`    : ''}
           </div>
-          <a href="shop.html?make=${encodeURIComponent(make)}&model=${encodeURIComponent(model)}"
-             class="btn btn-primary btn-sm">
-            Shop for your ${make}${model ? ' ' + model : ''}
-          </a>
+          <div class="reg-result-actions">
+            <a href="shop.html?make=${encodeURIComponent(make)}&model=${encodeURIComponent(model)}"
+               class="btn btn-primary btn-sm">
+              Shop for your ${make}${model ? ' ' + model : ''}
+            </a>
+            <button class="btn btn-outline btn-sm garage-save-btn"
+                    data-reg="${esc(reg)}" data-make="${esc(make)}" data-model="${esc(model)}"
+                    data-year="${esc(year)}" data-colour="${esc(colour)}"
+                    onclick="garageSaveCar(this)"
+                    ${isSaved ? 'disabled' : ''}>
+              ${isSaved
+                ? '<i class="fa-solid fa-check"></i> In My Garage'
+                : '<i class="fa-solid fa-plus"></i> Save to My Garage'}
+            </button>
+          </div>
         </div>`;
 
     } catch {

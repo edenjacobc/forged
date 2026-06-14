@@ -50,6 +50,11 @@
     <h1 class="section-title reveal">What fits your car?</h1>
     <p class="section-sub reveal">Enter your registration plate below. We'll identify your vehicle and show you every product that fits.</p>
 
+    <div id="garage-saved-wrap" class="garage-saved-wrap" style="display:none;">
+      <p class="garage-saved-label">Your cars</p>
+      <div id="garage-saved-list" class="garage-saved-list"></div>
+    </div>
+
     <form class="reg-form reveal reveal-delay-1" id="reg-form" style="max-width:480px;">
       <div class="reg-form-plate">
         <div class="reg-gb">
@@ -147,9 +152,32 @@
   <script src="js/shopify.js"></script>
   <script src="js/main.js"></script>
   <script>
+    /* Render saved cars quick-select */
+    window.renderSavedCars = function () {
+      const wrap = document.getElementById('garage-saved-wrap');
+      const list = document.getElementById('garage-saved-list');
+      if (!wrap || !list) return;
+      const cars = window.forgedGarage?.get() || [];
+      if (!cars.length) { wrap.style.display = 'none'; return; }
+      wrap.style.display = '';
+      list.innerHTML = cars.map(c => `
+        <button class="garage-saved-car" onclick="garagePickCar('${c.reg}')">
+          <span class="garage-saved-plate">${c.reg}</span>
+          ${(c.make || c.model) ? `<span class="garage-saved-info">${c.make || ''}${c.model ? ' ' + c.model : ''}</span>` : ''}
+        </button>`).join('');
+    };
+
+    window.garagePickCar = function (reg) {
+      const input = document.getElementById('reg-input');
+      const btn   = document.getElementById('reg-submit');
+      if (input) input.value = reg;
+      if (btn) btn.click();
+    };
+
+    document.addEventListener('DOMContentLoaded', window.renderSavedCars);
+
     /* Show vehicle card + filtered products after reg lookup */
-    const origShowResult = window.__regResultHandler;
-    document.getElementById('reg-form').addEventListener('submit', async function() {
+    document.getElementById('reg-form').addEventListener('submit', async function () {
       await new Promise(r => setTimeout(r, 100));
       const resultBox = document.getElementById('reg-result');
       const result = resultBox.querySelector('.reg-result');
@@ -159,7 +187,7 @@
       const model = result.querySelector('.reg-model')?.textContent || '';
       const year  = result.querySelector('.reg-year')?.textContent  || '';
 
-      if (make && make !== '—') {
+      if (make && make !== 'Unknown') {
         document.getElementById('default-products').style.display = 'none';
         document.getElementById('garage-products').style.display  = 'block';
 

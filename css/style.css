@@ -532,6 +532,38 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
   border-radius: var(--radius); color: #c0392b; font-size: 0.875rem;
 }
 .reg-disclaimer { font-size: 0.72rem; color: var(--grey-500); margin-top: 16px; }
+.reg-result-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+/* Saved cars quick-select (garage page) */
+.garage-saved-wrap {
+  margin-bottom: 24px;
+}
+.garage-saved-label {
+  font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.09em;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 10px;
+}
+.garage-saved-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.garage-saved-car {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer; transition: background 0.15s, border-color 0.15s;
+}
+.garage-saved-car:hover { background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.4); }
+.garage-saved-plate {
+  background: #FFDD00; color: #000;
+  border: 1.5px solid #000; border-radius: 3px;
+  font-weight: 900; letter-spacing: 2px;
+  padding: 2px 8px; font-size: 0.875rem;
+}
+.garage-saved-info {
+  font-size: 0.8rem; font-weight: 600;
+  color: rgba(255,255,255,0.8);
+}
 
 /* ============================================================
    PRODUCTS GRID
@@ -1528,6 +1560,44 @@ body.loader-active .hero-bg-word {
   color: var(--black); text-decoration: none;
 }
 .order-track-link:hover { opacity: 0.55; }
+
+/* Garage save button in reg result */
+.garage-save-btn { white-space: nowrap; }
+
+/* Account garage tab */
+.acct-garage-car {
+  display: flex; align-items: center; gap: 16px;
+  border: 1.5px solid var(--grey-200); border-radius: var(--radius);
+  padding: 16px 20px; margin-bottom: 12px;
+  transition: border-color 0.2s;
+}
+.acct-garage-car:hover { border-color: #aaa; }
+.acct-garage-plate {
+  background: #FFDD00; color: #000;
+  border: 2px solid #000; border-radius: 4px;
+  font-weight: 900; letter-spacing: 2px;
+  padding: 4px 12px; font-size: 1rem;
+  flex-shrink: 0; white-space: nowrap;
+}
+.acct-garage-car-info { flex: 1; min-width: 0; }
+.acct-garage-car-name { font-weight: 700; font-size: 0.95rem; }
+.acct-garage-car-detail { font-size: 0.8rem; color: var(--grey-500); margin-top: 2px; }
+.acct-garage-car-remove {
+  color: var(--grey-300); font-size: 0.8rem;
+  padding: 6px; border-radius: 6px; flex-shrink: 0;
+  transition: color 0.15s, background 0.15s;
+}
+.acct-garage-car-remove:hover { color: #c00; background: #fff0f0; }
+.acct-garage-actions { margin-top: 24px; }
+.acct-add-form {
+  display: flex; align-items: flex-start; gap: 12px;
+  flex-wrap: wrap; margin-top: 20px;
+}
+.reg-plate-sm { height: 46px; flex: none; width: 220px; }
+.reg-plate-sm .reg-gb { width: 42px; }
+.reg-plate-sm .reg-input { font-size: 1.1rem; padding: 0 10px; }
+.acct-add-form-btns { display: flex; gap: 8px; align-items: center; padding-top: 0; }
+.acct-add-status { font-size: 0.82rem; color: var(--grey-500); margin-top: 10px; }
 
 @media (max-width: 900px) {
   .acct-layout { flex-direction: column; }

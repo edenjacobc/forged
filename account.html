@@ -85,10 +85,10 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" x2="21" y1="6" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
               My Orders
             </button>
-            <a class="acct-nav-item" href="garage.html">
+            <button class="acct-nav-item" data-tab="garage" onclick="acctTab('garage',this)">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2z"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
               My Garage
-            </a>
+            </button>
             <button class="acct-nav-item acct-nav-logout" onclick="logout()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
               Sign Out
@@ -134,6 +134,42 @@
               <h1 class="acct-tab-title">My Orders</h1>
             </div>
             <div id="acct-orders"></div>
+          </div>
+
+          <!-- Garage tab -->
+          <div id="acct-tab-garage" class="acct-tab" style="display:none;">
+            <div class="acct-tab-header">
+              <p class="section-label">Account</p>
+              <h1 class="acct-tab-title">My Garage</h1>
+            </div>
+            <div id="acct-garage-list"></div>
+            <div class="acct-garage-actions">
+              <button class="btn btn-outline btn-sm" id="acct-add-car-btn" onclick="acctGarageShowAdd()">
+                <i class="fa-solid fa-plus"></i> Add a car
+              </button>
+              <div id="acct-garage-add-form" style="display:none;">
+                <form class="acct-add-form" id="acct-add-car-form">
+                  <div class="reg-form-plate reg-plate-sm">
+                    <div class="reg-gb">
+                      <svg viewBox="0 0 20 12" class="reg-gb-flag-svg" aria-hidden="true">
+                        <rect width="20" height="12" fill="#0033A0"/>
+                        <path d="M0,0 L20,12 M20,0 L0,12" stroke="white" stroke-width="4"/>
+                        <path d="M0,0 L20,12 M20,0 L0,12" stroke="#FF2020" stroke-width="2.2"/>
+                        <path d="M10,0 V12 M0,6 H20" stroke="white" stroke-width="4.5"/>
+                        <path d="M10,0 V12 M0,6 H20" stroke="#FF2020" stroke-width="2.8"/>
+                      </svg>
+                      <span class="reg-gb-text">GB</span>
+                    </div>
+                    <input type="text" id="acct-add-reg" class="reg-input" placeholder="AB12 CDE" maxlength="8" autocapitalize="characters" autocomplete="off">
+                  </div>
+                  <div class="acct-add-form-btns">
+                    <button type="submit" class="btn btn-primary btn-sm" id="acct-add-car-submit">Add car</button>
+                    <button type="button" class="btn btn-outline btn-sm" onclick="acctGarageHideAdd()">Cancel</button>
+                  </div>
+                </form>
+                <p id="acct-add-car-status" class="acct-add-status"></p>
+              </div>
+            </div>
           </div>
 
         </main>
