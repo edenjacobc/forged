@@ -21,20 +21,24 @@
   }
 
   window.startLogin = async function () {
-    const { verifier, challenge } = await buildPKCE();
-    const state = b64url(crypto.getRandomValues(new Uint8Array(16)));
-    localStorage.setItem('pkce_v', verifier);
-    localStorage.setItem('oauth_s', state);
-    const p = new URLSearchParams({
-      client_id:             CLIENT_ID,
-      response_type:         'code',
-      redirect_uri:          REDIRECT,
-      scope:                 SCOPES,
-      code_challenge:        challenge,
-      code_challenge_method: 'S256',
-      state,
-    });
-    window.location.href = `${AUTH_URL}?${p}`;
+    try {
+      const { verifier, challenge } = await buildPKCE();
+      const state = b64url(crypto.getRandomValues(new Uint8Array(16)));
+      localStorage.setItem('pkce_v', verifier);
+      localStorage.setItem('oauth_s', state);
+      const p = new URLSearchParams({
+        client_id:             CLIENT_ID,
+        response_type:         'code',
+        redirect_uri:          REDIRECT,
+        scope:                 SCOPES,
+        code_challenge:        challenge,
+        code_challenge_method: 'S256',
+        state,
+      });
+      window.location.href = `${AUTH_URL}?${p}`;
+    } catch (e) {
+      showError('Could not start login: ' + e.message);
+    }
   };
 
   window.logout = function () {
@@ -155,18 +159,23 @@
     const state  = params.get('state');
 
     if (code) {
-      if (state !== localStorage.getItem('oauth_s')) {
-        showError('Authentication failed. Please try again.');
+      const savedState = localStorage.getItem('oauth_s');
+      if (state !== savedState) {
+        showError(`State mismatch (got ${state?.slice(0,8)}, expected ${savedState?.slice(0,8)}). Try again.`);
         return;
       }
       try {
         show('loading');
         const tokens = await exchangeCode(code);
+        if (!tokens.access_token) {
+          showError('Token exchange returned no access token. Response: ' + JSON.stringify(tokens));
+          return;
+        }
         localStorage.setItem('access_token', tokens.access_token);
         if (tokens.id_token) localStorage.setItem('id_token', tokens.id_token);
         window.history.replaceState({}, '', window.location.pathname);
-      } catch {
-        showError('Login failed. Please try again.');
+      } catch (e) {
+        showError('Token exchange failed: ' + e.message);
         return;
       }
     }
@@ -179,9 +188,9 @@
       const customer = await fetchCustomer(token);
       renderDashboard(customer);
       show('dashboard');
-    } catch {
+    } catch (e) {
       localStorage.removeItem('access_token');
-      show('login');
+      showError('Could not load account: ' + e.message);
     }
   }
 
