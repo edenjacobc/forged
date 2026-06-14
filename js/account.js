@@ -64,15 +64,25 @@
   }
 
   async function fetchCustomer(token) {
-    const res = await fetch('/api/customer', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ token }),
-    });
-    if (res.status === 401) throw new Error('invalid_token');
-    const json = await res.json();
-    if (!res.ok) throw new Error(json.error || 'api_error');
-    return json;
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 15000);
+    try {
+      const res = await fetch('/api/customer', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ token }),
+        signal:  controller.signal,
+      });
+      clearTimeout(timer);
+      if (res.status === 401) throw new Error('invalid_token');
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || 'api_error');
+      return json;
+    } catch (e) {
+      clearTimeout(timer);
+      if (e.name === 'AbortError') throw new Error('Request timed out — try again');
+      throw e;
+    }
   }
 
   function orderStep(o) {
