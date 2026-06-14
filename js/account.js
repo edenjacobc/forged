@@ -6,7 +6,7 @@
   const TOKEN_URL = `https://shopify.com/authentication/${SHOP_ID}/oauth/token`;
   const LOGOUT_URL= `https://shopify.com/authentication/${SHOP_ID}/logout`;
   const API_URL   = `https://shopify.com/${SHOP_ID}/account/customer/api/2024-10/graphql`;
-  const SCOPES    = 'openid email';
+  const SCOPES    = 'openid%20email%20https%3A%2F%2Fapi.customers.com%2Fauth%2Fcustomer.graphql';
 
   function b64url(buf) {
     return btoa(String.fromCharCode(...new Uint8Array(buf)))
@@ -30,12 +30,11 @@
         client_id:             CLIENT_ID,
         response_type:         'code',
         redirect_uri:          REDIRECT,
-        scope:                 SCOPES,
         code_challenge:        challenge,
         code_challenge_method: 'S256',
         state,
       });
-      window.location.href = `${AUTH_URL}?${p}`;
+      window.location.href = `${AUTH_URL}?${p}&scope=${SCOPES}`;
     } catch (e) {
       showError('Could not start login: ' + e.message);
     }
@@ -68,7 +67,7 @@
   async function fetchCustomer(token) {
     const res = await fetch(API_URL, {
       method:  'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: token },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body:    JSON.stringify({ query: `{
         customer {
           firstName lastName
@@ -85,7 +84,8 @@
       }` }),
     });
     const json = await res.json();
-    if (json.errors) throw new Error('api_error');
+    if (json.errors) throw new Error(JSON.stringify(json.errors));
+    if (!json.data?.customer) throw new Error('No customer data. HTTP ' + res.status);
     return json.data.customer;
   }
 
