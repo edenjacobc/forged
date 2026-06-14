@@ -9,220 +9,238 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="forged logo.png" type="image/png">
   <style>
-    /* ── Admin shell ── */
-    body { background: #f7f7f7; }
+    .admin-wrap { max-width: 1280px; margin: 0 auto; padding: 0 40px 80px; }
 
-    .admin-topbar {
-      background: #000; color: #fff;
-      height: 56px; display: flex; align-items: center;
-      padding: 0 32px; gap: 16px;
-      position: sticky; top: 0; z-index: 100;
+    .admin-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      padding: 48px 0 36px; gap: 20px; flex-wrap: wrap;
     }
-    .admin-topbar-logo { height: 28px; width: auto; filter: invert(1); }
-    .admin-staff-badge {
-      font-size: 0.6rem; font-weight: 800; letter-spacing: 0.12em;
-      background: #fff; color: #000; padding: 3px 8px; border-radius: 4px;
-      text-transform: uppercase;
+    .admin-header-title { font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 900; letter-spacing: -0.03em; margin-top: 6px; }
+    .admin-user-chip {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--grey-100); border: 1px solid var(--grey-200);
+      border-radius: 999px; padding: 8px 16px 8px 12px;
     }
-    .admin-topbar-right { margin-left: auto; display: flex; align-items: center; gap: 20px; }
-    .admin-topbar-email { font-size: 0.8rem; color: rgba(255,255,255,0.5); }
-    .admin-topbar-btn {
-      font-size: 0.78rem; font-weight: 600; color: rgba(255,255,255,0.7);
-      background: none; border: none; cursor: pointer; font-family: inherit;
-      transition: color 0.15s;
+    .admin-user-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; flex-shrink: 0; }
+    .admin-user-email-text { font-size: 0.8rem; font-weight: 600; }
+    .admin-logout-btn {
+      font-size: 0.8rem; font-weight: 600; color: var(--grey-500);
+      padding: 8px 16px; border-radius: 999px;
+      border: 1px solid var(--grey-200); transition: all 0.15s;
     }
-    .admin-topbar-btn:hover { color: #fff; }
-    .admin-topbar-divider { width: 1px; height: 18px; background: rgba(255,255,255,0.15); }
+    .admin-logout-btn:hover { background: #fff0f0; color: #c00; border-color: #ffc0c0; }
 
-    /* ── Content ── */
-    .admin-content { max-width: 1280px; margin: 0 auto; padding: 40px 32px 80px; }
-
-    .admin-page-title {
-      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
-      font-weight: 900; letter-spacing: -0.03em;
-      margin-bottom: 32px;
-    }
-
-    /* ── Stat cards ── */
     .admin-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 36px; }
-    .admin-stat-card {
-      background: #fff; border: 1px solid #e8e8e8; border-radius: 12px;
-      padding: 24px 24px 20px;
+    .admin-stat {
+      border: 1.5px solid var(--grey-200); border-radius: var(--radius);
+      padding: 24px; transition: border-color 0.2s;
     }
+    .admin-stat:hover { border-color: #aaa; }
     .admin-stat-label {
       font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.1em; color: #888; margin-bottom: 10px;
+      letter-spacing: 0.09em; color: var(--grey-500); margin-bottom: 10px;
     }
-    .admin-stat-value { font-size: 2rem; font-weight: 900; letter-spacing: -0.04em; line-height: 1; }
-    .admin-stat-sub { font-size: 0.72rem; color: #aaa; margin-top: 6px; }
+    .admin-stat-value { font-size: 2rem; font-weight: 900; letter-spacing: -0.03em; line-height: 1; }
 
-    /* ── Tabs ── */
-    .admin-tabs { display: flex; gap: 4px; margin-bottom: 20px; border-bottom: 1px solid #e8e8e8; padding-bottom: 0; }
+    .admin-tabs {
+      display: flex; gap: 4px; margin-bottom: 28px;
+      border-bottom: 1.5px solid var(--grey-200);
+    }
     .admin-tab-btn {
-      font-size: 0.85rem; font-weight: 600; padding: 10px 18px;
-      background: none; border: none; cursor: pointer; font-family: inherit;
-      color: #888; border-bottom: 2px solid transparent; margin-bottom: -1px;
+      padding: 10px 18px; font-size: 0.875rem; font-weight: 600;
+      color: var(--grey-500); border-radius: 8px 8px 0 0;
+      border-bottom: 2px solid transparent; margin-bottom: -1.5px;
       transition: color 0.15s, border-color 0.15s;
     }
-    .admin-tab-btn:hover { color: #000; }
-    .admin-tab-btn.active { color: #000; border-bottom-color: #000; }
+    .admin-tab-btn:hover { color: var(--black); }
+    .admin-tab-btn.active { color: var(--black); border-bottom-color: var(--black); }
 
-    /* ── Tables ── */
-    .admin-table-wrap { background: #fff; border: 1px solid #e8e8e8; border-radius: 12px; overflow: hidden; }
-    .admin-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    .admin-table-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px; gap: 12px; flex-wrap: wrap; }
+    .admin-table-title { font-size: 1rem; font-weight: 800; letter-spacing: -0.02em; }
+    .admin-table-wrap { overflow-x: auto; border: 1.5px solid var(--grey-200); border-radius: var(--radius); }
+    .admin-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
     .admin-table th {
-      text-align: left; padding: 13px 16px;
-      font-size: 0.67rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.08em; color: #888;
-      background: #fafafa; border-bottom: 1px solid #e8e8e8;
+      text-align: left; padding: 12px 16px;
+      font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--grey-500);
+      background: var(--grey-100); border-bottom: 1px solid var(--grey-200);
+      white-space: nowrap;
     }
-    .admin-table td { padding: 13px 16px; border-bottom: 1px solid #f2f2f2; vertical-align: middle; }
+    .admin-table td { padding: 13px 16px; border-bottom: 1px solid var(--grey-100); vertical-align: middle; }
     .admin-table tr:last-child td { border-bottom: none; }
     .admin-table tr:hover td { background: #fafafa; }
-    .admin-mono { font-family: 'SF Mono', 'Consolas', monospace; font-size: 0.82rem; }
-    .admin-muted { color: #666; }
-    .admin-empty { color: #aaa; font-style: italic; text-align: center; padding: 40px 16px !important; }
+    .admin-mono { font-family: 'Courier New', monospace; font-weight: 700; font-size: 0.82rem; }
+    .admin-muted { color: var(--grey-500); }
 
-    /* ── Status badges ── */
     .admin-badge {
-      display: inline-block; font-size: 0.67rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.07em;
-      padding: 3px 8px; border-radius: 999px;
+      display: inline-flex; align-items: center;
+      padding: 3px 10px; border-radius: 999px;
+      font-size: 0.72rem; font-weight: 700; text-transform: capitalize;
+      white-space: nowrap;
     }
-    .admin-badge-green  { background: #e8f7ee; color: #1a7a3e; }
-    .admin-badge-yellow { background: #fef9e6; color: #8a6700; }
-    .admin-badge-red    { background: #fdecea; color: #b91c1c; }
-    .admin-badge-grey   { background: #f0f0f0; color: #666; }
+    .admin-badge-green  { background: #dcfce7; color: #166534; }
+    .admin-badge-yellow { background: #fef9c3; color: #854d0e; }
+    .admin-badge-red    { background: #fee2e2; color: #991b1b; }
+    .admin-badge-grey   { background: var(--grey-100); color: var(--grey-500); }
 
-    /* ── Inventory stock editor ── */
     .admin-stock-wrap { display: flex; align-items: center; gap: 8px; }
     .admin-stock-input {
-      width: 70px; padding: 6px 10px;
-      border: 1.5px solid #e8e8e8; border-radius: 6px;
-      font-size: 0.84rem; font-family: inherit; font-weight: 600;
-      transition: border-color 0.15s; outline: none;
+      width: 72px; padding: 5px 8px; border-radius: 6px;
+      border: 1.5px solid var(--grey-200); font-size: 0.85rem;
+      font-weight: 600; text-align: center; transition: border-color 0.15s;
     }
-    .admin-stock-input:focus { border-color: #000; }
+    .admin-stock-input:focus { outline: none; border-color: var(--black); }
 
-    /* ── Error state ── */
-    .admin-error {
-      display: none;
-      background: #fdecea; color: #b91c1c;
-      border: 1px solid #f5c6c6; border-radius: 10px;
-      padding: 20px 24px; font-size: 0.9rem; line-height: 1.6;
-      margin-bottom: 24px;
+    .admin-loading-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 16px;
+      min-height: calc(100vh - var(--nav-h)); color: var(--grey-500);
     }
-    .admin-error strong { display: block; margin-bottom: 6px; }
+    .admin-error-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 16px; text-align: center;
+      min-height: calc(100vh - var(--nav-h)); padding: 40px;
+    }
+    .admin-error-icon { font-size: 2.5rem; color: var(--grey-300); margin-bottom: 4px; }
+    .admin-error-title { font-size: 1.1rem; font-weight: 800; }
+    .admin-error-msg { font-size: 0.875rem; color: var(--grey-500); max-width: 400px; }
 
-    /* ── Toast ── */
     .admin-toast {
-      display: none; position: fixed; bottom: 28px; right: 28px;
-      background: #000; color: #fff;
-      padding: 12px 20px; border-radius: 8px;
-      font-size: 0.84rem; font-weight: 600;
-      z-index: 9999; transition: opacity 0.3s;
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+      background: var(--black); color: var(--white);
+      padding: 12px 24px; border-radius: 999px;
+      font-size: 0.85rem; font-weight: 600;
+      z-index: 999; transition: opacity 0.3s;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      white-space: nowrap;
     }
-    .admin-toast-err { background: #b91c1c; }
+    .admin-toast-err { background: #c00; }
+    .admin-empty { padding: 40px 16px; text-align: center; color: var(--grey-500); }
 
-    /* ── Loading ── */
-    #admin-loading { text-align: center; padding: 80px 20px; color: #888; }
-    .admin-spinner {
-      width: 32px; height: 32px;
-      border: 3px solid #e8e8e8; border-top-color: #000;
-      border-radius: 50%; animation: spin 0.7s linear infinite;
-      margin: 0 auto 16px;
-    }
-
-    /* ── Responsive ── */
-    @media (max-width: 768px) {
-      .admin-content { padding: 24px 16px 60px; }
-      .admin-stats { grid-template-columns: 1fr 1fr; }
-      .admin-topbar { padding: 0 16px; }
-      .admin-topbar-email { display: none; }
+    @media (max-width: 900px) {
+      .admin-wrap { padding: 0 20px 60px; }
+      .admin-stats { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 480px) {
-      .admin-stats { grid-template-columns: 1fr; }
+      .admin-stats { grid-template-columns: 1fr 1fr; }
+      .admin-stat-value { font-size: 1.5rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Top bar -->
-  <header class="admin-topbar">
-    <img src="forged logo.png" alt="Forged" class="admin-topbar-logo">
-    <span class="admin-staff-badge">Staff</span>
-    <div class="admin-topbar-right">
-      <span class="admin-topbar-email" id="admin-user-email"></span>
-      <div class="admin-topbar-divider"></div>
-      <button class="admin-topbar-btn" onclick="window.location.href='index.html'">
-        <i class="fa-solid fa-arrow-left" style="font-size:0.7rem;margin-right:5px;"></i>Back to store
-      </button>
-      <button class="admin-topbar-btn" onclick="adminLogout()">Sign out</button>
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="forged logo.png" alt="Forged" class="nav-wordmark">
+      </a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/shop">Shop</a></li>
+        <li><a href="/garage">Garage</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Support</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="/account" class="nav-icon-btn" aria-label="Account">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </a>
+        <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      </div>
     </div>
-  </header>
+  </nav>
+  <div class="nav-mobile" id="mobile-nav">
+    <a href="/">Home</a><a href="/shop">Shop</a>
+    <a href="/garage">Garage</a><a href="/about">About</a><a href="/contact">Support</a>
+  </div>
 
-  <div class="admin-content">
-
-    <!-- Loading -->
-    <div id="admin-loading">
-      <div class="admin-spinner"></div>
-      <p>Loading dashboard…</p>
+  <!-- Loading -->
+  <div id="admin-loading">
+    <div class="admin-loading-wrap">
+      <div class="acct-spinner"></div>
+      <p style="font-size:0.875rem;">Loading dashboard...</p>
     </div>
+  </div>
 
-    <!-- Error -->
-    <div class="admin-error" id="admin-error">
-      <strong>Could not load dashboard</strong>
-      <span id="admin-error-msg"></span>
+  <!-- Error -->
+  <div id="admin-error" style="display:none;">
+    <div class="admin-error-wrap">
+      <i class="fa-solid fa-triangle-exclamation admin-error-icon"></i>
+      <p class="admin-error-title">Access denied</p>
+      <p class="admin-error-msg" id="admin-error-msg">You do not have permission to view this page.</p>
+      <a href="/account" class="btn btn-outline btn-sm" style="margin-top:8px;">Back to account</a>
     </div>
+  </div>
 
-    <!-- Dashboard -->
-    <div id="admin-dashboard" style="display:none;">
-      <h1 class="admin-page-title">Staff Dashboard</h1>
+  <!-- Dashboard -->
+  <div id="admin-dashboard" style="display:none;">
+    <div class="admin-wrap">
 
-      <!-- Stat cards -->
+      <div class="admin-header">
+        <div>
+          <p class="section-label">Staff only</p>
+          <h1 class="admin-header-title">Forged Dashboard</h1>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <div class="admin-user-chip">
+            <span class="admin-user-dot"></span>
+            <span class="admin-user-email-text" id="admin-user-email"></span>
+          </div>
+          <button class="admin-logout-btn" onclick="adminLogout()">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign out
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats -->
       <div class="admin-stats">
-        <div class="admin-stat-card">
-          <p class="admin-stat-label">Total Orders</p>
+        <div class="admin-stat">
+          <p class="admin-stat-label">Total orders</p>
           <p class="admin-stat-value" id="stat-orders">—</p>
-          <p class="admin-stat-sub">All time</p>
         </div>
-        <div class="admin-stat-card">
-          <p class="admin-stat-label">Revenue</p>
+        <div class="admin-stat">
+          <p class="admin-stat-label">Revenue (30 days)</p>
           <p class="admin-stat-value" id="stat-revenue">—</p>
-          <p class="admin-stat-sub">Last 30 days</p>
         </div>
-        <div class="admin-stat-card">
+        <div class="admin-stat">
           <p class="admin-stat-label">Customers</p>
           <p class="admin-stat-value" id="stat-customers">—</p>
-          <p class="admin-stat-sub">Total registered</p>
         </div>
-        <div class="admin-stat-card">
+        <div class="admin-stat">
           <p class="admin-stat-label">Products</p>
           <p class="admin-stat-value" id="stat-products">—</p>
-          <p class="admin-stat-sub">In Shopify</p>
         </div>
       </div>
 
       <!-- Tabs -->
       <div class="admin-tabs">
-        <button class="admin-tab-btn active" data-tab="orders" onclick="adminTab('orders',this)">Recent Orders</button>
-        <button class="admin-tab-btn" data-tab="customers" onclick="adminTab('customers',this)">Customers</button>
-        <button class="admin-tab-btn" data-tab="inventory" onclick="adminTab('inventory',this)">Inventory</button>
+        <button class="admin-tab-btn active" onclick="adminTab('overview',this)">Overview</button>
+        <button class="admin-tab-btn" onclick="adminTab('customers',this)">Customers</button>
+        <button class="admin-tab-btn" onclick="adminTab('inventory',this)">Inventory</button>
       </div>
 
-      <!-- Orders panel -->
-      <div id="admin-panel-orders" class="admin-tab-panel">
+      <!-- Overview panel -->
+      <div id="admin-panel-overview" class="admin-tab-panel">
+        <div class="admin-table-header">
+          <p class="admin-table-title">Recent Orders</p>
+        </div>
         <div class="admin-table-wrap">
           <table class="admin-table">
             <thead>
               <tr>
-                <th>Order</th><th>Customer</th><th>Items</th>
-                <th>Payment</th><th>Fulfillment</th><th>Total</th><th>Date</th>
+                <th>Order</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Payment</th>
+                <th>Fulfilment</th>
+                <th>Total</th>
+                <th>Date</th>
               </tr>
             </thead>
             <tbody id="admin-orders-body">
-              <tr><td colspan="7" class="admin-empty">Loading…</td></tr>
+              <tr><td colspan="7" class="admin-empty">Loading orders...</td></tr>
             </tbody>
           </table>
         </div>
@@ -230,13 +248,22 @@
 
       <!-- Customers panel -->
       <div id="admin-panel-customers" class="admin-tab-panel" style="display:none;">
+        <div class="admin-table-header">
+          <p class="admin-table-title">All Customers</p>
+        </div>
         <div class="admin-table-wrap">
           <table class="admin-table">
             <thead>
-              <tr><th>Name</th><th>Email</th><th>Orders</th><th>Total Spent</th><th>Joined</th></tr>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Orders</th>
+                <th>Total spent</th>
+                <th>Joined</th>
+              </tr>
             </thead>
             <tbody id="admin-customers-body">
-              <tr><td colspan="5" class="admin-empty">Loading…</td></tr>
+              <tr><td colspan="5" class="admin-empty">Loading customers...</td></tr>
             </tbody>
           </table>
         </div>
@@ -244,16 +271,22 @@
 
       <!-- Inventory panel -->
       <div id="admin-panel-inventory" class="admin-tab-panel" style="display:none;">
-        <p style="font-size:0.8rem;color:#888;margin-bottom:14px;">
-          Edit the stock number and click <strong>Save</strong> — it updates Shopify instantly.
-        </p>
+        <div class="admin-table-header">
+          <p class="admin-table-title">Stock Management</p>
+          <p class="admin-muted" style="font-size:0.8rem;">Edit a quantity and click Save to update Shopify.</p>
+        </div>
         <div class="admin-table-wrap">
           <table class="admin-table">
             <thead>
-              <tr><th>Product</th><th>Price</th><th>Stock</th><th>Status</th></tr>
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Status</th>
+              </tr>
             </thead>
             <tbody id="admin-inventory-body">
-              <tr><td colspan="4" class="admin-empty">Loading…</td></tr>
+              <tr><td colspan="4" class="admin-empty">Loading inventory...</td></tr>
             </tbody>
           </table>
         </div>
@@ -262,8 +295,9 @@
     </div>
   </div>
 
-  <div class="admin-toast" id="admin-toast"></div>
+  <div id="admin-toast" class="admin-toast" style="display:none;opacity:0;"></div>
 
+  <script src="js/main.js"></script>
   <script src="js/admin.js"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 const SHOP    = 'forged-10046.myshopify.com';
 const SHOP_ID = '100016423286';
-const STAFF   = 'edencovell@gmail.com';
+const STAFF   = ['edencovell@gmail.com', 'mackinevahn11@gmail.com'];
 
 async function verifyStaff(req) {
   const token = (req.headers.authorization || '').replace('Bearer ', '');
@@ -11,7 +11,7 @@ async function verifyStaff(req) {
     });
     if (!r.ok) return false;
     const info = await r.json();
-    return info.email === STAFF;
+    return STAFF.includes(info.email);
   } catch { return false; }
 }
 
