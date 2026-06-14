@@ -10,7 +10,7 @@
 
   function adminFetch(path) {
     return fetch(path, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },
+      headers: { Authorization: `Bearer ${localStorage.getItem('id_token')}` },
     }).then(r => {
       if (!r.ok) return r.json().then(e => { throw new Error(e.error || `HTTP ${r.status}`); });
       return r.json();
@@ -165,9 +165,8 @@
   window.adminLogout = function () { window.location.href = '/account'; };
 
   async function init() {
-    const idToken     = localStorage.getItem('id_token');
-    const accessToken = localStorage.getItem('access_token');
-    if (!idToken || !accessToken) { window.location.href = '/account'; return; }
+    const idToken = localStorage.getItem('id_token');
+    if (!idToken) { window.location.href = '/account'; return; }
 
     const claims = decodeJWT(idToken);
     if (!claims || !STAFF_EMAILS.includes(claims.email)) { window.location.href = '/account'; return; }

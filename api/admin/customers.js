@@ -2,16 +2,15 @@ const SHOP    = 'forged-10046.myshopify.com';
 const SHOP_ID = '100016423286';
 const STAFF   = ['edencovell@gmail.com', 'mackinevahn11@gmail.com'];
 
-async function verifyStaff(req) {
+function verifyStaff(req) {
   const token = (req.headers.authorization || '').replace('Bearer ', '');
   if (!token) return false;
   try {
-    const r = await fetch(`https://shopify.com/authentication/${SHOP_ID}/oauth/userinfo`, {
-      headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
-    });
-    if (!r.ok) return false;
-    const info = await r.json();
-    return STAFF.includes(info.email);
+    const parts = token.split('.');
+    if (parts.length !== 3) return false;
+    const b64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    const payload = JSON.parse(Buffer.from(b64, 'base64').toString('utf8'));
+    return STAFF.includes(payload.email);
   } catch { return false; }
 }
 
@@ -22,7 +21,7 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'GET')    return res.status(405).end();
 
-  if (!await verifyStaff(req)) return res.status(403).json({ error: 'Forbidden' });
+  if (!verifyStaff(req)) return res.status(403).json({ error: 'Forbidden' });
 
   const adminToken = process.env.SHOPIFY_ADMIN_TOKEN;
   if (!adminToken) return res.status(500).json({ error: 'SHOPIFY_ADMIN_TOKEN not set.' });
