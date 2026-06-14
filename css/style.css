@@ -323,12 +323,12 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
   /* wave settled — glow blooms in */
   27%  {
     background-position: 0% center;
-    filter: drop-shadow(0 0 6px rgba(255,255,255,1)) drop-shadow(0 0 18px rgba(255,255,255,0.95)) drop-shadow(0 0 45px rgba(255,255,255,0.75)) drop-shadow(0 0 90px rgba(255,255,255,0.4));
+    filter: drop-shadow(0 0 4px #fff) drop-shadow(0 0 4px #fff) drop-shadow(0 0 4px #fff) drop-shadow(0 0 22px rgba(255,255,255,0.85)) drop-shadow(0 0 55px rgba(255,255,255,0.5));
   }
   /* hold */
   37%  {
     background-position: 0% center;
-    filter: drop-shadow(0 0 6px rgba(255,255,255,1)) drop-shadow(0 0 18px rgba(255,255,255,0.95)) drop-shadow(0 0 45px rgba(255,255,255,0.75)) drop-shadow(0 0 90px rgba(255,255,255,0.4));
+    filter: drop-shadow(0 0 4px #fff) drop-shadow(0 0 4px #fff) drop-shadow(0 0 4px #fff) drop-shadow(0 0 22px rgba(255,255,255,0.85)) drop-shadow(0 0 55px rgba(255,255,255,0.5));
   }
   /* fade out */
   45%  { background-position: 0% center; filter: none; animation-timing-function: steps(1, end); }
