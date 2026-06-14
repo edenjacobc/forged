@@ -156,9 +156,9 @@
     const state  = params.get('state');
 
     if (code) {
-      const savedState = localStorage.getItem('oauth_s');
-      if (state !== savedState) {
-        showError('State mismatch. Try logging in again.');
+      const savedVerifier = localStorage.getItem('pkce_v');
+      if (!savedVerifier) {
+        showError('Please open the sign-in link in this browser, then try again.');
         return;
       }
       try {
