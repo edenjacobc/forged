@@ -313,25 +313,21 @@ h1, h2, h3, h4 { line-height: 1.05; letter-spacing: -0.025em; font-weight: 900; 
   -webkit-text-fill-color: transparent;
   animation:
     hwReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both,
-    driveGlow 6s ease-in-out 1.4s infinite;
+    driveGlow 10s ease-in-out 1.4s infinite;
 }
 @keyframes driveGlow {
-  /* dim, wave waiting off-screen left */
   0%   { background-position: 100% center; text-shadow: none; }
-  12%  { background-position: 100% center; text-shadow: none; }
-  /* wave sweeps left→right, outer glow builds */
-  44%  {
+  7%   { background-position: 100% center; text-shadow: none; }
+  26%  {
     background-position: 0% center;
-    text-shadow: 0 0 22px rgba(255,255,255,0.55), 0 0 58px rgba(255,255,255,0.22);
+    text-shadow: 0 0 10px rgba(255,255,255,1), 0 0 28px rgba(255,255,255,0.8), 0 0 65px rgba(255,255,255,0.4);
   }
-  /* hold bright */
-  66%  {
+  40%  {
     background-position: 0% center;
-    text-shadow: 0 0 22px rgba(255,255,255,0.55), 0 0 58px rgba(255,255,255,0.22);
+    text-shadow: 0 0 10px rgba(255,255,255,1), 0 0 28px rgba(255,255,255,0.8), 0 0 65px rgba(255,255,255,0.4);
   }
-  /* fade dim — both position:0% and position:100% show identical dim flat gradient sections */
-  84%  { background-position: 0% center; text-shadow: none; }
-  85%  { background-position: 100% center; text-shadow: none; } /* invisible reset */
+  50%  { background-position: 0% center; text-shadow: none; animation-timing-function: steps(1, end); }
+  51%  { background-position: 100% center; text-shadow: none; }
   100% { background-position: 100% center; text-shadow: none; }
 }
 .hero-sub {
