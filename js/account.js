@@ -224,7 +224,7 @@
     document.getElementById('acct-overview-name').textContent = name;
     document.getElementById('acct-overview-email').textContent = claims.email || '';
 
-    if (claims.email === 'edencovell@gmail.com') {
+    if (['edencovell@gmail.com', 'mackinevahn11@gmail.com'].includes(claims.email)) {
       const btn = document.getElementById('acct-staff-btn');
       if (btn) btn.style.display = '';
     }

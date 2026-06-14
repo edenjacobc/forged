@@ -1,5 +1,5 @@
 (function () {
-  const STAFF_EMAIL = 'edencovell@gmail.com';
+  const STAFF_EMAILS = ['edencovell@gmail.com', 'mackinevahn11@gmail.com'];
 
   function decodeJWT(t) {
     try {
@@ -170,7 +170,7 @@
     if (!idToken || !accessToken) { window.location.href = '/account'; return; }
 
     const claims = decodeJWT(idToken);
-    if (!claims || claims.email !== STAFF_EMAIL) { window.location.href = '/account'; return; }
+    if (!claims || !STAFF_EMAILS.includes(claims.email)) { window.location.href = '/account'; return; }
 
     document.getElementById('admin-user-email').textContent = claims.email;
 
