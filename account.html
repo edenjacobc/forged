@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account — Forged</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="forged logo.png" alt="Forged" class="nav-wordmark">
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="garage.html">Garage</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Support</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="account.html" class="nav-icon-btn" aria-label="Account">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </a>
+        <button class="nav-icon-btn" onclick="openCart()" aria-label="Cart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" x2="21" y1="6" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="cart-badge" style="display:none">0</span>
+        </button>
+        <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </nav>
+  <div class="nav-mobile" id="mobile-nav">
+    <a href="index.html">Home</a><a href="shop.html">Shop</a>
+    <a href="garage.html">Garage</a><a href="about.html">About</a><a href="contact.html">Support</a>
+  </div>
+
+  <section class="account-section">
+
+    <!-- Login view -->
+    <div id="account-login" style="display:none;">
+      <div class="acct-login-wrap">
+        <img src="forged logo.png" alt="Forged" class="acct-login-logo">
+        <h1 class="acct-login-title">Log in to Forged</h1>
+        <p class="acct-login-sub">Access your orders, track deliveries, and manage your account.</p>
+        <div id="acct-error" class="acct-error" style="display:none;"></div>
+        <button class="btn btn-primary btn-lg acct-login-btn" onclick="startLogin()">
+          Continue <i class="fa-solid fa-arrow-right"></i>
+        </button>
+        <p class="acct-login-note">You'll receive a secure sign-in link by email. No password needed.</p>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div id="account-loading" style="display:none;">
+      <div class="acct-loading-wrap">
+        <div class="acct-spinner"></div>
+        <p>Loading your account...</p>
+      </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="account-dashboard" style="display:none;">
+      <div class="acct-dashboard-inner">
+        <div class="acct-header">
+          <div>
+            <p class="section-label">Your account</p>
+            <h1 class="acct-name" id="acct-name"></h1>
+            <p class="acct-email" id="acct-email"></p>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="logout()">Log out</button>
+        </div>
+
+        <h2 class="acct-orders-title">Your orders</h2>
+        <div id="acct-orders"></div>
+      </div>
+    </div>
+
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div>
+          <div class="footer-brand-logo"><div class="footer-logo-img-wrap"><img src="1.svg" alt="" class="footer-logo-img"></div>Forged</div>
+          <p class="footer-tagline">Premium car accessories, sourced for the detail-obsessed.</p>
+          <div class="footer-socials"><a href="#" class="footer-social"><i class="fa-brands fa-instagram"></i></a><a href="#" class="footer-social"><i class="fa-brands fa-tiktok"></i></a></div>
+        </div>
+        <div><p class="footer-col-title">Shop</p><div class="footer-links"><a href="shop.html">All products</a><a href="garage.html">Garage</a></div></div>
+        <div><p class="footer-col-title">Help</p><div class="footer-links"><a href="contact.html">Support</a><a href="contact.html">Returns</a></div></div>
+        <div><p class="footer-col-title">Company</p><div class="footer-links"><a href="about.html">About</a><a href="privacy.html">Privacy</a></div></div>
+      </div>
+      <div class="footer-bottom"><p class="footer-copy">&copy; 2026 Forged. All rights reserved. &nbsp;|&nbsp; Built by Eden Covell</p></div>
+    </div>
+  </footer>
+
+  <div class="cart-overlay" id="cart-overlay"></div>
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-drawer-header">
+      <div><p class="cart-drawer-title">Your cart</p><p class="cart-drawer-count" id="cart-drawer-count">0 items</p></div>
+      <button class="cart-close" onclick="closeCart()">&times;</button>
+    </div>
+    <div class="cart-items-list" id="cart-items-list"></div>
+    <div class="cart-drawer-footer" id="cart-drawer-footer" style="display:none;">
+      <div class="cart-total-row"><span class="cart-total-label">Total</span><span class="cart-total-amount" id="cart-total">£0.00</span></div>
+      <button class="btn btn-primary btn-lg cart-checkout-btn" onclick="shopifyCheckout()">Checkout <i class="fa-solid fa-arrow-right"></i></button>
+      <p class="cart-note">Free UK delivery on orders over £50</p>
+    </div>
+  </div>
+
+  <script src="js/cart.js"></script>
+  <script src="js/shopify.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/account.js"></script>
+</body>
+</html>
