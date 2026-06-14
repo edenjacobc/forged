@@ -177,7 +177,11 @@
       show('dashboard');
     } catch (e) {
       localStorage.removeItem('access_token');
-      showError('Could not load account: ' + e.message);
+      if (e.message === 'Invalid token') {
+        show('login');
+      } else {
+        showError('Could not load account: ' + e.message);
+      }
     }
   }
 
