@@ -1,11 +1,10 @@
 (function () {
-  const SHOP_ID      = '100016423286';
-  const CLIENT_ID    = '934f906e-c368-4a1a-9f9a-c5e938ed4e91';
-  const REDIRECT     = 'https://forgeduk.store/account.html';
-  const AUTH_URL     = `https://shopify.com/authentication/${SHOP_ID}/oauth/authorize`;
-  const TOKEN_URL    = `https://shopify.com/authentication/${SHOP_ID}/oauth/token`;
-  const LOGOUT_URL   = `https://shopify.com/authentication/${SHOP_ID}/logout`;
-  const USERINFO_URL = `https://shopify.com/authentication/${SHOP_ID}/oauth/userinfo`;
+  const SHOP_ID   = '100016423286';
+  const CLIENT_ID = '934f906e-c368-4a1a-9f9a-c5e938ed4e91';
+  const REDIRECT  = 'https://forgeduk.store/account.html';
+  const AUTH_URL  = `https://shopify.com/authentication/${SHOP_ID}/oauth/authorize`;
+  const TOKEN_URL = `https://shopify.com/authentication/${SHOP_ID}/oauth/token`;
+  const LOGOUT_URL= `https://shopify.com/authentication/${SHOP_ID}/logout`;
 
   function b64url(buf) {
     return btoa(String.fromCharCode(...new Uint8Array(buf)))
@@ -64,26 +63,16 @@
     return res.json();
   }
 
-  async function getUserInfo(token) {
-    const res = await fetch(USERINFO_URL, {
-      headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
+  async function fetchCustomer(token) {
+    const res = await fetch('/api/customer', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ token }),
     });
-    if (!res.ok) throw new Error('userinfo_failed');
-    return res.json();
-  }
-
-  async function getOrders(token) {
-    try {
-      const res = await fetch('/api/customer', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ token }),
-      });
-      const json = await res.json();
-      return res.ok ? (json.orders || null) : null;
-    } catch {
-      return null;
-    }
+    if (res.status === 401) throw new Error('invalid_token');
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.error || 'api_error');
+    return json;
   }
 
   function orderStep(o) {
@@ -141,18 +130,14 @@
     if (el) { el.textContent = msg; el.style.display = ''; }
   }
 
-  function renderDashboard(userInfo, orders) {
-    const first = userInfo.given_name || '';
-    const last  = userInfo.family_name || '';
-    const name  = (first + ' ' + last).trim() || userInfo.email || 'Customer';
+  function renderDashboard(c) {
+    const name = [c.firstName, c.lastName].filter(Boolean).join(' ') || c.emailAddress?.emailAddress || 'Customer';
     document.getElementById('acct-name').textContent  = name;
-    document.getElementById('acct-email').textContent = userInfo.email || '';
+    document.getElementById('acct-email').textContent = c.emailAddress?.emailAddress || '';
     const el = document.getElementById('acct-orders');
-    if (orders && orders.nodes && orders.nodes.length) {
-      el.innerHTML = orders.nodes.map(renderOrder).join('');
-    } else {
-      el.innerHTML = `<p class="acct-empty">No orders yet. <a href="shop.html">Browse the shop</a></p>`;
-    }
+    el.innerHTML = c.orders?.nodes?.length
+      ? c.orders.nodes.map(renderOrder).join('')
+      : `<p class="acct-empty">No orders yet. <a href="shop.html">Browse the shop</a></p>`;
   }
 
   async function init() {
@@ -170,7 +155,7 @@
         show('loading');
         const tokens = await exchangeCode(code);
         if (!tokens.access_token) {
-          showError('Login failed: no token received.');
+          showError('Login failed — no token received.');
           return;
         }
         localStorage.setItem('access_token', tokens.access_token);
@@ -187,14 +172,15 @@
 
     try {
       show('loading');
-      const userInfo = await getUserInfo(token);
-      const orders   = await getOrders(token);
-      renderDashboard(userInfo, orders);
+      const customer = await fetchCustomer(token);
+      renderDashboard(customer);
       show('dashboard');
     } catch (e) {
       localStorage.removeItem('access_token');
       show('login');
-      showError('Session expired. Please log in again.');
+      if (e.message !== 'invalid_token') {
+        showError('Could not load account: ' + e.message);
+      }
     }
   }
 

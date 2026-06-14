@@ -45,7 +45,7 @@ module.exports = async (req, res) => {
   const SHOP_DOMAIN = 'forged-10046.myshopify.com';
   const ADMIN_TOKEN = process.env.SHOPIFY_ADMIN_TOKEN;
 
-  // Verify OIDC token via Shopify userinfo
+  // Verify OIDC token + get customer identity
   const uInfo = await get(
     `https://shopify.com/authentication/${SHOP_ID}/oauth/userinfo`,
     { Authorization: `Bearer ${token}`, Accept: 'application/json' }
@@ -60,20 +60,28 @@ module.exports = async (req, res) => {
     return res.status(500).json({ error: 'Bad userinfo response' });
   }
 
+  const email      = userInfo.email || '';
+  const firstName  = userInfo.given_name  || '';
+  const lastName   = userInfo.family_name || '';
   const sub        = userInfo.sub || '';
   const customerId = sub.includes('/') ? sub.split('/').pop() : sub;
 
-  if (!customerId) return res.status(400).json({ error: 'No customer ID in token' });
-
-  // Try Admin API for orders — fail silently if token not configured
-  if (!ADMIN_TOKEN) {
-    return res.status(200).json({ orders: { nodes: [] } });
+  // If no Admin API token configured, return profile only (no orders)
+  if (!ADMIN_TOKEN || !customerId) {
+    return res.status(200).json({
+      firstName,
+      lastName,
+      emailAddress: { emailAddress: email },
+      orders: { nodes: [] },
+    });
   }
 
+  // Fetch orders from Admin API
   const adminGid = `gid://shopify/Customer/${customerId}`;
   const query = {
     query: `query GetCustomer($id: ID!) {
       customer(id: $id) {
+        firstName lastName
         orders(first: 10, sortKey: PROCESSED_AT, reverse: true) {
           nodes {
             id name processedAt financialStatus fulfillmentStatus
@@ -95,19 +103,33 @@ module.exports = async (req, res) => {
     const adminData = JSON.parse(adminRes.body);
 
     if (adminData.errors || !adminData.data?.customer) {
-      return res.status(200).json({ orders: { nodes: [] } });
+      return res.status(200).json({
+        firstName,
+        lastName,
+        emailAddress: { emailAddress: email },
+        orders: { nodes: [] },
+      });
     }
 
-    const orders = {
-      nodes: adminData.data.customer.orders.nodes.map(o => ({
-        ...o,
-        totalPrice: o.totalPriceSet?.shopMoney || { amount: '0', currencyCode: 'GBP' },
-        lineItems:  { nodes: o.lineItems.nodes.map(i => ({ title: i.name, quantity: i.quantity })) },
-      })),
-    };
-
-    return res.status(200).json({ orders });
+    const c = adminData.data.customer;
+    return res.status(200).json({
+      firstName:    c.firstName || firstName,
+      lastName:     c.lastName  || lastName,
+      emailAddress: { emailAddress: email },
+      orders: {
+        nodes: c.orders.nodes.map(o => ({
+          ...o,
+          totalPrice: o.totalPriceSet?.shopMoney || { amount: '0', currencyCode: 'GBP' },
+          lineItems:  { nodes: o.lineItems.nodes.map(i => ({ title: i.name, quantity: i.quantity })) },
+        })),
+      },
+    });
   } catch {
-    return res.status(200).json({ orders: { nodes: [] } });
+    return res.status(200).json({
+      firstName,
+      lastName,
+      emailAddress: { emailAddress: email },
+      orders: { nodes: [] },
+    });
   }
 };
