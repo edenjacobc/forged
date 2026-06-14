@@ -122,12 +122,25 @@
       </div>`;
   }
 
+  window.acctTab = function (tab, btn) {
+    document.querySelectorAll('.acct-tab').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.acct-nav-item').forEach(el => el.classList.remove('active'));
+    document.getElementById('acct-tab-' + tab).style.display = '';
+    if (btn) btn.classList.add('active');
+  };
+
   function renderDashboard(claims, orders) {
-    const first = claims.given_name  || '';
-    const last  = claims.family_name || '';
-    const name  = (first + ' ' + last).trim() || claims.email || 'Your account';
-    document.getElementById('acct-name').textContent  = name;
-    document.getElementById('acct-email').textContent = claims.email || '';
+    const first  = claims.given_name  || '';
+    const last   = claims.family_name || '';
+    const name   = (first + ' ' + last).trim() || claims.email || 'Your account';
+    const initials = (first[0] || claims.email?.[0] || '?').toUpperCase();
+
+    document.getElementById('acct-avatar').textContent        = initials;
+    document.getElementById('acct-name').textContent          = name;
+    document.getElementById('acct-email').textContent         = claims.email || '';
+    document.getElementById('acct-overview-name').textContent = name;
+    document.getElementById('acct-overview-email').textContent = claims.email || '';
+
     const el = document.getElementById('acct-orders');
     el.innerHTML = orders && orders.length
       ? orders.map(renderOrder).join('')

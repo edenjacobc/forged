@@ -67,18 +67,76 @@
 
     <!-- Dashboard -->
     <div id="account-dashboard" style="display:none;">
-      <div class="acct-dashboard-inner">
-        <div class="acct-header">
-          <div>
-            <p class="section-label">Your account</p>
-            <h1 class="acct-name" id="acct-name"></h1>
+      <div class="acct-layout">
+
+        <!-- Sidebar -->
+        <aside class="acct-sidebar">
+          <div class="acct-profile">
+            <div class="acct-avatar" id="acct-avatar">?</div>
+            <h2 class="acct-name" id="acct-name"></h2>
             <p class="acct-email" id="acct-email"></p>
           </div>
-          <button class="btn btn-outline btn-sm" onclick="logout()">Log out</button>
-        </div>
+          <nav class="acct-nav">
+            <button class="acct-nav-item active" data-tab="overview" onclick="acctTab('overview',this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              Overview
+            </button>
+            <button class="acct-nav-item" data-tab="orders" onclick="acctTab('orders',this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" x2="21" y1="6" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              My Orders
+            </button>
+            <a class="acct-nav-item" href="garage.html">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2z"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+              My Garage
+            </a>
+            <button class="acct-nav-item acct-nav-logout" onclick="logout()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+              Sign Out
+            </button>
+          </nav>
+        </aside>
 
-        <h2 class="acct-orders-title">Your orders</h2>
-        <div id="acct-orders"></div>
+        <!-- Main -->
+        <main class="acct-main">
+
+          <!-- Overview tab -->
+          <div id="acct-tab-overview" class="acct-tab">
+            <div class="acct-tab-header">
+              <p class="section-label">Dashboard</p>
+              <h1 class="acct-tab-title">Welcome back</h1>
+            </div>
+            <div class="acct-overview-grid">
+              <div class="acct-card">
+                <p class="acct-card-label">Contact information</p>
+                <p class="acct-card-name" id="acct-overview-name"></p>
+                <p class="acct-card-email" id="acct-overview-email"></p>
+              </div>
+              <div class="acct-card">
+                <p class="acct-card-label">Quick links</p>
+                <a href="shop.html" class="acct-card-link">Browse the shop <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="garage.html" class="acct-card-link">Open My Garage <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="contact.html" class="acct-card-link">Contact support <i class="fa-solid fa-arrow-right"></i></a>
+              </div>
+            </div>
+            <div class="acct-orders-nudge" onclick="acctTab('orders', document.querySelector('[data-tab=orders]'))">
+              <div>
+                <p style="font-weight:700;font-size:0.9rem;">My Orders</p>
+                <p style="font-size:0.8rem;color:var(--grey-500);margin-top:3px;">Track your deliveries and view order history</p>
+              </div>
+              <i class="fa-solid fa-chevron-right" style="color:var(--grey-400);font-size:0.8rem;"></i>
+            </div>
+          </div>
+
+          <!-- Orders tab -->
+          <div id="acct-tab-orders" class="acct-tab" style="display:none;">
+            <div class="acct-tab-header">
+              <p class="section-label">Account</p>
+              <h1 class="acct-tab-title">My Orders</h1>
+            </div>
+            <div id="acct-orders"></div>
+          </div>
+
+        </main>
       </div>
     </div>
 
