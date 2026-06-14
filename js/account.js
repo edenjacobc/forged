@@ -23,8 +23,8 @@
   window.startLogin = async function () {
     const { verifier, challenge } = await buildPKCE();
     const state = b64url(crypto.getRandomValues(new Uint8Array(16)));
-    sessionStorage.setItem('pkce_v', verifier);
-    sessionStorage.setItem('oauth_s', state);
+    localStorage.setItem('pkce_v', verifier);
+    localStorage.setItem('oauth_s', state);
     const p = new URLSearchParams({
       client_id:             CLIENT_ID,
       response_type:         'code',
@@ -38,8 +38,8 @@
   };
 
   window.logout = function () {
-    const idToken = sessionStorage.getItem('id_token');
-    sessionStorage.clear();
+    const idToken = localStorage.getItem('id_token');
+    ['pkce_v', 'oauth_s', 'access_token', 'id_token'].forEach(k => localStorage.removeItem(k));
     const p = new URLSearchParams({ post_logout_redirect_uri: REDIRECT });
     if (idToken) p.set('id_token_hint', idToken);
     window.location.href = `${LOGOUT_URL}?${p}`;
@@ -54,7 +54,7 @@
         client_id:     CLIENT_ID,
         redirect_uri:  REDIRECT,
         code,
-        code_verifier: sessionStorage.getItem('pkce_v'),
+        code_verifier: localStorage.getItem('pkce_v'),
       }),
     });
     if (!res.ok) throw new Error('token_exchange');
@@ -155,15 +155,15 @@
     const state  = params.get('state');
 
     if (code) {
-      if (state !== sessionStorage.getItem('oauth_s')) {
+      if (state !== localStorage.getItem('oauth_s')) {
         showError('Authentication failed. Please try again.');
         return;
       }
       try {
         show('loading');
         const tokens = await exchangeCode(code);
-        sessionStorage.setItem('access_token', tokens.access_token);
-        if (tokens.id_token) sessionStorage.setItem('id_token', tokens.id_token);
+        localStorage.setItem('access_token', tokens.access_token);
+        if (tokens.id_token) localStorage.setItem('id_token', tokens.id_token);
         window.history.replaceState({}, '', window.location.pathname);
       } catch {
         showError('Login failed. Please try again.');
@@ -171,7 +171,7 @@
       }
     }
 
-    const token = sessionStorage.getItem('access_token');
+    const token = localStorage.getItem('access_token');
     if (!token) { show('login'); return; }
 
     try {
@@ -180,7 +180,7 @@
       renderDashboard(customer);
       show('dashboard');
     } catch {
-      sessionStorage.removeItem('access_token');
+      localStorage.removeItem('access_token');
       show('login');
     }
   }
