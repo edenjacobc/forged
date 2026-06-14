@@ -6,7 +6,7 @@
   const TOKEN_URL = `https://shopify.com/authentication/${SHOP_ID}/oauth/token`;
   const LOGOUT_URL= `https://shopify.com/authentication/${SHOP_ID}/logout`;
   const API_URL   = `https://shopify.com/${SHOP_ID}/account/customer/api/2024-10/graphql`;
-  const SCOPES    = 'openid email https://api.customers.com/auth/customer.graphql';
+  const SCOPES    = 'https://api.customers.com/auth/customer.graphql';
 
   function b64url(buf) {
     return btoa(String.fromCharCode(...new Uint8Array(buf)))
