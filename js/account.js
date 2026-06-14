@@ -224,6 +224,11 @@
     document.getElementById('acct-overview-name').textContent = name;
     document.getElementById('acct-overview-email').textContent = claims.email || '';
 
+    if (claims.email === 'edencovell@gmail.com') {
+      const btn = document.getElementById('acct-staff-btn');
+      if (btn) btn.style.display = '';
+    }
+
     const el = document.getElementById('acct-orders');
     el.innerHTML = orders && orders.length
       ? orders.map(renderOrder).join('')

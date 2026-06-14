@@ -1450,6 +1450,10 @@ body.loader-active .hero-bg-word {
 .acct-nav-item.active svg { opacity: 1; }
 .acct-nav-logout { margin-top: 12px; color: var(--grey-400); }
 .acct-nav-logout:hover { background: #fff0f0; color: #c00; }
+.acct-nav-staff { margin-top: 4px; color: var(--black); background: #f5f5f5; border: 1.5px solid #e0e0e0; }
+.acct-nav-staff:hover { background: var(--black); color: var(--white); border-color: var(--black); }
+.acct-nav-staff svg { opacity: 0.6; }
+.acct-nav-staff:hover svg { opacity: 1; }
 
 /* Main content */
 .acct-main { flex: 1; padding: 52px 56px; min-width: 0; }

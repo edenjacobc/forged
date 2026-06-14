@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff Dashboard — Forged</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ── Admin shell ── */
+    body { background: #f7f7f7; }
+
+    .admin-topbar {
+      background: #000; color: #fff;
+      height: 56px; display: flex; align-items: center;
+      padding: 0 32px; gap: 16px;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .admin-topbar-logo { height: 28px; width: auto; filter: invert(1); }
+    .admin-staff-badge {
+      font-size: 0.6rem; font-weight: 800; letter-spacing: 0.12em;
+      background: #fff; color: #000; padding: 3px 8px; border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .admin-topbar-right { margin-left: auto; display: flex; align-items: center; gap: 20px; }
+    .admin-topbar-email { font-size: 0.8rem; color: rgba(255,255,255,0.5); }
+    .admin-topbar-btn {
+      font-size: 0.78rem; font-weight: 600; color: rgba(255,255,255,0.7);
+      background: none; border: none; cursor: pointer; font-family: inherit;
+      transition: color 0.15s;
+    }
+    .admin-topbar-btn:hover { color: #fff; }
+    .admin-topbar-divider { width: 1px; height: 18px; background: rgba(255,255,255,0.15); }
+
+    /* ── Content ── */
+    .admin-content { max-width: 1280px; margin: 0 auto; padding: 40px 32px 80px; }
+
+    .admin-page-title {
+      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+      font-weight: 900; letter-spacing: -0.03em;
+      margin-bottom: 32px;
+    }
+
+    /* ── Stat cards ── */
+    .admin-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 36px; }
+    .admin-stat-card {
+      background: #fff; border: 1px solid #e8e8e8; border-radius: 12px;
+      padding: 24px 24px 20px;
+    }
+    .admin-stat-label {
+      font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: #888; margin-bottom: 10px;
+    }
+    .admin-stat-value { font-size: 2rem; font-weight: 900; letter-spacing: -0.04em; line-height: 1; }
+    .admin-stat-sub { font-size: 0.72rem; color: #aaa; margin-top: 6px; }
+
+    /* ── Tabs ── */
+    .admin-tabs { display: flex; gap: 4px; margin-bottom: 20px; border-bottom: 1px solid #e8e8e8; padding-bottom: 0; }
+    .admin-tab-btn {
+      font-size: 0.85rem; font-weight: 600; padding: 10px 18px;
+      background: none; border: none; cursor: pointer; font-family: inherit;
+      color: #888; border-bottom: 2px solid transparent; margin-bottom: -1px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .admin-tab-btn:hover { color: #000; }
+    .admin-tab-btn.active { color: #000; border-bottom-color: #000; }
+
+    /* ── Tables ── */
+    .admin-table-wrap { background: #fff; border: 1px solid #e8e8e8; border-radius: 12px; overflow: hidden; }
+    .admin-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    .admin-table th {
+      text-align: left; padding: 13px 16px;
+      font-size: 0.67rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: #888;
+      background: #fafafa; border-bottom: 1px solid #e8e8e8;
+    }
+    .admin-table td { padding: 13px 16px; border-bottom: 1px solid #f2f2f2; vertical-align: middle; }
+    .admin-table tr:last-child td { border-bottom: none; }
+    .admin-table tr:hover td { background: #fafafa; }
+    .admin-mono { font-family: 'SF Mono', 'Consolas', monospace; font-size: 0.82rem; }
+    .admin-muted { color: #666; }
+    .admin-empty { color: #aaa; font-style: italic; text-align: center; padding: 40px 16px !important; }
+
+    /* ── Status badges ── */
+    .admin-badge {
+      display: inline-block; font-size: 0.67rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      padding: 3px 8px; border-radius: 999px;
+    }
+    .admin-badge-green  { background: #e8f7ee; color: #1a7a3e; }
+    .admin-badge-yellow { background: #fef9e6; color: #8a6700; }
+    .admin-badge-red    { background: #fdecea; color: #b91c1c; }
+    .admin-badge-grey   { background: #f0f0f0; color: #666; }
+
+    /* ── Inventory stock editor ── */
+    .admin-stock-wrap { display: flex; align-items: center; gap: 8px; }
+    .admin-stock-input {
+      width: 70px; padding: 6px 10px;
+      border: 1.5px solid #e8e8e8; border-radius: 6px;
+      font-size: 0.84rem; font-family: inherit; font-weight: 600;
+      transition: border-color 0.15s; outline: none;
+    }
+    .admin-stock-input:focus { border-color: #000; }
+
+    /* ── Error state ── */
+    .admin-error {
+      display: none;
+      background: #fdecea; color: #b91c1c;
+      border: 1px solid #f5c6c6; border-radius: 10px;
+      padding: 20px 24px; font-size: 0.9rem; line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .admin-error strong { display: block; margin-bottom: 6px; }
+
+    /* ── Toast ── */
+    .admin-toast {
+      display: none; position: fixed; bottom: 28px; right: 28px;
+      background: #000; color: #fff;
+      padding: 12px 20px; border-radius: 8px;
+      font-size: 0.84rem; font-weight: 600;
+      z-index: 9999; transition: opacity 0.3s;
+    }
+    .admin-toast-err { background: #b91c1c; }
+
+    /* ── Loading ── */
+    #admin-loading { text-align: center; padding: 80px 20px; color: #888; }
+    .admin-spinner {
+      width: 32px; height: 32px;
+      border: 3px solid #e8e8e8; border-top-color: #000;
+      border-radius: 50%; animation: spin 0.7s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .admin-content { padding: 24px 16px 60px; }
+      .admin-stats { grid-template-columns: 1fr 1fr; }
+      .admin-topbar { padding: 0 16px; }
+      .admin-topbar-email { display: none; }
+    }
+    @media (max-width: 480px) {
+      .admin-stats { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <header class="admin-topbar">
+    <img src="forged logo.png" alt="Forged" class="admin-topbar-logo">
+    <span class="admin-staff-badge">Staff</span>
+    <div class="admin-topbar-right">
+      <span class="admin-topbar-email" id="admin-user-email"></span>
+      <div class="admin-topbar-divider"></div>
+      <button class="admin-topbar-btn" onclick="window.location.href='index.html'">
+        <i class="fa-solid fa-arrow-left" style="font-size:0.7rem;margin-right:5px;"></i>Back to store
+      </button>
+      <button class="admin-topbar-btn" onclick="adminLogout()">Sign out</button>
+    </div>
+  </header>
+
+  <div class="admin-content">
+
+    <!-- Loading -->
+    <div id="admin-loading">
+      <div class="admin-spinner"></div>
+      <p>Loading dashboard…</p>
+    </div>
+
+    <!-- Error -->
+    <div class="admin-error" id="admin-error">
+      <strong>Could not load dashboard</strong>
+      <span id="admin-error-msg"></span>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="admin-dashboard" style="display:none;">
+      <h1 class="admin-page-title">Staff Dashboard</h1>
+
+      <!-- Stat cards -->
+      <div class="admin-stats">
+        <div class="admin-stat-card">
+          <p class="admin-stat-label">Total Orders</p>
+          <p class="admin-stat-value" id="stat-orders">—</p>
+          <p class="admin-stat-sub">All time</p>
+        </div>
+        <div class="admin-stat-card">
+          <p class="admin-stat-label">Revenue</p>
+          <p class="admin-stat-value" id="stat-revenue">—</p>
+          <p class="admin-stat-sub">Last 30 days</p>
+        </div>
+        <div class="admin-stat-card">
+          <p class="admin-stat-label">Customers</p>
+          <p class="admin-stat-value" id="stat-customers">—</p>
+          <p class="admin-stat-sub">Total registered</p>
+        </div>
+        <div class="admin-stat-card">
+          <p class="admin-stat-label">Products</p>
+          <p class="admin-stat-value" id="stat-products">—</p>
+          <p class="admin-stat-sub">In Shopify</p>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="admin-tabs">
+        <button class="admin-tab-btn active" data-tab="orders" onclick="adminTab('orders',this)">Recent Orders</button>
+        <button class="admin-tab-btn" data-tab="customers" onclick="adminTab('customers',this)">Customers</button>
+        <button class="admin-tab-btn" data-tab="inventory" onclick="adminTab('inventory',this)">Inventory</button>
+      </div>
+
+      <!-- Orders panel -->
+      <div id="admin-panel-orders" class="admin-tab-panel">
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Order</th><th>Customer</th><th>Items</th>
+                <th>Payment</th><th>Fulfillment</th><th>Total</th><th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="admin-orders-body">
+              <tr><td colspan="7" class="admin-empty">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Customers panel -->
+      <div id="admin-panel-customers" class="admin-tab-panel" style="display:none;">
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr><th>Name</th><th>Email</th><th>Orders</th><th>Total Spent</th><th>Joined</th></tr>
+            </thead>
+            <tbody id="admin-customers-body">
+              <tr><td colspan="5" class="admin-empty">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Inventory panel -->
+      <div id="admin-panel-inventory" class="admin-tab-panel" style="display:none;">
+        <p style="font-size:0.8rem;color:#888;margin-bottom:14px;">
+          Edit the stock number and click <strong>Save</strong> — it updates Shopify instantly.
+        </p>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr><th>Product</th><th>Price</th><th>Stock</th><th>Status</th></tr>
+            </thead>
+            <tbody id="admin-inventory-body">
+              <tr><td colspan="4" class="admin-empty">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="admin-toast" id="admin-toast"></div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
