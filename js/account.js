@@ -6,7 +6,7 @@
   const TOKEN_URL = `https://shopify.com/authentication/${SHOP_ID}/oauth/token`;
   const LOGOUT_URL= `https://shopify.com/authentication/${SHOP_ID}/logout`;
   const API_URL   = `https://shopify.com/${SHOP_ID}/account/customer/api/2024-10/graphql`;
-  const SCOPES    = 'openid email';
+  const SCOPES    = 'openid email https://api.customers.com/auth/customer.graphql';
 
   function b64url(buf) {
     return btoa(String.fromCharCode(...new Uint8Array(buf)))
@@ -66,14 +66,29 @@
   }
 
   async function fetchCustomer(token) {
-    const res = await fetch('/api/customer', {
+    const query = `{
+      customer {
+        firstName lastName
+        emailAddress { emailAddress }
+        orders(first: 10, sortKey: PROCESSED_AT, reverse: true) {
+          nodes {
+            id name processedAt financialStatus fulfillmentStatus
+            totalPrice { amount currencyCode }
+            lineItems(first: 5) { nodes { title quantity } }
+            fulfillments(first: 1) { trackingInfo(first: 1) { number url } }
+          }
+        }
+      }
+    }`;
+    const res = await fetch(API_URL, {
       method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ token }),
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body:    JSON.stringify({ query }),
     });
     const json = await res.json();
-    if (!res.ok) throw new Error(json.error || ('HTTP ' + res.status));
-    return json;
+    if (json.errors) throw new Error(JSON.stringify(json.errors));
+    if (!json.data?.customer) throw new Error('Invalid token');
+    return json.data.customer;
   }
 
   function orderStep(o) {
