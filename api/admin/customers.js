@@ -1,3 +1,5 @@
+const { getAdminToken } = require('./_token');
+
 const SHOP    = 'forged-10046.myshopify.com';
 const SHOP_ID = '100016423286';
 const STAFF   = ['edencovell@gmail.com', 'mackinevahn11@gmail.com'];
@@ -23,10 +25,8 @@ module.exports = async function handler(req, res) {
 
   if (!verifyStaff(req)) return res.status(403).json({ error: 'Forbidden' });
 
-  const adminToken = process.env.SHOPIFY_ADMIN_TOKEN;
-  if (!adminToken) return res.status(500).json({ error: 'SHOPIFY_ADMIN_TOKEN not set.' });
-
   try {
+    const adminToken = await getAdminToken();
     const r = await fetch(
       `https://${SHOP}/admin/api/2024-10/customers.json?limit=100&order=created_at+DESC&fields=id,email,first_name,last_name,created_at,orders_count,total_spent,verified_email`,
       { headers: { 'X-Shopify-Access-Token': adminToken, Accept: 'application/json' } }

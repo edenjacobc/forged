@@ -122,7 +122,7 @@
     try {
       const r = await fetch('/api/admin/update-stock', {
         method:  'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('access_token')}` },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('id_token')}` },
         body:    JSON.stringify({ inventoryItemId: itemId, quantity: qty }),
       });
       if (!r.ok) { const e = await r.json(); throw new Error(e.error); }

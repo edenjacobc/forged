@@ -1,3 +1,5 @@
+const { getAdminToken } = require('./_token');
+
 const SHOP    = 'forged-10046.myshopify.com';
 const SHOP_ID = '100016423286';
 const STAFF   = ['edencovell@gmail.com', 'mackinevahn11@gmail.com'];
@@ -31,10 +33,8 @@ module.exports = async function handler(req, res) {
 
   if (!verifyStaff(req)) return res.status(403).json({ error: 'Forbidden' });
 
-  const adminToken = process.env.SHOPIFY_ADMIN_TOKEN;
-  if (!adminToken) return res.status(500).json({ error: 'SHOPIFY_ADMIN_TOKEN not set in Vercel environment variables.' });
-
   try {
+    const adminToken = await getAdminToken();
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
 
     const [orderCount, customerCount, productCount, recentOrders, revenueOrders] = await Promise.all([

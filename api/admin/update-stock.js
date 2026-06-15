@@ -1,3 +1,5 @@
+const { getAdminToken } = require('./_token');
+
 const SHOP    = 'forged-10046.myshopify.com';
 const SHOP_ID = '100016423286';
 const STAFF   = ['edencovell@gmail.com', 'mackinevahn11@gmail.com'];
@@ -23,9 +25,6 @@ module.exports = async function handler(req, res) {
 
   if (!verifyStaff(req)) return res.status(403).json({ error: 'Forbidden' });
 
-  const adminToken = process.env.SHOPIFY_ADMIN_TOKEN;
-  if (!adminToken) return res.status(500).json({ error: 'SHOPIFY_ADMIN_TOKEN not set.' });
-
   const { inventoryItemId, quantity } = req.body || {};
   if (!inventoryItemId || quantity === undefined) {
     return res.status(400).json({ error: 'inventoryItemId and quantity required' });
@@ -35,7 +34,8 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    // Get primary active location
+    const adminToken = await getAdminToken();
+
     const locR = await fetch(`https://${SHOP}/admin/api/2024-10/locations.json`, {
       headers: { 'X-Shopify-Access-Token': adminToken, Accept: 'application/json' },
     });
