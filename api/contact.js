@@ -13,25 +13,26 @@ module.exports = async function handler(req, res) {
   }
 
   const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) return res.status(500).json({ error: 'RESEND_API_KEY not configured' });
+  if (!apiKey) return res.status(500).json({ error: 'RESEND_API_KEY not set', env_keys: Object.keys(process.env).filter(k => k.includes('RESEND')) });
 
-  const r = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
-    body: JSON.stringify({
-      from:    'Forged Support <noreply@forgeduk.store>',
-      to:      [TO],
-      reply_to: email,
-      subject: `Forged Support: ${subject || 'General enquiry'}`,
-      text:    `Name: ${name}\nEmail: ${email}\nSubject: ${subject || 'General enquiry'}\n\n${message}`,
-      html:    `<p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p><p><strong>Subject:</strong> ${subject || 'General enquiry'}</p><hr><p>${message.replace(/\n/g, '<br>')}</p>`,
-    }),
-  });
+  try {
+    const r = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
+      body: JSON.stringify({
+        from:     'Forged Support <noreply@forgeduk.store>',
+        to:       [TO],
+        reply_to: email,
+        subject:  `Forged Support: ${subject || 'General enquiry'}`,
+        text:     `Name: ${name}\nEmail: ${email}\nSubject: ${subject || 'General enquiry'}\n\n${message}`,
+        html:     `<p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p><p><strong>Subject:</strong> ${subject || 'General enquiry'}</p><hr><p>${message.replace(/\n/g, '<br>')}</p>`,
+      }),
+    });
 
-  if (!r.ok) {
-    const err = await r.json().catch(() => ({}));
-    return res.status(500).json({ error: err.message || 'Failed to send email' });
+    const body = await r.json().catch(() => ({}));
+    if (!r.ok) return res.status(500).json({ error: body.message || body.name || 'Resend error', detail: body, status: r.status });
+    return res.json({ ok: true });
+  } catch (e) {
+    return res.status(500).json({ error: e.message, stack: e.stack?.split('\n')[0] });
   }
-
-  return res.json({ ok: true });
 };
