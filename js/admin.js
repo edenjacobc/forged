@@ -59,11 +59,19 @@
       : '<tr><td colspan="7" class="admin-empty">No orders yet</td></tr>';
   }
 
+  function nameFromEmail(email) {
+    const local = (email || '').split('@')[0];
+    const parts = local.split(/[._\-+]/).filter(Boolean);
+    return parts.length > 1
+      ? parts.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' ')
+      : local.charAt(0).toUpperCase() + local.slice(1);
+  }
+
   function renderCustomers(d) {
     const customers = d.customers || [];
     document.getElementById('admin-customers-body').innerHTML = customers.length
       ? customers.map(c => {
-          const name = [c.first_name, c.last_name].filter(Boolean).join(' ') || '—';
+          const name = [c.first_name, c.last_name].filter(Boolean).join(' ') || nameFromEmail(c.email);
           return `<tr>
             <td>${name}</td>
             <td>${c.email}</td>
