@@ -39,7 +39,7 @@ module.exports = async function handler(req, res) {
     const locR = await fetch(`https://${SHOP}/admin/api/2026-04/locations.json`, {
       headers: { 'X-Shopify-Access-Token': adminToken, Accept: 'application/json' },
     });
-    if (!locR.ok) throw new Error(`Locations fetch failed: ${locR.status}`);
+    if (!locR.ok) throw new Error(`Locations fetch failed ${locR.status} — add read_locations scope to your Shopify custom app`);
     const locData = await locR.json();
     const location = (locData.locations || []).find(l => l.active) || locData.locations?.[0];
     if (!location) return res.status(500).json({ error: 'No Shopify location found' });

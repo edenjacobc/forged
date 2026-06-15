@@ -37,7 +37,9 @@ module.exports = async function handler(req, res) {
     const adminToken = await getAdminToken();
     const [productsData, locationsData] = await Promise.all([
       shopify('/products.json?limit=100&fields=id,title,status,variants', adminToken),
-      shopify('/locations.json', adminToken),
+      fetch(`https://${SHOP}/admin/api/2026-04/locations.json`, {
+        headers: { 'X-Shopify-Access-Token': adminToken, Accept: 'application/json' },
+      }).then(r => r.ok ? r.json() : { locations: [] }),
     ]);
 
     const primaryLocation = (locationsData.locations || []).find(l => l.active) || locationsData.locations?.[0];
