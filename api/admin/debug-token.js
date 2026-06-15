@@ -32,16 +32,23 @@ module.exports = async function handler(req, res) {
 
   const masked = adminToken ? adminToken.slice(0, 8) + '...' + adminToken.slice(-4) : null;
 
-  const r = await fetch(`https://${SHOP}/admin/api/2026-04/shop.json`, {
-    headers: { 'X-Shopify-Access-Token': adminToken, Accept: 'application/json' },
-  });
+  const [shopR, ordersR] = await Promise.all([
+    fetch(`https://${SHOP}/admin/api/2026-04/shop.json`, {
+      headers: { 'X-Shopify-Access-Token': adminToken, Accept: 'application/json' },
+    }),
+    fetch(`https://${SHOP}/admin/api/2026-04/orders/count.json?status=any`, {
+      headers: { 'X-Shopify-Access-Token': adminToken, Accept: 'application/json' },
+    }),
+  ]);
 
-  const body = await r.json().catch(() => ({}));
+  const shopBody   = await shopR.json().catch(() => ({}));
+  const ordersBody = await ordersR.json().catch(() => ({}));
 
   return res.json({
-    token_prefix: masked,
-    shopify_status: r.status,
-    shop_name: body.shop?.name || null,
-    error: body.errors || null,
+    token_prefix:   masked,
+    shop_status:    shopR.status,
+    shop_name:      shopBody.shop?.name || null,
+    orders_status:  ordersR.status,
+    orders_error:   ordersBody.errors || ordersBody.error || null,
   });
 };
