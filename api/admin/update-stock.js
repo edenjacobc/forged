@@ -36,7 +36,7 @@ module.exports = async function handler(req, res) {
   try {
     const adminToken = await getAdminToken();
 
-    const locR = await fetch(`https://${SHOP}/admin/api/2024-10/locations.json`, {
+    const locR = await fetch(`https://${SHOP}/admin/api/2026-04/locations.json`, {
       headers: { 'X-Shopify-Access-Token': adminToken, Accept: 'application/json' },
     });
     if (!locR.ok) throw new Error(`Locations fetch failed: ${locR.status}`);
@@ -45,7 +45,7 @@ module.exports = async function handler(req, res) {
     if (!location) return res.status(500).json({ error: 'No Shopify location found' });
 
     // Set inventory level
-    const setR = await fetch(`https://${SHOP}/admin/api/2024-10/inventory_levels/set.json`, {
+    const setR = await fetch(`https://${SHOP}/admin/api/2026-04/inventory_levels/set.json`, {
       method:  'POST',
       headers: {
         'X-Shopify-Access-Token': adminToken,

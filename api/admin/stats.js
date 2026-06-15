@@ -17,7 +17,7 @@ function verifyStaff(req) {
 }
 
 async function shopify(path, adminToken) {
-  const r = await fetch(`https://${SHOP}/admin/api/2024-10${path}`, {
+  const r = await fetch(`https://${SHOP}/admin/api/2026-04${path}`, {
     headers: { 'X-Shopify-Access-Token': adminToken, Accept: 'application/json' },
   });
   if (!r.ok) throw new Error(`Shopify ${r.status} ${path}`);

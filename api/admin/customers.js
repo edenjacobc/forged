@@ -28,7 +28,7 @@ module.exports = async function handler(req, res) {
   try {
     const adminToken = await getAdminToken();
     const r = await fetch(
-      `https://${SHOP}/admin/api/2024-10/customers.json?limit=100&order=created_at+DESC&fields=id,email,first_name,last_name,created_at,orders_count,total_spent,verified_email`,
+      `https://${SHOP}/admin/api/2026-04/customers.json?limit=100&order=created_at+DESC&fields=id,email,first_name,last_name,created_at,orders_count,total_spent,verified_email`,
       { headers: { 'X-Shopify-Access-Token': adminToken, Accept: 'application/json' } }
     );
     if (!r.ok) throw new Error(`Shopify ${r.status}`);
