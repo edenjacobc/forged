@@ -126,9 +126,9 @@
 
     <!-- Quick links -->
     <div style="margin-top: 48px; padding-top: 40px; border-top: 1px solid var(--grey-200);">
-      <a href="mailto:hello@forged.co.uk" style="padding:20px;border:1.5px solid var(--grey-200);border-radius:var(--radius);display:flex;align-items:center;gap:14px;transition:var(--transition);" onmouseover="this.style.borderColor='#000'" onmouseout="this.style.borderColor='var(--grey-200)'">
+      <a href="mailto:admin@forgeduk.store" style="padding:20px;border:1.5px solid var(--grey-200);border-radius:var(--radius);display:flex;align-items:center;gap:14px;transition:var(--transition);" onmouseover="this.style.borderColor='#000'" onmouseout="this.style.borderColor='var(--grey-200)'">
         <i class="fa-solid fa-envelope" style="font-size:1.2rem;"></i>
-        <div><p style="font-weight:700;font-size:0.875rem;">Email us</p><p style="font-size:0.775rem;color:var(--grey-500);">hello@forged.co.uk</p></div>
+        <div><p style="font-weight:700;font-size:0.875rem;">Email us</p><p style="font-size:0.775rem;color:var(--grey-500);">admin@forgeduk.store</p></div>
       </a>
     </div>
   </section>
@@ -173,7 +173,7 @@
       const subjectText = document.querySelector('#subject-select .custom-select-trigger-text')?.textContent || subject;
       const message = document.getElementById('cf-message').value;
       const body = `Name: ${name}\nEmail: ${email}\nSubject: ${subjectText}\n\n${message}`;
-      window.location.href = 'mailto:hello@forged.co.uk?subject=Forged Support: ' + encodeURIComponent(subjectText) + '&body=' + encodeURIComponent(body);
+      window.location.href = 'mailto:admin@forgeduk.store?subject=Forged Support: ' + encodeURIComponent(subjectText) + '&body=' + encodeURIComponent(body);
       document.getElementById('contact-form').style.display = 'none';
       document.getElementById('contact-success').style.display = 'block';
     }
