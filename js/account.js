@@ -212,11 +212,19 @@
     }
   }
 
+  function nameFromEmail(email) {
+    const local = (email || '').split('@')[0];
+    const parts = local.split(/[._\-+]/).filter(Boolean);
+    return parts.length > 1
+      ? parts.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' ')
+      : local.charAt(0).toUpperCase() + local.slice(1);
+  }
+
   function renderDashboard(claims, orders) {
     const first  = claims.given_name  || '';
     const last   = claims.family_name || '';
-    const name   = (first + ' ' + last).trim() || claims.email || 'Your account';
-    const initials = (first[0] || claims.email?.[0] || '?').toUpperCase();
+    const name   = (first + ' ' + last).trim() || nameFromEmail(claims.email) || 'Your account';
+    const initials = (first[0] || name[0] || '?').toUpperCase();
 
     document.getElementById('acct-avatar').textContent        = initials;
     document.getElementById('acct-name').textContent          = name;
