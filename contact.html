@@ -165,17 +165,34 @@
   <script src="js/shopify.js"></script>
   <script src="js/main.js"></script>
   <script>
-    function handleContact(e) {
+    async function handleContact(e) {
       e.preventDefault();
+      const btn     = e.target.querySelector('button[type=submit]');
       const name    = document.getElementById('cf-name').value;
       const email   = document.getElementById('cf-email').value;
-      const subject = document.getElementById('cf-subject').value;
-      const subjectText = document.querySelector('#subject-select .custom-select-trigger-text')?.textContent || subject;
+      const subject = document.querySelector('#subject-select .custom-select-trigger-text')?.textContent || 'General enquiry';
       const message = document.getElementById('cf-message').value;
-      const body = `Name: ${name}\nEmail: ${email}\nSubject: ${subjectText}\n\n${message}`;
-      window.location.href = 'mailto:admin@forgeduk.store?subject=Forged Support: ' + encodeURIComponent(subjectText) + '&body=' + encodeURIComponent(body);
-      document.getElementById('contact-form').style.display = 'none';
-      document.getElementById('contact-success').style.display = 'block';
+
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+
+      try {
+        const r = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, subject, message }),
+        });
+        if (!r.ok) {
+          const err = await r.json().catch(() => ({}));
+          throw new Error(err.error || 'Something went wrong. Please try again.');
+        }
+        document.getElementById('contact-form').style.display = 'none';
+        document.getElementById('contact-success').style.display = 'block';
+      } catch (err) {
+        btn.textContent = 'Send message';
+        btn.disabled = false;
+        alert(err.message);
+      }
     }
   </script>
 </body>
