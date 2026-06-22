@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
 
   const SHOP_ID     = '100016423286';
   const SHOP_DOMAIN = 'forged-10046.myshopify.com';
-  const ADMIN_TOKEN = process.env.SHOPIFY_ADMIN_TOKEN;
+  const ADMIN_TOKEN = process.env.SHOPIFY_ACCESS_TOKEN;
 
   // Verify OIDC token via Shopify userinfo
   let userInfo;
@@ -69,10 +69,12 @@ module.exports = async (req, res) => {
     const aData = await aRes.json();
 
     if (aData.errors || !aData.data?.customer) {
+      console.error('[customer] Admin API error:', JSON.stringify(aData.errors || 'no customer'));
       return res.status(200).json({
         firstName, lastName,
         emailAddress: { emailAddress: email },
         orders: { nodes: [] },
+        _debug: aData.errors || 'customer not found',
       });
     }
 

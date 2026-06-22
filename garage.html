@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Forged Garage — Enter your reg plate and find every product that fits your exact vehicle.">
-  <title>Garage — Forged</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Forged Garage â€” Enter your reg plate and find every product that fits your exact vehicle.">
+  <title>Garage - Forged</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,6 +15,11 @@
   <link rel="apple-touch-icon" href="forged logo.png">
 </head>
 <body>
+
+  <!-- Announcement Bar -->
+  <div class="announcement-bar">
+    Summer Sale &mdash; <span class="announcement-bar-highlight">10% Off Everything</span> &mdash; Code SUMMER10 applied at checkout
+  </div>
 
   <nav class="navbar" id="navbar">
     <div class="nav-inner">
@@ -84,16 +89,18 @@
     <p class="reg-disclaimer reveal reveal-delay-2">Powered by DVLA &amp; DVSA. We never store your registration.</p>
   </section>
 
-  <!-- Vehicle result + products -->
-  <div class="garage-results" id="garage-products" style="display:none;">
-    <div class="garage-vehicle-card" id="garage-vehicle-card"></div>
-    <div>
-      <p class="section-label" style="margin-bottom:12px;">Products for your vehicle</p>
-      <div class="products-grid" id="garage-products-grid"></div>
+  <!-- Vehicle result + filtered products (shown after reg lookup) -->
+  <div id="garage-products" style="display:none;">
+    <div class="garage-results">
+      <div class="garage-vehicle-card" id="garage-vehicle-card"></div>
+      <p class="section-label" id="garage-fit-heading">Products for your vehicle</p>
     </div>
+    <section class="products-section" style="padding-top:40px;">
+      <div class="products-grid" id="garage-products-grid"></div>
+    </section>
   </div>
 
-  <!-- Default: show all products -->
+  <!-- Default: all products (hidden after reg lookup) -->
   <section class="products-section" id="default-products">
     <div class="section-header">
       <div class="section-header-left">
@@ -102,23 +109,7 @@
       </div>
       <a href="/shop" class="btn btn-outline btn-sm">Full shop</a>
     </div>
-    <div class="products-grid">
-      <div class="product-card reveal">
-        <div class="product-img"><div class="product-img-placeholder"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><span class="product-badge">Best Seller</span></div>
-        <div class="product-info"><p class="product-category">Tech &amp; Connectivity</p><p class="product-name">Wireless CarPlay Adapter</p></div>
-        <div class="product-footer"><p class="product-price">£89.99</p><button class="product-add-btn" onclick="addToCart('wireless-carplay','Wireless CarPlay Adapter',89.99,'Tech & Connectivity')">Add to cart</button></div>
-      </div>
-      <div class="product-card reveal reveal-delay-1">
-        <div class="product-img"><div class="product-img-placeholder"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg></div></div>
-        <div class="product-info"><p class="product-category">Badges &amp; Emblems</p><p class="product-name">Audi S Badge Set, Gloss Black</p></div>
-        <div class="product-footer"><p class="product-price">£19.99</p><button class="product-add-btn" onclick="addToCart('audi-s-badge','Audi S Badge Set, Gloss Black',19.99,'Badges & Emblems')">Add to cart</button></div>
-      </div>
-      <div class="product-card reveal reveal-delay-2">
-        <div class="product-img"><div class="product-img-placeholder"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div></div>
-        <div class="product-info"><p class="product-category">Exterior Styling</p><p class="product-name">Carbon Fibre Mirror Caps</p></div>
-        <div class="product-footer"><p class="product-price">£34.99 <span class="was">£49.99</span></p><button class="product-add-btn" onclick="addToCart('carbon-mirror-caps','Carbon Fibre Mirror Caps',34.99,'Exterior Styling')">Add to cart</button></div>
-      </div>
-    </div>
+    <div class="products-grid" id="garage-all-grid"></div>
   </section>
 
   <footer>
@@ -145,9 +136,20 @@
     </div>
     <div class="cart-items-list" id="cart-items-list"></div>
     <div class="cart-drawer-footer" id="cart-drawer-footer" style="display:none;">
-      <div class="cart-total-row"><span class="cart-total-label">Total</span><span class="cart-total-amount" id="cart-total">£0.00</span></div>
+      <div class="cart-total-row"><span class="cart-total-label">Total</span><span class="cart-total-amount" id="cart-total">Â£0.00</span></div>
       <button class="btn btn-primary btn-lg cart-checkout-btn" onclick="shopifyCheckout()">Checkout <i class="fa-solid fa-arrow-right"></i></button>
-      <p class="cart-note">Free UK delivery on orders over £50</p>
+      <p class="cart-note">Free UK delivery on orders over Â£50</p>
+    </div>
+  </div>
+
+  <!-- Product Modal -->
+  <div class="product-modal" id="product-modal" role="dialog" aria-modal="true">
+    <div class="pm-inner">
+      <button class="pm-close" onclick="closeProductModal()" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="pm-body" id="pm-content"></div>
+      <div class="pm-atc-bar" id="pm-atc-bar"></div>
     </div>
   </div>
 
@@ -155,7 +157,6 @@
   <script src="js/shopify.js"></script>
   <script src="js/main.js"></script>
   <script>
-    /* Render saved cars quick-select */
     window.renderSavedCars = function () {
       const wrap = document.getElementById('garage-saved-wrap');
       const list = document.getElementById('garage-saved-list');
@@ -179,38 +180,14 @@
 
     document.addEventListener('DOMContentLoaded', window.renderSavedCars);
 
-    /* Show vehicle card + filtered products after reg lookup */
-    document.getElementById('reg-form').addEventListener('submit', async function () {
-      await new Promise(r => setTimeout(r, 100));
-      const resultBox = document.getElementById('reg-result');
-      const result = resultBox.querySelector('.reg-result');
-      if (!result) return;
-
-      const make  = result.querySelector('.reg-make')?.textContent  || '';
-      const model = result.querySelector('.reg-model')?.textContent || '';
-      const year  = result.querySelector('.reg-year')?.textContent  || '';
-
+    /* React to reg lookup result (dispatched by main.js) */
+    document.addEventListener('forged:reg-result', function (e) {
+      const { make, model, year, reg } = e.detail;
       if (make && make !== 'Unknown') {
-        document.getElementById('default-products').style.display = 'none';
-        document.getElementById('garage-products').style.display  = 'block';
-
-        document.getElementById('garage-vehicle-card').innerHTML = `
-          <div class="garage-vehicle-info">
-            <div class="garage-vehicle-make">${make}</div>
-            <div class="garage-vehicle-model">${model}</div>
-            <div class="garage-vehicle-detail">
-              ${year ? `<span>${year}</span>` : ''}
-            </div>
-          </div>
-          <div class="garage-reg-plate">${document.getElementById('reg-input').value.toUpperCase()}</div>
-        `;
-
-        document.getElementById('garage-products-grid').innerHTML = `
-          <p style="padding:40px;grid-column:1/-1;color:var(--grey-500);font-size:0.925rem;">
-            Vehicle-specific product matching coming soon. Browse the <a href="/shop" style="color:var(--black);text-decoration:underline;">full shop</a> in the meantime.
-          </p>`;
+        window.filterGarageProducts(make, model, year, reg);
       }
-    }, true);
+    });
   </script>
 </body>
 </html>
+

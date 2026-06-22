@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="description" content="Forged — Premium car accessories for every drive. CarPlay upgrades, badges, interior styling and more. Free UK delivery over £50.">
   <title>Forged | Premium Car Accessories</title>
   <link rel="stylesheet" href="css/style.css">
@@ -18,6 +18,11 @@
 
   <!-- Pause hero animations before loader exits -->
   <script>document.body.classList.add('loader-active');</script>
+
+  <!-- Announcement Bar -->
+  <div class="announcement-bar">
+    Summer Sale &mdash; <span class="announcement-bar-highlight">10% Off Everything</span> &mdash; Code SUMMER10 applied at checkout
+  </div>
 
   <!-- Page Loader -->
   <div class="page-loader" id="page-loader">
@@ -180,58 +185,7 @@
       <a href="/shop" class="btn btn-outline btn-sm">View all</a>
     </div>
 
-    <div class="products-grid">
-
-      <div class="product-card reveal" onclick="location.href='shop.html'">
-        <div class="product-img">
-          <div class="product-img-placeholder">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-          </div>
-          <span class="product-badge">Best Seller</span>
-        </div>
-        <div class="product-info">
-          <p class="product-category">Tech &amp; Connectivity</p>
-          <p class="product-name">Wireless CarPlay Adapter</p>
-        </div>
-        <div class="product-footer">
-          <p class="product-price">£89.99</p>
-          <button class="product-add-btn" onclick="event.stopPropagation(); addToCart('wireless-carplay','Wireless CarPlay Adapter',89.99,'Tech & Connectivity')">Add to cart</button>
-        </div>
-      </div>
-
-      <div class="product-card reveal reveal-delay-1" onclick="location.href='shop.html'">
-        <div class="product-img">
-          <div class="product-img-placeholder">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-          </div>
-        </div>
-        <div class="product-info">
-          <p class="product-category">Badges &amp; Emblems</p>
-          <p class="product-name">Audi S Badge Set, Gloss Black</p>
-        </div>
-        <div class="product-footer">
-          <p class="product-price">£19.99</p>
-          <button class="product-add-btn" onclick="event.stopPropagation(); addToCart('audi-s-badge','Audi S Badge Set, Gloss Black',19.99,'Badges & Emblems')">Add to cart</button>
-        </div>
-      </div>
-
-      <div class="product-card reveal reveal-delay-2" onclick="location.href='shop.html'">
-        <div class="product-img">
-          <div class="product-img-placeholder">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          </div>
-        </div>
-        <div class="product-info">
-          <p class="product-category">Exterior Styling</p>
-          <p class="product-name">Carbon Fibre Mirror Caps</p>
-        </div>
-        <div class="product-footer">
-          <p class="product-price">£34.99 <span class="was">£49.99</span></p>
-          <button class="product-add-btn" onclick="event.stopPropagation(); addToCart('carbon-mirror-caps','Carbon Fibre Mirror Caps',34.99,'Exterior Styling')">Add to cart</button>
-        </div>
-      </div>
-
-    </div>
+    <div class="products-grid" id="home-products-grid"></div>
   </section>
 
   <!-- Brand Statement -->
@@ -274,10 +228,10 @@
           <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
           <div class="review-quote-icon">"</div>
         </div>
-        <p class="review-text">"Ordered the carbon mirror caps for my Golf R. They fit perfectly and look like they came from the factory. Actually better than OEM."</p>
+        <p class="review-text">"The carbon fibre gear selector is premium quality. Clip-in fit took literally two minutes, looks completely factory. My Audi looks a whole different level now."</p>
         <div class="review-author">
           <div class="review-avatar">JT</div>
-          <div><p class="review-name">James T.</p><p class="review-car">VW Golf R</p></div>
+          <div><p class="review-name">James T.</p><p class="review-car">Audi A4 2020</p></div>
         </div>
       </div>
 
@@ -286,10 +240,10 @@
           <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
           <div class="review-quote-icon">"</div>
         </div>
-        <p class="review-text">"Wireless CarPlay adapter is incredible, couldn't believe the quality for the price. Dead simple to set up, works flawlessly every time."</p>
+        <p class="review-text">"Shift knob feels incredible. Heavier and more solid than stock, proper premium feel. Delivery was next day and packaging was immaculate. Highly recommend."</p>
         <div class="review-author">
           <div class="review-avatar">PM</div>
-          <div><p class="review-name">Priya M.</p><p class="review-car">BMW 3 Series</p></div>
+          <div><p class="review-name">Priya M.</p><p class="review-car">Audi A6 2021</p></div>
         </div>
       </div>
 
@@ -298,10 +252,10 @@
           <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
           <div class="review-quote-icon">"</div>
         </div>
-        <p class="review-text">"The carbon interior trim set completely transformed my car. Quality is genuinely premium, you'd never guess the price. Delivery was fast too."</p>
+        <p class="review-text">"Carbon wing mirror covers are perfect. Fit snaps on without tools and the finish is flawless. Everyone thinks they came with the car. Already ordered more."</p>
         <div class="review-author">
           <div class="review-avatar">MW</div>
-          <div><p class="review-name">Marcus W.</p><p class="review-car">Audi A4</p></div>
+          <div><p class="review-name">Marcus W.</p><p class="review-car">VW Golf GTI 2022</p></div>
         </div>
       </div>
 
@@ -310,10 +264,10 @@
           <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
           <div class="review-quote-icon">"</div>
         </div>
-        <p class="review-text">"Shift paddles are solid, weighty, feel exactly right. Massive improvement over the stock plastic ones. Already looking at what to order next."</p>
+        <p class="review-text">"Boot storage box is solid and practical. No more junk sliding around in the back. Build quality is much better than I expected for the price. Great product."</p>
         <div class="review-author">
           <div class="review-avatar">DR</div>
-          <div><p class="review-name">Dan R.</p><p class="review-car">VW Golf GTI</p></div>
+          <div><p class="review-name">Dan R.</p><p class="review-car">BMW 5 Series 2019</p></div>
         </div>
       </div>
 
@@ -322,10 +276,10 @@
           <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
           <div class="review-quote-icon">"</div>
         </div>
-        <p class="review-text">"Great experience start to finish. The badge set looks factory-fitted, everyone asks if it came like that. Will absolutely be ordering again."</p>
+        <p class="review-text">"Seat gap fillers work brilliantly. Simple fix but makes such a difference. No more dropped keys and it looks smart too. Fast delivery, arrived well packaged."</p>
         <div class="review-author">
           <div class="review-avatar">SK</div>
-          <div><p class="review-name">Sophie K.</p><p class="review-car">Mercedes C-Class</p></div>
+          <div><p class="review-name">Sophie K.</p><p class="review-car">Mercedes C-Class 2020</p></div>
         </div>
       </div>
 
@@ -334,10 +288,10 @@
           <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
           <div class="review-quote-icon">"</div>
         </div>
-        <p class="review-text">"Plate frame is subtle and clean, exactly what I wanted. Arrived quickly, packaged well. No complaints at all, would recommend without hesitation."</p>
+        <p class="review-text">"Forged is my new go-to for car upgrades. Badge set looks completely OEM, mates thought it was from the dealership. Customer service is class as well."</p>
         <div class="review-author">
           <div class="review-avatar">CB</div>
-          <div><p class="review-name">Chris B.</p><p class="review-car">BMW M3</p></div>
+          <div><p class="review-name">Chris B.</p><p class="review-car">Audi A3 2021</p></div>
         </div>
       </div>
 
@@ -429,6 +383,17 @@
     </div>
   </div>
 
+  <!-- Product Modal -->
+  <div class="product-modal" id="product-modal" role="dialog" aria-modal="true">
+    <div class="pm-inner">
+      <button class="pm-close" onclick="closeProductModal()" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="pm-body" id="pm-content"></div>
+      <div class="pm-atc-bar" id="pm-atc-bar"></div>
+    </div>
+  </div>
+
   <script src="js/cart.js"></script>
   <script src="js/shopify.js"></script>
   <script src="js/main.js"></script>
@@ -440,7 +405,9 @@
       if (!loader || !bar) return;
 
       // Skip loader on return visits within the same session
-      if (sessionStorage.getItem('forged_visited')) {
+      let alreadyVisited = false;
+      try { alreadyVisited = !!sessionStorage.getItem('forged_visited'); } catch {}
+      if (alreadyVisited) {
         loader.style.display = 'none';
         document.body.classList.remove('loader-active');
         return;
@@ -465,7 +432,7 @@
           loader.addEventListener('transitionend', function () {
             loader.style.display = 'none';
             document.body.classList.remove('loader-active');
-            sessionStorage.setItem('forged_visited', '1');
+            try { sessionStorage.setItem('forged_visited', '1'); } catch {}
           }, { once: true });
         }, 400);
       }

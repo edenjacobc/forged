@@ -279,7 +279,25 @@
       return;
     }
 
-    renderDashboard(claims, []);
+    show('loading');
+
+    const accessToken = localStorage.getItem('access_token');
+    let orders = [];
+    if (accessToken) {
+      try {
+        const cRes = await fetch('/api/customer', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ token: accessToken }),
+        });
+        if (cRes.ok) {
+          const cData = await cRes.json();
+          orders = cData.orders?.nodes || [];
+        }
+      } catch {}
+    }
+
+    renderDashboard(claims, orders);
     show('dashboard');
   }
 
