@@ -10,16 +10,16 @@
     try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch { return []; }
   }
   function saveCart(items) {
-    localStorage.setItem(KEY, JSON.stringify(items));
+    try { localStorage.setItem(KEY, JSON.stringify(items)); } catch {}
     syncAll();
   }
 
   /* ── Actions ── */
-  window.addToCart = function (id, name, price, category) {
+  window.addToCart = function (id, name, price, category, img, variantTitle) {
     const cart = getCart();
     const existing = cart.find(i => i.id === id);
     if (existing) { existing.qty++; }
-    else { cart.push({ id, name, price: Number(price), category: category || '', qty: 1 }); }
+    else { cart.push({ id, name, price: Number(price), category: category || '', img: img || '', variant: variantTitle || '', qty: 1 }); }
     saveCart(cart);
     openCart();
   };
@@ -84,7 +84,7 @@
         </div>
         <div class="cart-item-details">
           <div class="cart-item-name">${esc(item.name)}</div>
-          <div class="cart-item-meta">${esc(item.category)}</div>
+          <div class="cart-item-meta">${item.variant ? esc(item.variant) : esc(item.category)}</div>
           <div class="cart-item-controls">
             <button class="cart-qty-btn" onclick="cartQty('${item.id}',-1)"><i class="fa-solid fa-minus" style="font-size:9px;"></i></button>
             <span class="cart-qty-val">${item.qty}</span>
@@ -113,7 +113,7 @@
     const lines = cart.map(i => `• ${i.qty}x ${i.name} — £${(i.price * i.qty).toFixed(2)}`).join('\n');
     const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
     const body = `Hi,\n\nI'd like to order:\n\n${lines}\n\nOrder total: £${total.toFixed(2)}\n\nPlease confirm and send payment details. Thanks`;
-    window.location.href = 'mailto:hello@forged.co.uk?subject=Order%20Enquiry&body=' + encodeURIComponent(body);
+    window.location.href = 'mailto:admin@forgeduk.store?subject=Order%20Enquiry&body=' + encodeURIComponent(body);
   };
 
   /* ── Toast ── */

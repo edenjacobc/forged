@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Staff Dashboard — Forged</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Staff Dashboard - Forged</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -200,19 +200,19 @@
       <div class="admin-stats">
         <div class="admin-stat">
           <p class="admin-stat-label">Total orders</p>
-          <p class="admin-stat-value" id="stat-orders">—</p>
+          <p class="admin-stat-value" id="stat-orders">â€”</p>
         </div>
         <div class="admin-stat">
           <p class="admin-stat-label">Revenue (30 days)</p>
-          <p class="admin-stat-value" id="stat-revenue">—</p>
+          <p class="admin-stat-value" id="stat-revenue">â€”</p>
         </div>
         <div class="admin-stat">
           <p class="admin-stat-label">Customers</p>
-          <p class="admin-stat-value" id="stat-customers">—</p>
+          <p class="admin-stat-value" id="stat-customers">â€”</p>
         </div>
         <div class="admin-stat">
           <p class="admin-stat-label">Products</p>
-          <p class="admin-stat-value" id="stat-products">—</p>
+          <p class="admin-stat-value" id="stat-products">â€”</p>
         </div>
       </div>
 
@@ -275,7 +275,10 @@
       <div id="admin-panel-inventory" class="admin-tab-panel" style="display:none;">
         <div class="admin-table-header">
           <p class="admin-table-title">Stock Management</p>
-          <p class="admin-muted" style="font-size:0.8rem;">Edit a quantity and click Save to update Shopify.</p>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <p class="admin-muted" style="font-size:0.8rem;">Edit a quantity and click Save to update Shopify.</p>
+            <button class="btn btn-outline btn-xs" id="sku-btn" onclick="adminSeedSkus()" style="font-size:0.78rem;padding:5px 12px;">Assign missing SKUs</button>
+          </div>
         </div>
         <div class="admin-table-wrap">
           <table class="admin-table">
@@ -303,3 +306,4 @@
   <script src="js/admin.js"></script>
 </body>
 </html>
+

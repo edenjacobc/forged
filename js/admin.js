@@ -101,7 +101,7 @@
                 data-orig="${qty}" id="si-${v.inventory_item_id}"
                 oninput="adminStockChange(this,'${v.inventory_item_id}')">
               <button class="btn btn-xs btn-primary admin-stock-save" id="sb-${v.inventory_item_id}"
-                style="display:none" onclick="adminSaveStock('${v.inventory_item_id}')">Save</button>
+                style="display:none" onclick="adminSaveStock('${v.inventory_item_id}','${v.id}')">Save</button>
             </div>
           </td>
           <td><span class="admin-badge admin-badge-${stockClass}" id="sl-${v.inventory_item_id}">${stockLabel}</span></td>
@@ -118,7 +118,7 @@
     if (saveBtn) saveBtn.style.display = input.value !== input.dataset.orig ? '' : 'none';
   };
 
-  window.adminSaveStock = async function (itemId) {
+  window.adminSaveStock = async function (itemId, variantId) {
     const input   = document.getElementById('si-' + itemId);
     const saveBtn = document.getElementById('sb-' + itemId);
     const qty     = parseInt(input.value, 10);
@@ -131,7 +131,7 @@
       const r = await fetch('/api/admin/update-stock', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('id_token')}` },
-        body:    JSON.stringify({ inventoryItemId: itemId, quantity: qty }),
+        body:    JSON.stringify({ inventoryItemId: itemId, variantId, quantity: qty }),
       });
       if (!r.ok) { const e = await r.json(); throw new Error(e.error); }
 
@@ -169,6 +169,26 @@
     document.getElementById('admin-error').style.display = '';
     document.getElementById('admin-error-msg').textContent = msg;
   }
+
+  window.adminSeedSkus = async function () {
+    const btn = document.getElementById('sku-btn');
+    btn.textContent = 'Assigning…';
+    btn.disabled = true;
+    try {
+      const r = await fetch('/api/admin/seed-skus', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${localStorage.getItem('id_token')}` },
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error);
+      toast(`Done: ${d.updated.length} SKUs assigned, ${d.skipped.length} already had one`);
+      btn.textContent = 'SKUs assigned';
+    } catch (e) {
+      toast('Failed: ' + e.message, true);
+      btn.textContent = 'Assign missing SKUs';
+      btn.disabled = false;
+    }
+  };
 
   window.adminLogout = function () { window.location.href = '/account'; };
 

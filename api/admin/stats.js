@@ -16,10 +16,16 @@ function verifyStaff(req) {
   } catch { return false; }
 }
 
-async function shopify(path, adminToken) {
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+async function shopify(path, adminToken, retries = 2) {
   const r = await fetch(`https://${SHOP}/admin/api/2026-04${path}`, {
     headers: { 'X-Shopify-Access-Token': adminToken, Accept: 'application/json' },
   });
+  if (r.status === 429 && retries > 0) {
+    await sleep(1500);
+    return shopify(path, adminToken, retries - 1);
+  }
   if (!r.ok) throw new Error(`Shopify ${r.status} ${path}`);
   return r.json();
 }
@@ -37,13 +43,11 @@ module.exports = async function handler(req, res) {
     const adminToken = await getAdminToken();
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
 
-    const [orderCount, customerCount, productCount, recentOrders, revenueOrders] = await Promise.all([
-      shopify('/orders/count.json?status=any', adminToken),
-      shopify('/customers/count.json', adminToken),
-      shopify('/products/count.json', adminToken),
-      shopify('/orders.json?status=any&limit=15&fields=id,name,email,total_price,financial_status,fulfillment_status,created_at,line_items', adminToken),
-      shopify(`/orders.json?status=any&created_at_min=${thirtyDaysAgo}&limit=250&fields=id,total_price,financial_status`, adminToken),
-    ]);
+    const orderCount    = await shopify('/orders/count.json?status=any', adminToken);
+    const customerCount = await shopify('/customers/count.json', adminToken);
+    const productCount  = await shopify('/products/count.json', adminToken);
+    const recentOrders  = await shopify('/orders.json?status=any&limit=15&fields=id,name,email,total_price,financial_status,fulfillment_status,created_at,line_items', adminToken);
+    const revenueOrders = await shopify(`/orders.json?status=any&created_at_min=${thirtyDaysAgo}&limit=250&fields=id,total_price,financial_status`, adminToken);
 
     const revenue30d = (revenueOrders.orders || [])
       .filter(o => ['paid', 'partially_refunded'].includes(o.financial_status))

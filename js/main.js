@@ -36,6 +36,11 @@
 (function () {
   const els = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
   if (!els.length) return;
+
+  function showAll() { els.forEach(el => el.classList.add('visible')); }
+
+  if (!('IntersectionObserver' in window)) { showAll(); return; }
+
   const io = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) {
@@ -43,8 +48,11 @@
         io.unobserve(e.target);
       }
     });
-  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+  }, { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
   els.forEach(el => io.observe(el));
+
+  // Fallback: if IO never fires (some WebViews), show everything after 3s
+  setTimeout(showAll, 3000);
 })();
 
 /* ── Custom animated dropdown ── */
@@ -184,11 +192,26 @@ window.garageSaveCar = function (btn) {
           </div>
         </div>`;
 
+      document.dispatchEvent(new CustomEvent('forged:reg-result', {
+        detail: { make, model, year, colour, fuel, reg }
+      }));
+
     } catch {
       resultBox.innerHTML = `<p class="reg-error">Something went wrong. Please try again.</p>`;
     } finally {
       submitBtn.textContent = 'Find My Car';
       submitBtn.disabled = false;
+    }
+  });
+})();
+
+/* ── Home page: filter products after reg lookup ── */
+(function () {
+  if (!document.getElementById('home-products-grid')) return;
+  document.addEventListener('forged:reg-result', function (e) {
+    const { make, model, year, reg } = e.detail;
+    if (make && make !== 'Unknown') {
+      window.filterGarageProducts(make, model, year, reg);
     }
   });
 })();
