@@ -290,6 +290,12 @@
           headers: { 'Content-Type': 'application/json' },
           body:    JSON.stringify({ token: accessToken }),
         });
+        if (cRes.status === 401) {
+          // Token expired — clear session and force re-login
+          ['pkce_v', 'oauth_s', 'access_token', 'id_token'].forEach(k => localStorage.removeItem(k));
+          showError('Your session has expired. Please sign in again.');
+          return;
+        }
         if (cRes.ok) {
           const cData = await cRes.json();
           orders = cData.orders?.nodes || [];
