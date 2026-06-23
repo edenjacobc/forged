@@ -86,44 +86,74 @@
   }
 
   function orderStep(o) {
+    if (o.cancelledAt) return 0;
     const f = (o.fulfillmentStatus || '').toUpperCase();
-    const p = (o.financialStatus || '').toUpperCase();
-    if (f === 'FULFILLED')                                    return 5;
-    if (f === 'IN_PROGRESS' || f === 'PARTIALLY_FULFILLED')  return 4;
-    if (f === 'PENDING_FULFILLMENT' || f === 'OPEN')         return 3;
-    if (p === 'PAID' || p === 'AUTHORIZED')                  return 2;
+    const p = (o.financialStatus   || '').toUpperCase();
+    if (f === 'FULFILLED' || f === 'IN_PROGRESS' || f === 'PARTIALLY_FULFILLED') return 4;
+    if (f === 'OPEN' || f === 'PENDING_FULFILLMENT' || f === 'ON_HOLD') {
+      if (p === 'PAID' || p === 'AUTHORIZED') return 3;
+    }
+    if (p === 'PAID' || p === 'AUTHORIZED') return 2;
     return 1;
   }
 
   function statusBadge(o) {
+    if (o.cancelledAt) return { text: 'Cancelled', cls: 'cancelled' };
     const f = (o.fulfillmentStatus || '').toUpperCase();
-    const p = (o.financialStatus || '').toUpperCase();
-    if (f === 'FULFILLED')           return { text: 'Fulfilled',    cls: 'delivered' };
-    if (f === 'IN_PROGRESS')         return { text: 'In transit',   cls: 'transit' };
-    if (f === 'PARTIALLY_FULFILLED') return { text: 'Partly shipped', cls: 'transit' };
-    if (f === 'ON_HOLD')             return { text: 'On hold',      cls: 'hold' };
-    if (p === 'REFUNDED' || p === 'VOIDED') return { text: 'Refunded', cls: 'refunded' };
-    if (p === 'PAID' || p === 'AUTHORIZED') return { text: 'Processing', cls: 'processing' };
+    const p = (o.financialStatus   || '').toUpperCase();
+    if (f === 'FULFILLED' || f === 'IN_PROGRESS') return { text: 'On its way', cls: 'transit' };
+    if (f === 'PARTIALLY_FULFILLED')              return { text: 'Partly shipped', cls: 'transit' };
+    if (f === 'ON_HOLD')                          return { text: 'Delayed', cls: 'hold' };
+    if (p === 'REFUNDED' || p === 'VOIDED')       return { text: 'Refunded', cls: 'refunded' };
+    if (p === 'PAID' || p === 'AUTHORIZED')       return { text: 'Processing', cls: 'processing' };
     return { text: 'Pending', cls: 'pending' };
   }
 
   const CHECK_SVG = `<svg viewBox="0 0 10 10" fill="none"><polyline points="2,5.5 4,7.5 8,3" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
   function renderOrder(o, idx) {
+    const delay = `${(idx || 0) * 0.07}s`;
+    const date  = new Date(o.processedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+    const total = `£${parseFloat(o.totalPrice.amount).toFixed(2)}`;
+    const items = o.lineItems.nodes.map(i => i.quantity > 1 ? `${i.title} ×${i.quantity}` : i.title).join(', ');
+
+    if (o.cancelledAt) {
+      return `
+        <div class="order-card order-card--cancelled" style="--anim-delay:${delay}">
+          <div class="order-card-header">
+            <div class="order-card-id-wrap">
+              <span class="order-number">${o.name}</span>
+              <span class="order-meta">${date}</span>
+            </div>
+            <div class="order-card-right">
+              <span class="order-status order-status--cancelled">Cancelled</span>
+              <span class="order-total">${total}</span>
+            </div>
+          </div>
+          <p class="order-items">${items}</p>
+          <p class="order-cancelled-msg">This order was cancelled. <a href="/contact">Contact support</a> if you need help with a refund.</p>
+        </div>`;
+    }
+
     const step   = orderStep(o);
-    const labels = ['Order placed', 'Payment confirmed', 'Preparing', 'Dispatched', 'Delivered'];
-    const date   = new Date(o.processedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-    const total  = `£${parseFloat(o.totalPrice.amount).toFixed(2)}`;
-    const items  = o.lineItems.nodes.map(i => i.quantity > 1 ? `${i.title} ×${i.quantity}` : i.title).join(', ');
+    const labels = ['Order placed', 'Payment confirmed', 'Being prepared', 'On its way', 'Delivered'];
     const pct    = Math.round(((step - 1) / (labels.length - 1)) * 100);
     const track  = o.fulfillments?.[0]?.trackingInfo?.[0];
     const badge  = statusBadge(o);
-    const delay  = `${(idx || 0) * 0.07}s`;
+
+    const statusDesc = {
+      transit:    'Your order is on its way. International deliveries typically take 7–21 days.',
+      processing: 'Payment confirmed — we\'re getting your order ready to ship.',
+      hold:       'Your order is temporarily delayed. We\'ll update you soon.',
+      refunded:   'Your payment has been refunded.',
+    }[badge.cls] || '';
+
     const stepsHTML = labels.map((s, i) => `
       <div class="order-step ${i < step ? 'done' : ''} ${i === step - 1 ? 'current' : ''}">
         <div class="order-step-dot">${i < step ? CHECK_SVG : ''}</div>
         <span>${s}</span>
       </div>`).join('');
+
     return `
       <div class="order-card" style="--anim-delay:${delay}">
         <div class="order-card-header">
@@ -137,11 +167,18 @@
           </div>
         </div>
         <p class="order-items">${items}</p>
+        ${statusDesc ? `<p class="order-status-desc">${statusDesc}</p>` : ''}
         <div class="order-progress">
           <div class="order-track"><div class="order-track-fill" style="width:${pct}%"></div></div>
           <div class="order-steps">${stepsHTML}</div>
         </div>
-        ${track ? `<a href="${track.url}" target="_blank" rel="noopener" class="order-track-link">Track shipment <i class="fa-solid fa-arrow-right"></i></a>` : ''}
+        ${track ? `
+        <div class="order-tracking">
+          <a href="${track.url || '#'}" target="_blank" rel="noopener" class="order-track-link">
+            <i class="fa-solid fa-location-dot"></i> Track shipment
+          </a>
+          ${track.number ? `<span class="order-tracking-num">Ref: ${track.number}</span>` : ''}
+        </div>` : ''}
       </div>`;
   }
 

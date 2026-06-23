@@ -1626,11 +1626,36 @@ body.loader-active .hero-bg-word {
 .order-status--delivered  { background: var(--black); color: var(--white); }
 .order-status--refunded   { background: #FEF2F2; color: #991B1B; }
 .order-status--pending    { background: var(--grey-100); color: var(--grey-500); }
+.order-status--cancelled  { background: var(--grey-100); color: var(--grey-400); }
 .order-items {
   font-size: 0.83rem;
   color: var(--grey-500);
-  margin: 6px 0 20px;
+  margin: 6px 0 16px;
   line-height: 1.5;
+}
+.order-status-desc {
+  font-size: 0.8rem;
+  color: var(--grey-400);
+  margin: -8px 0 18px;
+  line-height: 1.55;
+}
+.order-card--cancelled { opacity: 0.7; }
+.order-card--cancelled .order-number { color: var(--grey-400); }
+.order-cancelled-msg {
+  font-size: 0.82rem;
+  color: var(--grey-400);
+  margin-top: 0;
+}
+.order-cancelled-msg a { color: var(--black); text-decoration: underline; }
+.order-tracking {
+  display: flex; align-items: center; gap: 16px;
+  flex-wrap: wrap; margin-top: 4px;
+}
+.order-tracking-num {
+  font-size: 0.75rem;
+  color: var(--grey-400);
+  font-family: monospace;
+  letter-spacing: 0.03em;
 }
 .order-progress { margin-bottom: 16px; }
 .order-track {
