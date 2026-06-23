@@ -80,6 +80,12 @@ module.exports = async (req, res) => {
 
     if (aData.errors) {
       console.error('[customer] Admin API errors:', JSON.stringify(aData.errors));
+      return res.status(200).json({
+        firstName, lastName,
+        emailAddress: { emailAddress: email },
+        orders: { nodes: [] },
+        _debug: 'graphql errors: ' + JSON.stringify(aData.errors),
+      });
     }
 
     const c = aData.data?.customers?.nodes?.[0];
