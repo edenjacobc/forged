@@ -57,7 +57,7 @@ module.exports = async (req, res) => {
         firstName lastName
         orders(first: 10, sortKey: PROCESSED_AT, reverse: true) {
           nodes {
-            id name processedAt financialStatus fulfillmentStatus
+            id name processedAt displayFinancialStatus displayFulfillmentStatus
             totalPriceSet { shopMoney { amount currencyCode } }
             lineItems(first: 5) { nodes { name quantity } }
             fulfillments(first: 1) { trackingInfo(first: 1) { number url } }
@@ -106,6 +106,8 @@ module.exports = async (req, res) => {
       orders: {
         nodes: c.orders.nodes.map(o => ({
           ...o,
+          financialStatus:   o.displayFinancialStatus,
+          fulfillmentStatus: o.displayFulfillmentStatus,
           totalPrice: o.totalPriceSet?.shopMoney || { amount: '0', currencyCode: 'GBP' },
           lineItems:  { nodes: o.lineItems.nodes.map(i => ({ title: i.name, quantity: i.quantity })) },
         })),
