@@ -1484,6 +1484,17 @@ body.loader-active .hero-bg-word {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* Account animations */
+@keyframes acctSlideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes acctTabIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.acct-tab-enter { animation: acctTabIn 0.3s cubic-bezier(0.22,1,0.36,1) both; }
+
 /* Dashboard layout */
 #account-dashboard { width: 100%; }
 .acct-layout {
@@ -1502,6 +1513,7 @@ body.loader-active .hero-bg-word {
   flex-direction: column;
   gap: 32px;
   background: #fafafa;
+  animation: acctSlideUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.05s both;
 }
 .acct-profile { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
 .acct-avatar {
@@ -1538,7 +1550,7 @@ body.loader-active .hero-bg-word {
 .acct-nav-staff:hover svg { opacity: 1; }
 
 /* Main content */
-.acct-main { flex: 1; padding: 52px 56px; min-width: 0; }
+.acct-main { flex: 1; padding: 52px 56px; min-width: 0; animation: acctSlideUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.12s both; }
 .acct-tab-header { margin-bottom: 32px; }
 .acct-tab-title {
   font-size: clamp(1.6rem, 2.5vw, 2.25rem);
@@ -1581,71 +1593,98 @@ body.loader-active .hero-bg-word {
 .order-card {
   border: 1.5px solid var(--grey-200);
   border-radius: var(--radius);
-  padding: 24px;
-  margin-bottom: 14px;
-  transition: border-color 0.2s;
+  padding: 22px 24px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  animation: acctSlideUp 0.45s cubic-bezier(0.22,1,0.36,1) var(--anim-delay,0s) both;
 }
-.order-card:hover { border-color: #aaa; }
+.order-card:hover {
+  border-color: #ccc;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
 .order-card-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
-.order-number { font-weight: 800; font-size: 0.95rem; }
-.order-meta { font-size: 0.78rem; color: var(--grey-400); margin-top: 2px; }
-.order-total { font-weight: 800; font-size: 0.95rem; white-space: nowrap; }
+.order-card-id-wrap { display: flex; flex-direction: column; gap: 2px; }
+.order-number { font-weight: 800; font-size: 0.95rem; letter-spacing: -0.01em; }
+.order-meta { font-size: 0.76rem; color: var(--grey-400); }
+.order-card-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+.order-total { font-weight: 800; font-size: 1rem; letter-spacing: -0.01em; }
+.order-status {
+  display: inline-flex; align-items: center;
+  font-size: 0.67rem; font-weight: 700;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 20px; white-space: nowrap;
+}
+.order-status--processing { background: #EFF6FF; color: #1D4ED8; }
+.order-status--transit    { background: #F0FDF4; color: #166534; }
+.order-status--hold       { background: #FFFBEB; color: #92400E; }
+.order-status--delivered  { background: var(--black); color: var(--white); }
+.order-status--refunded   { background: #FEF2F2; color: #991B1B; }
+.order-status--pending    { background: var(--grey-100); color: var(--grey-500); }
 .order-items {
-  font-size: 0.825rem;
+  font-size: 0.83rem;
   color: var(--grey-500);
-  margin-bottom: 20px;
+  margin: 6px 0 20px;
   line-height: 1.5;
 }
-.order-progress { margin-bottom: 14px; }
+.order-progress { margin-bottom: 16px; }
 .order-track {
-  height: 3px;
-  background: var(--grey-100);
+  height: 2px;
+  background: #f0f0f0;
   border-radius: 2px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   position: relative;
 }
 .order-track-fill {
   position: absolute; top: 0; left: 0; height: 100%;
   background: var(--black);
   border-radius: 2px;
-  transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .order-steps { display: flex; justify-content: space-between; }
 .order-step {
   display: flex; flex-direction: column;
-  align-items: center; gap: 6px; flex: 1;
+  align-items: center; gap: 5px; flex: 1;
 }
 .order-step-dot {
-  width: 8px; height: 8px;
+  width: 20px; height: 20px;
   border-radius: 50%;
-  background: var(--grey-200);
-  border: 2px solid var(--grey-200);
+  background: #f4f4f4;
+  border: 1.5px solid #e4e4e4;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.25s, border-color 0.25s;
+  flex-shrink: 0;
 }
 .order-step.done .order-step-dot,
 .order-step.current .order-step-dot {
   background: var(--black);
   border-color: var(--black);
 }
+.order-step-dot svg { width: 10px; height: 10px; display: none; }
+.order-step.done .order-step-dot svg { display: block; }
 .order-step span {
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   color: var(--grey-300);
   text-align: center;
   line-height: 1.3;
+  font-weight: 500;
 }
 .order-step.done span,
-.order-step.current span { color: var(--black); font-weight: 600; }
+.order-step.current span { color: var(--black); font-weight: 700; }
 .order-track-link {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 0.8rem; font-weight: 700;
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 0.78rem; font-weight: 700;
   color: var(--black); text-decoration: none;
+  border: 1.5px solid var(--grey-200); border-radius: 8px;
+  padding: 7px 14px; margin-top: 4px;
+  transition: background 0.15s, border-color 0.15s;
 }
-.order-track-link:hover { opacity: 0.55; }
+.order-track-link:hover { background: var(--grey-100); border-color: #ccc; }
 
 /* Garage save button in reg result */
 .garage-save-btn { white-space: nowrap; }
@@ -1656,6 +1695,7 @@ body.loader-active .hero-bg-word {
   border: 1.5px solid var(--grey-200); border-radius: var(--radius);
   padding: 16px 20px; margin-bottom: 12px;
   transition: border-color 0.2s;
+  animation: acctSlideUp 0.4s cubic-bezier(0.22,1,0.36,1) var(--anim-delay,0s) both;
 }
 .acct-garage-car:hover { border-color: #aaa; }
 .acct-garage-plate {

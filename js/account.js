@@ -86,8 +86,8 @@
   }
 
   function orderStep(o) {
-    const f = o.fulfillmentStatus;
-    const p = o.financialStatus;
+    const f = (o.fulfillmentStatus || '').toUpperCase();
+    const p = (o.financialStatus || '').toUpperCase();
     if (f === 'FULFILLED')                                    return 5;
     if (f === 'IN_PROGRESS' || f === 'PARTIALLY_FULFILLED')  return 4;
     if (f === 'PENDING_FULFILLMENT' || f === 'OPEN')         return 3;
@@ -95,37 +95,64 @@
     return 1;
   }
 
-  function renderOrder(o) {
+  function statusBadge(o) {
+    const f = (o.fulfillmentStatus || '').toUpperCase();
+    const p = (o.financialStatus || '').toUpperCase();
+    if (f === 'FULFILLED')           return { text: 'Fulfilled',    cls: 'delivered' };
+    if (f === 'IN_PROGRESS')         return { text: 'In transit',   cls: 'transit' };
+    if (f === 'PARTIALLY_FULFILLED') return { text: 'Partly shipped', cls: 'transit' };
+    if (f === 'ON_HOLD')             return { text: 'On hold',      cls: 'hold' };
+    if (p === 'REFUNDED' || p === 'VOIDED') return { text: 'Refunded', cls: 'refunded' };
+    if (p === 'PAID' || p === 'AUTHORIZED') return { text: 'Processing', cls: 'processing' };
+    return { text: 'Pending', cls: 'pending' };
+  }
+
+  const CHECK_SVG = `<svg viewBox="0 0 10 10" fill="none"><polyline points="2,5.5 4,7.5 8,3" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+  function renderOrder(o, idx) {
     const step   = orderStep(o);
     const labels = ['Order placed', 'Payment confirmed', 'Preparing', 'Dispatched', 'Delivered'];
     const date   = new Date(o.processedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
     const total  = `£${parseFloat(o.totalPrice.amount).toFixed(2)}`;
-    const items  = o.lineItems.nodes.map(i => i.quantity > 1 ? `${i.title} x${i.quantity}` : i.title).join(', ');
+    const items  = o.lineItems.nodes.map(i => i.quantity > 1 ? `${i.title} ×${i.quantity}` : i.title).join(', ');
     const pct    = Math.round(((step - 1) / (labels.length - 1)) * 100);
     const track  = o.fulfillments?.[0]?.trackingInfo?.[0];
+    const badge  = statusBadge(o);
+    const delay  = `${(idx || 0) * 0.07}s`;
     const stepsHTML = labels.map((s, i) => `
       <div class="order-step ${i < step ? 'done' : ''} ${i === step - 1 ? 'current' : ''}">
-        <div class="order-step-dot"></div><span>${s}</span>
+        <div class="order-step-dot">${i < step ? CHECK_SVG : ''}</div>
+        <span>${s}</span>
       </div>`).join('');
     return `
-      <div class="order-card">
+      <div class="order-card" style="--anim-delay:${delay}">
         <div class="order-card-header">
-          <div><p class="order-number">${o.name}</p><p class="order-meta">${date}</p></div>
-          <p class="order-total">${total}</p>
+          <div class="order-card-id-wrap">
+            <span class="order-number">${o.name}</span>
+            <span class="order-meta">${date}</span>
+          </div>
+          <div class="order-card-right">
+            <span class="order-status order-status--${badge.cls}">${badge.text}</span>
+            <span class="order-total">${total}</span>
+          </div>
         </div>
         <p class="order-items">${items}</p>
         <div class="order-progress">
           <div class="order-track"><div class="order-track-fill" style="width:${pct}%"></div></div>
           <div class="order-steps">${stepsHTML}</div>
         </div>
-        ${track ? `<a href="${track.url}" target="_blank" rel="noopener" class="order-track-link">Track with courier <i class="fa-solid fa-arrow-right"></i></a>` : ''}
+        ${track ? `<a href="${track.url}" target="_blank" rel="noopener" class="order-track-link">Track shipment <i class="fa-solid fa-arrow-right"></i></a>` : ''}
       </div>`;
   }
 
   window.acctTab = function (tab, btn) {
     document.querySelectorAll('.acct-tab').forEach(el => el.style.display = 'none');
     document.querySelectorAll('.acct-nav-item').forEach(el => el.classList.remove('active'));
-    document.getElementById('acct-tab-' + tab).style.display = '';
+    const tabEl = document.getElementById('acct-tab-' + tab);
+    tabEl.style.display = '';
+    tabEl.classList.remove('acct-tab-enter');
+    void tabEl.offsetWidth;
+    tabEl.classList.add('acct-tab-enter');
     if (btn) btn.classList.add('active');
     if (tab === 'garage') renderGarageTab();
   };
@@ -135,11 +162,11 @@
     const list = document.getElementById('acct-garage-list');
     if (!list) return;
     list.innerHTML = cars.length
-      ? cars.map(c => {
+      ? cars.map((c, ci) => {
           const name   = [c.make, c.model].filter(Boolean).join(' ');
           const detail = [c.year, c.colour ? c.colour.charAt(0).toUpperCase() + c.colour.slice(1).toLowerCase() : ''].filter(Boolean).join(' · ');
           return `
-            <div class="acct-garage-car">
+            <div class="acct-garage-car" style="--anim-delay:${ci * 0.07}s">
               <div class="acct-garage-plate">${c.reg}</div>
               <div class="acct-garage-car-info">
                 ${name   ? `<p class="acct-garage-car-name">${name}</p>` : ''}
@@ -239,7 +266,7 @@
 
     const el = document.getElementById('acct-orders');
     el.innerHTML = orders && orders.length
-      ? orders.map(renderOrder).join('')
+      ? orders.map((o, i) => renderOrder(o, i)).join('')
       : `<p class="acct-empty">No orders yet. <a href="/shop">Browse the shop</a></p>`;
   }
 
