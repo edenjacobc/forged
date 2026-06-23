@@ -470,15 +470,32 @@ window.filterGarageProducts = function (make, model, year, reg) {
         ${year ? `<div class="garage-vehicle-detail"><span>${sfEsc(year)}</span></div>` : ''}
       </div>
       <div class="garage-reg-plate">${sfEsc((reg || '').toUpperCase())}</div>`;
+    vehicleCard.classList.remove('g-entering');
+    void vehicleCard.offsetWidth;
+    vehicleCard.classList.add('g-entering');
   }
 
   const defaultSection = document.getElementById('default-products');
   const filteredSection = document.getElementById('garage-products');
-  if (defaultSection) defaultSection.style.display = 'none';
-  if (filteredSection) filteredSection.style.display = '';
+  if (defaultSection) {
+    defaultSection.style.transition = 'opacity 0.18s ease';
+    defaultSection.style.opacity = '0';
+    setTimeout(() => { defaultSection.style.display = 'none'; defaultSection.style.opacity = ''; defaultSection.style.transition = ''; }, 200);
+  }
+  if (filteredSection) {
+    filteredSection.style.display = '';
+    filteredSection.classList.remove('g-visible');
+    void filteredSection.offsetWidth;
+    filteredSection.classList.add('g-visible');
+  }
 
   const heading = document.getElementById('garage-fit-heading');
-  if (heading) heading.textContent = `Products for your ${[make, model].filter(Boolean).join(' ')}`;
+  if (heading) {
+    heading.textContent = `Products for your ${[make, model].filter(Boolean).join(' ')}`;
+    heading.classList.remove('g-entering');
+    void heading.offsetWidth;
+    heading.classList.add('g-entering');
+  }
 
   const garageGrid = document.getElementById('garage-products-grid');
   if (garageGrid) renderProductCards(compatible, garageGrid, fitTagFn);

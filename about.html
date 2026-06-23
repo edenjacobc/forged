@@ -48,66 +48,56 @@
   </div>
 
   <!-- About Hero -->
-  <section class="about-hero-sec" style="padding: 80px 40px; border-bottom: 1px solid var(--grey-200);">
-    <div class="about-hero-grid" style="max-width: var(--content-w); margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;">
+  <section class="about-hero-sec">
+    <div class="about-hero-grid">
       <div class="reveal">
         <p class="section-label">About us</p>
-        <h1 style="font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 900; letter-spacing: -0.025em; margin-bottom: 24px;">We built Forged for drivers who actually care.</h1>
-        <p style="color: var(--grey-500); line-height: 1.8; font-size: 0.975rem; margin-bottom: 16px;">
-          Forged started with a simple frustration: finding genuinely good car accessories that don't look cheap, don't break, and actually fit properly is harder than it should be.
-        </p>
-        <p style="color: var(--grey-500); line-height: 1.8; font-size: 0.975rem; margin-bottom: 32px;">
-          So we built the shop we wanted to exist. Every product is chosen for fit, finish, and the difference it makes. If it doesn't meet that standard, it doesn't make it in.
-        </p>
+        <h1 class="about-hero-title">We built Forged for drivers who actually care.</h1>
+        <p class="about-hero-body">Forged started with a simple frustration: finding genuinely good car accessories that don't look cheap, don't break, and actually fit properly is harder than it should be.</p>
+        <p class="about-hero-body">So we built the shop we wanted to exist. Every product is chosen for fit, finish, and the difference it makes. If it doesn't meet that standard, it doesn't make it in.</p>
         <a href="/shop" class="btn btn-primary">Browse the shop</a>
       </div>
       <div class="reveal reveal-delay-1">
-        <div style="aspect-ratio: 4/3; border-radius: var(--radius); overflow: hidden;">
-          <img src="about us page.jpg" alt="Forged — About us" style="width:100%;height:100%;object-fit:cover;">
+        <div class="about-hero-img-wrap">
+          <img src="about us page.jpg" alt="Forged — About us">
         </div>
       </div>
     </div>
   </section>
 
   <!-- Values -->
-  <section class="about-values-sec" style="padding: 80px 40px; border-bottom: 1px solid var(--grey-200);">
-    <div style="max-width: var(--content-w); margin: 0 auto;">
-      <div style="text-align: center; margin-bottom: 56px;" class="reveal">
+  <section class="about-values-sec">
+    <div class="about-values-inner">
+      <div class="about-values-head reveal">
         <p class="section-label">What we stand for</p>
         <h2 class="section-title">The Forged standard.</h2>
       </div>
-      <div class="about-values-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--grey-200); border: 1px solid var(--grey-200);">
-        <div style="background: var(--white); padding: 40px;" class="reveal">
-          <div style="width:40px;height:40px;background:var(--black);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
-            <i class="fa-solid fa-check" style="color:white;font-size:14px;"></i>
-          </div>
-          <h4 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 10px;">Quality only</h4>
-          <p style="color: var(--grey-500); font-size: 0.875rem; line-height: 1.7;">We test and vet every product. If it wouldn't go on our own cars, it won't go on yours.</p>
+      <div class="about-values-grid">
+        <div class="about-value-card reveal">
+          <div class="about-value-icon"><i class="fa-solid fa-check"></i></div>
+          <h4 class="about-value-title">Quality only</h4>
+          <p class="about-value-text">We test and vet every product. If it wouldn't go on our own cars, it won't go on yours.</p>
         </div>
-        <div style="background: var(--white); padding: 40px;" class="reveal reveal-delay-1">
-          <div style="width:40px;height:40px;background:var(--black);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
-            <i class="fa-solid fa-car" style="color:white;font-size:14px;"></i>
-          </div>
-          <h4 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 10px;">Fitment first</h4>
-          <p style="color: var(--grey-500); font-size: 0.875rem; line-height: 1.7;">Our reg lookup means you never guess if something fits. We show you what works for your exact vehicle.</p>
+        <div class="about-value-card reveal reveal-delay-1">
+          <div class="about-value-icon"><i class="fa-solid fa-car"></i></div>
+          <h4 class="about-value-title">Fitment first</h4>
+          <p class="about-value-text">Our reg lookup means you never guess if something fits. We show you what works for your exact vehicle.</p>
         </div>
-        <div style="background: var(--white); padding: 40px;" class="reveal reveal-delay-2">
-          <div style="width:40px;height:40px;background:var(--black);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
-            <i class="fa-solid fa-truck" style="color:white;font-size:14px;"></i>
-          </div>
-          <h4 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 10px;">Fast UK dispatch</h4>
-          <p style="color: var(--grey-500); font-size: 0.875rem; line-height: 1.7;">Orders dispatched within 48 hours. Free delivery on all orders over Â£50. No fuss, no delays.</p>
+        <div class="about-value-card reveal reveal-delay-2">
+          <div class="about-value-icon"><i class="fa-solid fa-truck"></i></div>
+          <h4 class="about-value-title">Fast UK dispatch</h4>
+          <p class="about-value-text">Orders dispatched within 48 hours. Free delivery on all orders over £50. No fuss, no delays.</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- CTA -->
-  <section style="padding: 80px 40px; text-align: center;">
-    <div style="max-width: 600px; margin: 0 auto;" class="reveal">
-      <h2 class="section-title" style="margin-bottom: 16px;">Ready to upgrade?</h2>
-      <p style="color: var(--grey-500); margin-bottom: 32px; font-size: 0.975rem;">Browse the full range or use the Garage to find exactly what fits your car.</p>
-      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+  <section class="about-cta-sec">
+    <div class="about-cta-inner reveal">
+      <h2 class="section-title">Ready to upgrade?</h2>
+      <p class="about-cta-sub">Browse the full range or use the Garage to find exactly what fits your car.</p>
+      <div class="about-cta-btns">
         <a href="/shop" class="btn btn-primary btn-lg">Shop now</a>
         <a href="/garage" class="btn btn-outline btn-lg">Open the Garage</a>
       </div>
