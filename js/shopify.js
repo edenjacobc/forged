@@ -299,11 +299,6 @@ function showSkeletons(grid) {
   grid.innerHTML = Array.from({ length: CARD_SKELETON_COUNT }, () => `
     <div class="product-skeleton">
       <div class="skeleton-img"></div>
-      <div style="padding:14px 20px 18px;">
-        <div class="skeleton-line" style="width:70%;height:13px;margin-bottom:8px;margin-left:0;margin-right:0;"></div>
-        <div class="skeleton-line" style="width:42%;height:10px;margin-bottom:14px;margin-left:0;margin-right:0;"></div>
-        <div class="skeleton-line" style="width:48%;height:14px;margin-left:0;margin-right:0;"></div>
-      </div>
     </div>`).join('');
 }
 
@@ -327,16 +322,14 @@ function buildCardHTML(p, i, filterCat) {
           : `<div class="product-img-placeholder"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div>`}
         ${badge ? `<span class="product-badge">${sfEsc(badge)}</span>` : ''}
         ${carbonBadge ? `<span class="product-badge product-badge--carbon">${sfEsc(carbonBadge)}</span>` : ''}
-        <span class="product-cat-tag">${sfEsc(cat)}</span>
-      </div>
-      <div class="product-body">
-        <p class="product-name">${sfEsc(p.title)}</p>
-        ${hasOpts ? '<p class="product-variants-hint">Multiple options</p>' : ''}
-        <div class="product-price-row">
+        <div class="product-overlay">
+          <p class="product-cat-tag">${sfEsc(cat)}</p>
+          <p class="product-name">${sfEsc(p.title)}</p>
+          ${hasOpts ? '<p class="product-variants-hint">Multiple options</p>' : ''}
           <p class="product-price">${priceHTML}</p>
-          <span class="product-card-arrow" aria-hidden="true">
-            <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </span>
+          <div class="product-ol-cta">
+            <span class="product-view-btn">View product <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
         </div>
       </div>
     </div>`;
@@ -406,17 +399,15 @@ function renderProductCards(products, grid, fitTagFn) {
           ${img ? `<img src="${sfEsc(img)}" alt="${sfEsc(p.title)}" loading="lazy">` : `<div class="product-img-placeholder"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div>`}
           ${badge ? `<span class="product-badge">${sfEsc(badge)}</span>` : ''}
           ${carbonBadge ? `<span class="product-badge product-badge--carbon">${sfEsc(carbonBadge)}</span>` : ''}
-          ${fit ? `<span class="garage-fit-tag${fit.cls === 'warn' ? ' garage-fit-tag--warn' : ''}">${sfEsc(fit.label)}</span>` : ''}
-          <span class="product-cat-tag">${sfEsc(cat)}</span>
-        </div>
-        <div class="product-body">
-          <p class="product-name">${sfEsc(p.title)}</p>
-          ${hasOpts ? '<p class="product-variants-hint">Multiple options</p>' : ''}
-          <div class="product-price-row">
+          <div class="product-overlay">
+            ${fit ? `<span class="garage-fit-tag${fit.cls === 'warn' ? ' garage-fit-tag--warn' : ''}">${sfEsc(fit.label)}</span>` : ''}
+            <p class="product-cat-tag">${sfEsc(cat)}</p>
+            <p class="product-name">${sfEsc(p.title)}</p>
+            ${hasOpts ? '<p class="product-variants-hint">Multiple options</p>' : ''}
             <p class="product-price">${priceHTML}</p>
-            <span class="product-card-arrow" aria-hidden="true">
-              <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
+            <div class="product-ol-cta">
+              <span class="product-view-btn">View product <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
           </div>
         </div>
       </div>`;

@@ -229,10 +229,17 @@ window.garageSaveCar = function (btn) {
       const grid = document.getElementById('products-grid');
       if (grid) grid.classList.add('grid-filtering');
       setTimeout(() => {
+        let visible = 0;
         document.querySelectorAll('.product-card[data-category]').forEach(card => {
-          card.style.display = (category === 'all' || card.dataset.category === category) ? '' : 'none';
+          const show = category === 'all' || card.dataset.category === category;
+          card.style.display = show ? '' : 'none';
+          if (show) visible++;
         });
         if (grid) grid.classList.remove('grid-filtering');
+        const countEl = document.getElementById('shop-product-count');
+        if (countEl && visible > 0) {
+          countEl.textContent = visible + ' product' + (visible !== 1 ? 's' : '');
+        }
       }, 160);
     });
   });

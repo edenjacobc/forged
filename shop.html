@@ -54,28 +54,26 @@
 
   <!-- Shop Hero -->
   <header class="shop-hero">
-    <div class="shop-hero-eyebrow">
-      <p class="section-label reveal">All products</p>
-      <span class="shop-season reveal">Summer '26</span>
-    </div>
-    <h1 class="shop-hero-title reveal">Shop<br>everything.</h1>
-    <div class="shop-hero-foot reveal">
-      <span id="shop-product-count" class="shop-hero-count">Loading...</span>
-      <span class="shop-hero-sep">·</span>
-      <span>Free UK delivery over £50</span>
+    <div class="shop-hero-inner">
+      <div class="shop-hero-eyebrow">
+        <p class="section-label">All products</p>
+        <span class="shop-season">Summer '26</span>
+      </div>
+      <h1 class="shop-hero-title">Shop<br>everything.</h1>
+      <div class="shop-hero-bottom">
+        <div class="shop-filters">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="tech">Tech</button>
+          <button class="filter-btn" data-filter="exterior">Exterior</button>
+          <button class="filter-btn" data-filter="interior">Interior</button>
+        </div>
+        <span id="shop-product-count" class="shop-hero-count">—</span>
+      </div>
     </div>
   </header>
 
-  <!-- Filters -->
-  <div class="shop-filters">
-    <button class="filter-btn active" data-filter="all">All</button>
-    <button class="filter-btn" data-filter="tech">Tech</button>
-    <button class="filter-btn" data-filter="exterior">Exterior</button>
-    <button class="filter-btn" data-filter="interior">Interior</button>
-  </div>
-
   <!-- Products grid — populated by shopify.js -->
-  <div class="products-grid" id="products-grid" style="border-top:none;min-height:400px;"></div>
+  <div class="products-grid" id="products-grid" style="min-height:400px;"></div>
 
   <!-- Reviews -->
   <section class="reviews-section">
