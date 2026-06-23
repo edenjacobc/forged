@@ -172,13 +172,6 @@
           <div class="order-track"><div class="order-track-fill" style="width:${pct}%"></div></div>
           <div class="order-steps">${stepsHTML}</div>
         </div>
-        ${track ? `
-        <div class="order-tracking">
-          <a href="${track.url || '#'}" target="_blank" rel="noopener" class="order-track-link">
-            <i class="fa-solid fa-location-dot"></i> Track shipment
-          </a>
-          ${track.number ? `<span class="order-tracking-num">Ref: ${track.number}</span>` : ''}
-        </div>` : ''}
       </div>`;
   }
 
