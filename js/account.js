@@ -281,14 +281,13 @@
 
     show('loading');
 
-    const accessToken = localStorage.getItem('access_token');
     let orders = [];
-    if (accessToken) {
+    if (idToken) {
       try {
         const cRes = await fetch('/api/customer', {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify({ token: accessToken }),
+          body:    JSON.stringify({ token: idToken }),
         });
         if (cRes.ok) {
           const cData = await cRes.json();

@@ -1,3 +1,8 @@
+const { getAdminToken } = require('./admin/_token');
+
+const SHOP_DOMAIN = 'forged-10046.myshopify.com';
+const API         = '2026-04';
+
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', 'https://forgeduk.store');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -9,37 +14,21 @@ module.exports = async (req, res) => {
   const { token } = req.body || {};
   if (!token) return res.status(400).json({ error: 'Missing token' });
 
-  const SHOP_ID     = '100016423286';
-  const SHOP_DOMAIN = 'forged-10046.myshopify.com';
-  const ADMIN_TOKEN = process.env.SHOPIFY_ACCESS_TOKEN;
-
-  // Verify OIDC token via Shopify userinfo
-  let userInfo;
+  // Decode id_token JWT directly — avoids fragile userinfo network call
+  let email, firstName, lastName;
   try {
-    const uRes = await fetch(
-      `https://shopify.com/authentication/${SHOP_ID}/oauth/userinfo`,
-      { headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' } }
-    );
-    if (!uRes.ok) {
-      console.error('[customer] userinfo failed:', uRes.status);
-      return res.status(401).json({ error: 'Invalid or expired token' });
+    const parts = token.split('.');
+    if (parts.length !== 3) throw new Error('Not a JWT');
+    const pad = s => s + '='.repeat((4 - s.length % 4) % 4);
+    const payload = JSON.parse(Buffer.from(pad(parts[1].replace(/-/g, '+').replace(/_/g, '/')), 'base64').toString('utf8'));
+    if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) {
+      return res.status(401).json({ error: 'Token expired' });
     }
-    userInfo = await uRes.json();
+    email     = payload.email       || '';
+    firstName = payload.given_name  || '';
+    lastName  = payload.family_name || '';
   } catch (e) {
-    return res.status(500).json({ error: 'userinfo_failed: ' + e.message });
-  }
-
-  const email     = userInfo.email      || '';
-  const firstName = userInfo.given_name  || '';
-  const lastName  = userInfo.family_name || '';
-
-  if (!ADMIN_TOKEN) {
-    console.error('[customer] SHOPIFY_ACCESS_TOKEN not set');
-    return res.status(200).json({
-      firstName, lastName,
-      emailAddress: { emailAddress: email },
-      orders: { nodes: [] },
-    });
+    return res.status(401).json({ error: 'Invalid token: ' + e.message });
   }
 
   if (!email) {
@@ -50,8 +39,18 @@ module.exports = async (req, res) => {
     });
   }
 
-  // Look up customer by email — more reliable than using the OIDC sub,
-  // which is a CustomerAccount GID and does not match the Admin API Customer GID.
+  let adminToken;
+  try {
+    adminToken = await getAdminToken();
+  } catch (e) {
+    console.error('[customer] getAdminToken failed:', e.message);
+    return res.status(200).json({
+      firstName, lastName,
+      emailAddress: { emailAddress: email },
+      orders: { nodes: [] },
+    });
+  }
+
   const gql = `query GetCustomerByEmail($query: String!) {
     customers(first: 1, query: $query) {
       nodes {
@@ -69,11 +68,11 @@ module.exports = async (req, res) => {
   }`;
 
   try {
-    const aRes = await fetch(`https://${SHOP_DOMAIN}/admin/api/2024-10/graphql.json`, {
+    const aRes = await fetch(`https://${SHOP_DOMAIN}/admin/api/${API}/graphql.json`, {
       method:  'POST',
       headers: {
         'Content-Type':           'application/json',
-        'X-Shopify-Access-Token': ADMIN_TOKEN,
+        'X-Shopify-Access-Token': adminToken,
       },
       body: JSON.stringify({ query: gql, variables: { query: `email:${email}` } }),
     });
