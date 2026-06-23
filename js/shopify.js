@@ -8,7 +8,10 @@ const SHOPIFY = {
   api:    '2026-04'
 };
 
-const SUMMER_SALE_PCT = 10; // Summer sale: 10% off all products
+/* ─── Configurable display constants ─────── */
+const SUMMER_SALE_PCT      = 10;      // Summer sale discount % — also update announcement bar copy
+const CARD_SKELETON_COUNT  = 8;       // Skeletons shown while products load
+const PM_MAX_WIDTH         = '1100px'; // Product modal max-width (also update .pm-inner in CSS)
 
 function sfEsc(s) {
   return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -293,67 +296,76 @@ function getProductDescription(product) {
 
 /* ─── Skeleton loaders ────────────────────── */
 function showSkeletons(grid) {
-  grid.innerHTML = Array.from({ length: 4 }, () => `
+  grid.innerHTML = Array.from({ length: CARD_SKELETON_COUNT }, () => `
     <div class="product-skeleton">
       <div class="skeleton-img"></div>
-      <div style="padding:18px 20px 8px;">
-        <div class="skeleton-line" style="width:38%;height:10px;margin-bottom:6px;margin-left:0;margin-right:0;"></div>
-        <div class="skeleton-line" style="width:70%;height:13px;margin-left:0;margin-right:0;"></div>
-      </div>
-      <div style="padding:8px 20px 18px;display:flex;justify-content:space-between;align-items:center;">
-        <div class="skeleton-line" style="width:55px;height:16px;margin:0;"></div>
-        <div class="skeleton-line" style="width:56px;height:30px;border-radius:8px;margin:0;"></div>
+      <div style="padding:14px 20px 18px;">
+        <div class="skeleton-line" style="width:70%;height:13px;margin-bottom:8px;margin-left:0;margin-right:0;"></div>
+        <div class="skeleton-line" style="width:42%;height:10px;margin-bottom:14px;margin-left:0;margin-right:0;"></div>
+        <div class="skeleton-line" style="width:48%;height:14px;margin-left:0;margin-right:0;"></div>
       </div>
     </div>`).join('');
 }
 
 /* ─── Render product grid (shop page) ────── */
+function buildCardHTML(p, i, filterCat) {
+  const v0 = p.variants.nodes[0];
+  const img = p.featuredImage?.url || '';
+  const badge = getProductBadge(p);
+  const carbonBadge = getCarbonBadge(p);
+  const cat = getProductCategory(p);
+  const hasOpts = p.variants.nodes.length > 1 && p.variants.nodes[0].title !== 'Default Title';
+  const priceHTML = v0 ? buildPriceHTML(v0) : '£0.00';
+  const staggerMs = Math.min(i, 7) * 55;
+
+  return `
+    <div class="product-card reveal" style="--reveal-delay:${staggerMs}ms"
+         data-category="${sfEsc(filterCat)}" onclick="openProductModal(${i})">
+      <div class="product-img">
+        ${img
+          ? `<img src="${sfEsc(img)}" alt="${sfEsc(p.title)}" loading="lazy">`
+          : `<div class="product-img-placeholder"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div>`}
+        ${badge ? `<span class="product-badge">${sfEsc(badge)}</span>` : ''}
+        ${carbonBadge ? `<span class="product-badge product-badge--carbon">${sfEsc(carbonBadge)}</span>` : ''}
+        <span class="product-cat-tag">${sfEsc(cat)}</span>
+      </div>
+      <div class="product-body">
+        <p class="product-name">${sfEsc(p.title)}</p>
+        ${hasOpts ? '<p class="product-variants-hint">Multiple options</p>' : ''}
+        <div class="product-price-row">
+          <p class="product-price">${priceHTML}</p>
+          <span class="product-card-arrow" aria-hidden="true">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+    </div>`;
+}
+
 function renderShopGrid(products) {
   const grid = document.getElementById('products-grid');
   if (!grid) return;
 
   const countEl = document.getElementById('shop-product-count');
-  if (countEl) countEl.textContent = products.length + ' product' + (products.length !== 1 ? 's' : '') + ' · free UK delivery over £50';
+  if (countEl) countEl.textContent = products.length + ' product' + (products.length !== 1 ? 's' : '');
 
   if (!products.length) {
     grid.innerHTML = '<p style="padding:60px;color:var(--grey-500);grid-column:1/-1;text-align:center;">No products found.</p>';
     return;
   }
 
-  grid.innerHTML = products.map((p, i) => {
-    const v0 = p.variants.nodes[0];
-    const img = p.featuredImage?.url || '';
-    const badge = getProductBadge(p);
-    const carbonBadge = getCarbonBadge(p);
-    const cat = getProductCategory(p);
-    const filterCat = getFilterCategory(p);
-    const delay = i % 3 === 1 ? ' reveal-delay-1' : i % 3 === 2 ? ' reveal-delay-2' : '';
-    const hasOpts = p.variants.nodes.length > 1 && p.variants.nodes[0].title !== 'Default Title';
-    const priceHTML = v0 ? buildPriceHTML(v0) : '£0.00';
-
-    return `
-      <div class="product-card reveal${delay}" data-category="${sfEsc(filterCat)}" onclick="openProductModal(${i})">
-        <div class="product-img">
-          ${img
-            ? `<img src="${sfEsc(img)}" alt="${sfEsc(p.title)}" loading="lazy">`
-            : `<div class="product-img-placeholder"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div>`}
-          ${badge ? `<span class="product-badge">${sfEsc(badge)}</span>` : ''}
-          ${carbonBadge ? `<span class="product-badge product-badge--carbon">${sfEsc(carbonBadge)}</span>` : ''}
-        </div>
-        <div class="product-info">
-          <p class="product-category">${sfEsc(cat)}</p>
-          <p class="product-name">${sfEsc(p.title)}</p>
-          ${hasOpts ? '<p class="product-variants-hint">Multiple options</p>' : ''}
-        </div>
-        <div class="product-footer">
-          <p class="product-price">${priceHTML}</p>
-          <button class="product-add-btn" onclick="event.stopPropagation();openProductModal(${i})">View</button>
-        </div>
-      </div>`;
-  }).join('');
+  grid.innerHTML = products.map((p, i) => buildCardHTML(p, i, getFilterCategory(p))).join('');
 
   const io = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        // Reset stagger delay after reveal so hover transitions are instant
+        const d = parseFloat(e.target.style.getPropertyValue('--reveal-delay')) || 0;
+        setTimeout(() => e.target.style.setProperty('--reveal-delay', '0ms'), d + 950);
+        io.unobserve(e.target);
+      }
+    });
   }, { threshold: 0.05, rootMargin: '0px 0px -10px 0px' });
   grid.querySelectorAll('.product-card.reveal').forEach(el => io.observe(el));
 
@@ -377,7 +389,7 @@ function renderProductCards(products, grid, fitTagFn) {
     grid.innerHTML = '<p style="padding:40px;color:var(--grey-500);grid-column:1/-1;text-align:center;">No products found.</p>';
     return;
   }
-  grid.innerHTML = products.map(p => {
+  grid.innerHTML = products.map((p, i) => {
     const idx = _shopProducts.indexOf(p);
     const v0 = p.variants.nodes[0];
     const img = p.featuredImage?.url || '';
@@ -387,28 +399,38 @@ function renderProductCards(products, grid, fitTagFn) {
     const hasOpts = p.variants.nodes.length > 1 && p.variants.nodes[0].title !== 'Default Title';
     const priceHTML = v0 ? buildPriceHTML(v0) : '£0.00';
     const fit = fitTagFn ? fitTagFn(p) : null;
+    const staggerMs = Math.min(i, 7) * 55;
     return `
-      <div class="product-card reveal" onclick="openProductModal(${idx})">
+      <div class="product-card reveal" style="--reveal-delay:${staggerMs}ms" onclick="openProductModal(${idx})">
         <div class="product-img">
           ${img ? `<img src="${sfEsc(img)}" alt="${sfEsc(p.title)}" loading="lazy">` : `<div class="product-img-placeholder"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div>`}
           ${badge ? `<span class="product-badge">${sfEsc(badge)}</span>` : ''}
           ${carbonBadge ? `<span class="product-badge product-badge--carbon">${sfEsc(carbonBadge)}</span>` : ''}
           ${fit ? `<span class="garage-fit-tag${fit.cls === 'warn' ? ' garage-fit-tag--warn' : ''}">${sfEsc(fit.label)}</span>` : ''}
+          <span class="product-cat-tag">${sfEsc(cat)}</span>
         </div>
-        <div class="product-info">
-          <p class="product-category">${sfEsc(cat)}</p>
+        <div class="product-body">
           <p class="product-name">${sfEsc(p.title)}</p>
           ${hasOpts ? '<p class="product-variants-hint">Multiple options</p>' : ''}
-        </div>
-        <div class="product-footer">
-          <p class="product-price">${priceHTML}</p>
-          <button class="product-add-btn" onclick="event.stopPropagation();openProductModal(${idx})">View</button>
+          <div class="product-price-row">
+            <p class="product-price">${priceHTML}</p>
+            <span class="product-card-arrow" aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </div>
         </div>
       </div>`;
   }).join('');
 
   const io = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        const d = parseFloat(e.target.style.getPropertyValue('--reveal-delay')) || 0;
+        setTimeout(() => e.target.style.setProperty('--reveal-delay', '0ms'), d + 950);
+        io.unobserve(e.target);
+      }
+    });
   }, { threshold: 0.05, rootMargin: '0px 0px -10px 0px' });
   grid.querySelectorAll('.product-card.reveal').forEach(el => io.observe(el));
 }
@@ -507,6 +529,10 @@ window.openProductModal = function (idx) {
   if (!content) return;
   content._product = product;
 
+  const { salePrice: salePriceVal, wasPrice: wasPriceVal } = v ? computePricing(v) : { salePrice: '0.00', wasPrice: '0.00' };
+  const savingsAmt = (parseFloat(wasPriceVal) - parseFloat(salePriceVal)).toFixed(2);
+  const showSaleTag = parseFloat(savingsAmt) > 0;
+
   content.innerHTML = `
     <div class="pm-gallery">
       <div class="pm-main-img">
@@ -523,6 +549,10 @@ window.openProductModal = function (idx) {
       <p class="product-category">${sfEsc(getProductCategory(product))}</p>
       <h2 class="pm-title">${sfEsc(product.title)}</h2>
       <p class="pm-price" id="pm-price">${priceHTML}</p>
+      ${showSaleTag ? `<div class="pm-sale-row">
+        <span class="pm-sale-tag"><i class="fa-solid fa-tag"></i> Summer Sale ${SUMMER_SALE_PCT}% off</span>
+        <span class="pm-save-amount">You save £${savingsAmt}</span>
+      </div>` : ''}
       ${hasOpts ? (variants.length > 5
         ? `<div class="pm-variants">
             <p class="pm-label">Option</p>
@@ -544,8 +574,8 @@ window.openProductModal = function (idx) {
       </div>` : ''}
       <div class="pm-shipping">
         <div class="pm-ship-row"><i class="fa-solid fa-truck"></i><span>Free UK delivery on orders over £50</span></div>
-        <div class="pm-ship-row"><i class="fa-regular fa-clock"></i><span>Standard delivery: 7 to 14 days</span></div>
-        <div class="pm-ship-row"><i class="fa-solid fa-rotate-left"></i><span>30-day returns</span></div>
+        <div class="pm-ship-row"><i class="fa-regular fa-clock"></i><span>Standard delivery: 7–14 days</span></div>
+        <div class="pm-ship-row"><i class="fa-solid fa-rotate-left"></i><span>30-day hassle-free returns</span></div>
       </div>
       <button class="btn btn-primary btn-lg pm-atc" onclick="pmAddToCart()">
         <i class="fa-solid fa-bag-shopping"></i> Add to cart
@@ -606,7 +636,13 @@ window.pmSelectImage = function (idx) {
   const images = product?.images?.nodes;
   if (!images || !images[idx]) return;
   const el = document.getElementById('pm-img-el');
-  if (el) el.src = images[idx].url;
+  if (el) {
+    el.style.opacity = '0';
+    const newSrc = images[idx].url;
+    const onLoad = () => { el.style.opacity = '1'; el.removeEventListener('load', onLoad); };
+    el.addEventListener('load', onLoad);
+    setTimeout(() => { el.src = newSrc; }, 130);
+  }
   document.querySelectorAll('.pm-thumb').forEach((t, i) => t.classList.toggle('active', i === idx));
 };
 

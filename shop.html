@@ -52,15 +52,22 @@
     <a href="/garage">Garage</a><a href="/about">About</a><a href="/contact">Support</a>
   </div>
 
-  <!-- Shop Header -->
-  <div style="padding: 48px 40px 32px; max-width: var(--max-w); margin: 0 auto; border-bottom: 1px solid var(--grey-200);">
-    <p class="section-label reveal">All products</p>
-    <h1 class="reveal" style="font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; letter-spacing: -0.025em;">Shop everything.</h1>
-    <p class="reveal" id="shop-product-count" style="color: var(--grey-500); font-size: 0.925rem; margin-top: 8px;">Loading products...</p>
-  </div>
+  <!-- Shop Hero -->
+  <header class="shop-hero">
+    <div class="shop-hero-eyebrow">
+      <p class="section-label reveal">All products</p>
+      <span class="shop-season reveal">Summer '26</span>
+    </div>
+    <h1 class="shop-hero-title reveal">Shop<br>everything.</h1>
+    <div class="shop-hero-foot reveal">
+      <span id="shop-product-count" class="shop-hero-count">Loading...</span>
+      <span class="shop-hero-sep">·</span>
+      <span>Free UK delivery over £50</span>
+    </div>
+  </header>
 
   <!-- Filters -->
-  <div class="shop-filters reveal">
+  <div class="shop-filters">
     <button class="filter-btn active" data-filter="all">All</button>
     <button class="filter-btn" data-filter="tech">Tech</button>
     <button class="filter-btn" data-filter="exterior">Exterior</button>

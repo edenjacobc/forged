@@ -226,9 +226,14 @@ window.garageSaveCar = function (btn) {
       filterBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       const category = btn.dataset.filter;
-      document.querySelectorAll('.product-card[data-category]').forEach(card => {
-        card.style.display = (category === 'all' || card.dataset.category === category) ? '' : 'none';
-      });
+      const grid = document.getElementById('products-grid');
+      if (grid) grid.classList.add('grid-filtering');
+      setTimeout(() => {
+        document.querySelectorAll('.product-card[data-category]').forEach(card => {
+          card.style.display = (category === 'all' || card.dataset.category === category) ? '' : 'none';
+        });
+        if (grid) grid.classList.remove('grid-filtering');
+      }, 160);
     });
   });
 })();
